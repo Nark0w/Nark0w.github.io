@@ -374,8 +374,8 @@
           </div>
           <div class="challenge-card-body">
             <h2>Le Possédé</h2>
-            <p>À quatre joueurs, trois Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.</p>
-            <div class="challenge-meta"><span>4 joueurs</span><span>Rôles secrets</span><span>Local ou en ligne</span></div>
+            <p>De trois à quatre joueurs, les Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.</p>
+            <div class="challenge-meta"><span>3-4 joueurs</span><span>Rôles secrets</span><span>Local ou en ligne</span></div>
             <button id="open-possessed-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
@@ -881,7 +881,7 @@
         <p class="player-count">4 joueurs</p>
 
         <h3>Distribution des rôles</h3>
-        <p>Avant la partie, les rôles sont distribués secrètement : trois joueurs deviennent Enquêteurs et un joueur devient le Possédé.</p>
+        <p>Avant la partie, les rôles sont distribués secrètement : un joueur devient le Possédé et tous les autres deviennent Enquêteurs.</p>
         <p>Chaque joueur doit garder son rôle secret. L’interface n’affiche à chaque participant que son propre rôle.</p>
 
         <h3>Objectif commun</h3>
@@ -923,12 +923,12 @@
         <div id="possessed-local-panel" class="possessed-mode-panel">
           <div class="possessed-box">
             <h3>Distribution locale</h3>
-            <p>Les quatre joueurs se passent le même téléphone. Le rôle est masqué avant de passer au joueur suivant.</p>
+            <p>Les joueurs se passent le même téléphone. Le rôle est masqué avant de passer au joueur suivant.</p>
             <div class="possessed-field">
               <label for="possessed-local-count">Nombre de joueurs</label>
-              <select id="possessed-local-count" disabled><option value="4" selected>4</option></select>
+              <select id="possessed-local-count"><option value="3">3</option><option value="4" selected>4</option></select>
             </div>
-            <p class="possessed-note">Le défi nécessite exactement quatre joueurs : trois Enquêteurs et un Possédé.</p>
+            <p class="possessed-note">Le défi accepte 3 à 4 joueurs : un Possédé et tous les autres Enquêteurs.</p>
             <div id="possessed-local-names" class="possessed-names"></div>
             <button id="possessed-local-prepare" class="good-btn" type="button">Préparer les rôles</button>
           </div>
@@ -966,7 +966,8 @@
               <div class="possessed-share-row"><input id="possessed-share-link" type="text" readonly aria-label="Lien d’invitation"><button id="possessed-copy-link" type="button">Copier le lien</button></div>
             </div>
             <div id="possessed-lobby-list" class="possessed-lobby-list"></div>
-            <button id="possessed-start-online" class="good-btn" type="button" hidden>Démarrer à 4 joueurs et distribuer les rôles</button>
+            <button id="possessed-start-online" class="good-btn" type="button" hidden>Distribuer les rôles</button>
+            <button id="possessed-redraw-online" class="warning-btn" type="button" hidden>Redistribuer les rôles</button>
             <button id="possessed-leave-room" class="danger-btn" type="button">Quitter la room</button>
           </div>
           <div id="possessed-online-role" class="possessed-stage" hidden></div>
@@ -1491,13 +1492,13 @@
       "Défis Phasmophobia":"Phasmophobia Challenges",
       "Choisis un défi pour ouvrir sa propre vue. Toute l’application, les règles et la progression sont réunies dans un seul fichier HTML.":"Choose a challenge to open its dedicated view. The entire app, its rules and your progress are contained in a single HTML file.",
       "Le Possédé":"The Possessed",
-      "À quatre joueurs, trois Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.":"With four players, three Investigators try to identify the ghost while one Possessed player secretly spreads doubt.",
-      "4 joueurs":"4 players",
+      "De trois à quatre joueurs, les Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.":"With three to four players, the Investigators try to identify the ghost while one Possessed player secretly spreads doubt.",
+      "3-4 joueurs":"3-4 players",
       "Rôles secrets":"Secret roles",
       "Local ou en ligne":"Local or online",
       "Le Possédé - Phasmophobia":"The Possessed - Phasmophobia",
       "Distribution des rôles":"Role distribution",
-      "Avant la partie, les rôles sont distribués secrètement : trois joueurs deviennent Enquêteurs et un joueur devient le Possédé.":"Before the game, roles are assigned secretly: three players become Investigators and one player becomes the Possessed.",
+      "Avant la partie, les rôles sont distribués secrètement : un joueur devient le Possédé et tous les autres deviennent Enquêteurs.":"Before the game, roles are assigned secretly: one player becomes the Possessed and everyone else becomes an Investigator.",
       "Chaque joueur doit garder son rôle secret. L’interface n’affiche à chaque participant que son propre rôle.":"Every player must keep their role secret. The interface only shows each participant their own role.",
       "Objectif commun":"Shared objective",
       "L’équipe doit toujours identifier correctement le fantôme.":"The team must always identify the ghost correctly.",
@@ -1523,12 +1524,12 @@
       "Possédé mort avant ses deux corruptions :":"Possessed dies before completing both corruptions:",
       "0 point.":"0 points.",
       "Le Possédé doit donc aider suffisamment l’équipe pour gagner la partie, tout en semant discrètement le doute.":"The Possessed must help the team enough to win the game while subtly spreading doubt.",
-      "Le défi nécessite exactement quatre joueurs : trois Enquêteurs et un Possédé.":"The challenge requires exactly four players: three Investigators and one Possessed.",
+      "Le défi accepte 3 à 4 joueurs : un Possédé et tous les autres Enquêteurs.":"The challenge supports 3 to 4 players: one Possessed player and everyone else as Investigators.",
       "Choisir le mode de distribution":"Choose the distribution mode",
       "Même appareil":"Same device",
       "Room en ligne (bêta)":"Online room (beta)",
       "Distribution locale":"Local distribution",
-      "Les quatre joueurs se passent le même téléphone. Le rôle est masqué avant de passer au joueur suivant.":"The four players pass around the same phone. The role is hidden before handing it to the next player.",
+      "Les joueurs se passent le même téléphone. Le rôle est masqué avant de passer au joueur suivant.":"Players pass around the same phone. The role is hidden before handing it to the next player.",
       "Nombre de joueurs":"Number of players",
       "Préparer les rôles":"Prepare roles",
       "Passe l’appareil au joueur suivant":"Pass the device to the next player",
@@ -1549,7 +1550,8 @@
       "Salle d’attente":"Lobby",
       "En attente…":"Waiting…",
       "Copier le lien":"Copy link",
-      "Démarrer à 4 joueurs et distribuer les rôles":"Start with 4 players and assign roles",
+      "Distribuer les rôles":"Assign roles",
+      "Redistribuer les rôles":"Reassign roles",
       "Quitter la room":"Leave room",
       "Cette room utilise une connexion directe WebRTC entre les appareils et le service public de signalement PeerJS. Aucun compte n’est nécessaire et les rôles ne sont pas enregistrés. L’hôte doit rester connecté ; certains réseaux très restrictifs peuvent bloquer la connexion.":"This room uses a direct WebRTC connection between devices and the public PeerJS signaling service. No account is required and roles are not stored. The host must stay connected; some highly restrictive networks may block the connection.",
       "Le Tarot Surprise":"Tarot Surprise",
@@ -2108,9 +2110,9 @@
 
     const possessedLocalTab=document.getElementById("possessed-local-tab"),possessedOnlineTab=document.getElementById("possessed-online-tab"),possessedLocalPanel=document.getElementById("possessed-local-panel"),possessedOnlinePanel=document.getElementById("possessed-online-panel");
     const possessedLocalCount=document.getElementById("possessed-local-count"),possessedLocalNames=document.getElementById("possessed-local-names"),possessedLocalStage=document.getElementById("possessed-local-stage"),possessedLocalPlayerTitle=document.getElementById("possessed-local-player-title"),possessedLocalInstruction=document.getElementById("possessed-local-instruction"),possessedLocalReveal=document.getElementById("possessed-local-reveal"),possessedLocalRole=document.getElementById("possessed-local-role"),possessedLocalNext=document.getElementById("possessed-local-next");
-    const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
+    const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedRedrawOnline=document.getElementById("possessed-redraw-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
     let possessedLocalAssignments=[],possessedLocalIndex=0,possessedLocalRevealed=false;
-    let possessedPeer=null,possessedHostConnection=null,possessedConnections=new Map(),possessedPlayers=[],possessedIsHost=false,possessedRoomCode="",possessedOnlineStarted=false;
+    let possessedPeer=null,possessedHostConnection=null,possessedConnections=new Map(),possessedPlayers=[],possessedIsHost=false,possessedRoomCode="",possessedOnlineStarted=false,possessedDistributionRound=0;
 
     function possessedText(fr,en){return currentLanguage==="en"?en:fr}
     function secureShuffle(values){
@@ -2136,7 +2138,7 @@
     }
     function prepareLocalPossessedRoles(){
       const names=[...possessedLocalNames.querySelectorAll("input")].map((input,index)=>input.value.trim()||possessedText(`Joueur ${index+1}`,`Player ${index+1}`));
-      if(names.length!==4)return;
+      if(names.length<3||names.length>4)return;
       const roles=secureShuffle(["possessed",...Array(names.length-1).fill("investigator")]);
       possessedLocalAssignments=names.map((name,index)=>({name,role:roles[index]}));possessedLocalIndex=0;possessedLocalRevealed=false;possessedLocalStage.hidden=false;renderLocalPossessedStage();possessedLocalStage.scrollIntoView({behavior:"smooth",block:"center"})
     }
@@ -2157,7 +2159,7 @@
       possessedLocalRole.innerHTML=createRoleCard(possessedLocalAssignments[possessedLocalIndex].role);possessedLocalReveal.hidden=true;possessedLocalNext.hidden=false;possessedLocalRevealed=true
     }
     function nextLocalPossessedPlayer(){
-      if(possessedLocalIndex>=possessedLocalAssignments.length){possessedLocalAssignments=[];possessedLocalStage.hidden=true;renderPossessedLocalNames();return}
+      if(possessedLocalIndex>=possessedLocalAssignments.length){prepareLocalPossessedRoles();return}
       possessedLocalRole.innerHTML="";possessedLocalIndex++;renderLocalPossessedStage()
     }
     function setPossessedMode(mode){
@@ -2168,22 +2170,34 @@
     }
     function normalizeRoomCode(value){return String(value||"").toUpperCase().replace(/[^A-Z2-9]/g,"").slice(0,5)}
     function setPossessedOnlineStatus(fr,en){possessedOnlineStatus.textContent=possessedText(fr,en)}
-    function showPossessedOnlineLobby(){possessedOnlineSetup.hidden=true;possessedOnlineLobby.hidden=false;possessedOnlineRole.hidden=true}
+    function showPossessedOnlineSetup(){possessedOnlineSetup.hidden=false;possessedOnlineSetup.style.removeProperty("display");possessedOnlineLobby.hidden=true}
+    function showPossessedOnlineLobby(){possessedOnlineSetup.hidden=true;possessedOnlineSetup.style.display="none";possessedOnlineLobby.hidden=false;possessedOnlineRole.hidden=true}
     function renderPossessedLobby(){
       possessedLobbyList.innerHTML="";
       possessedPlayers.forEach(player=>{const chip=document.createElement("span");chip.className=`possessed-player-chip${player.host?" host":""}`;chip.textContent=player.name;possessedLobbyList.appendChild(chip)});
-      if(possessedIsHost){possessedStartOnline.hidden=false;possessedStartOnline.disabled=possessedPlayers.length!==4||possessedOnlineStarted;possessedHostRoomInfo.hidden=false}else{possessedStartOnline.hidden=true;possessedHostRoomInfo.hidden=true}
+      const count=possessedPlayers.length,validCount=count>=3&&count<=4;
+      if(possessedIsHost){
+        possessedHostRoomInfo.hidden=false;
+        possessedStartOnline.hidden=possessedOnlineStarted;
+        possessedStartOnline.disabled=!validCount;
+        possessedStartOnline.textContent=validCount?possessedText(`Démarrer à ${count} joueurs et distribuer les rôles`,`Start with ${count} players and assign roles`):possessedText(`En attente de ${Math.max(0,3-count)} joueur(s)`,`Waiting for ${Math.max(0,3-count)} player(s)`);
+        possessedRedrawOnline.hidden=!possessedOnlineStarted;
+        possessedRedrawOnline.disabled=!validCount;
+        possessedRedrawOnline.textContent=possessedText(`Redistribuer les rôles à ${count} joueurs`,`Reassign roles for ${count} players`)
+      }else{
+        possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;possessedHostRoomInfo.hidden=true
+      }
     }
     function broadcastPossessedLobby(){
-      const message={type:"lobby",players:possessedPlayers.map(player=>({id:player.id,name:player.name,host:player.host})),started:possessedOnlineStarted};
+      const message={type:"lobby",players:possessedPlayers.map(player=>({id:player.id,name:player.name,host:player.host})),started:possessedOnlineStarted,round:possessedDistributionRound};
       possessedConnections.forEach(connection=>{if(connection.open)connection.send(message)});renderPossessedLobby()
     }
     function cleanupPossessedPeer(showSetup=true){
       possessedConnections.forEach(connection=>{try{connection.close()}catch(error){}});possessedConnections.clear();
       if(possessedHostConnection){try{possessedHostConnection.close()}catch(error){}possessedHostConnection=null}
       if(possessedPeer){try{possessedPeer.destroy()}catch(error){}possessedPeer=null}
-      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";possessedOnlineStarted=false;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedStartOnline.hidden=true;
-      if(showSetup){possessedOnlineSetup.hidden=false;possessedOnlineLobby.hidden=true;setPossessedOnlineStatus("En attente…","Waiting…")}
+      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;
+      if(showSetup){showPossessedOnlineSetup();setPossessedOnlineStatus("En attente…","Waiting…")}
     }
     function setupHostConnection(connection){
       let joined=false;
@@ -2206,9 +2220,9 @@
     }
     function handlePossessedGuestData(data){
       if(!data)return;
-      if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
-      else if(data.type==="role"){possessedOnlineStarted=true;possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(data.role)}`;setPossessedOnlineStatus("Les rôles ont été distribués.","Roles have been assigned.");possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})}
-      else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);possessedOnlineSetup.hidden=false;possessedOnlineLobby.hidden=true}
+      if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
+      else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(data.role)}`;setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})}
+      else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
     function joinPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
@@ -2219,10 +2233,10 @@
       possessedPeer.on("error",()=>setPossessedOnlineStatus("Room introuvable ou connexion impossible.","Room not found or unable to connect."))
     }
     function startPossessedOnlineGame(){
-      if(!possessedIsHost||possessedPlayers.length!==4||possessedOnlineStarted)return;
-      possessedOnlineStarted=true;const shuffled=secureShuffle(possessedPlayers.map(player=>player.id)),possessedId=shuffled[0];
-      possessedPlayers.forEach(player=>{const role=player.id===possessedId?"possessed":"investigator";if(player.host){possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(role)}`}else{const connection=possessedConnections.get(player.id);if(connection&&connection.open)connection.send({type:"role",role})}});
-      broadcastPossessedLobby();setPossessedOnlineStatus("Les rôles ont été distribués.","Roles have been assigned.");possessedStartOnline.disabled=true;possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})
+      const count=possessedPlayers.length;if(!possessedIsHost||count<3||count>4)return;
+      possessedOnlineStarted=true;possessedDistributionRound++;const shuffled=secureShuffle(possessedPlayers.map(player=>player.id)),possessedId=shuffled[0];
+      possessedPlayers.forEach(player=>{const role=player.id===possessedId?"possessed":"investigator";if(player.host){possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(role)}`}else{const connection=possessedConnections.get(player.id);if(connection&&connection.open)connection.send({type:"role",role,round:possessedDistributionRound})}});
+      broadcastPossessedLobby();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");renderPossessedLobby();possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})
     }
     async function copyPossessedInvite(){
       const value=possessedShareLink.value;if(!value)return;
@@ -2234,6 +2248,7 @@
     function refreshPossessedLanguage(){
       renderPossessedLocalNames();
       if(possessedLocalAssignments.length)renderLocalPossessedStage();
+      if(!possessedOnlineLobby.hidden)renderPossessedLobby();
       if(!possessedOnlineRole.hidden&&possessedOnlineStarted){/* role card is refreshed on next assignment; keep current private view unchanged */}
     }
 
@@ -2277,6 +2292,7 @@
     document.getElementById("possessed-create-room").addEventListener("click",createPossessedRoom);
     document.getElementById("possessed-join-room").addEventListener("click",joinPossessedRoom);
     document.getElementById("possessed-start-online").addEventListener("click",startPossessedOnlineGame);
+    document.getElementById("possessed-redraw-online").addEventListener("click",startPossessedOnlineGame);
     document.getElementById("possessed-copy-link").addEventListener("click",copyPossessedInvite);
     document.getElementById("possessed-leave-room").addEventListener("click",()=>cleanupPossessedPeer(true));
     mediaUniqueButton.addEventListener("click",mediaAddUnique);
