@@ -1078,7 +1078,7 @@
         <h3>Source du défi</h3>
         <p>Le Mur de la mort et ses règles originales ont été créés par MrTiboute.</p>
         <p><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
-        <p class="source">La page source décrit l'objectif, le démarrage et les conditions de réussite. La liste de malus utilisée ici est une proposition jouable pour rendre le mur interactif.</p>
+        <p class="source">La page source décrit l'objectif, le démarrage et les conditions de réussite. Les cases du mur reprennent les malus fournis dans l'image de référence.</p>
       </div>
     </div>
   </main>
@@ -1617,28 +1617,41 @@
     const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
     const wallMaluses=[
-      {title:"Sans pilules",desc:"Aucune pilule de santé mentale ne peut être utilisée."},
-      {title:"Sans crucifix",desc:"N'achetez et n'utilisez aucun crucifix."},
-      {title:"Lumières limitées",desc:"Une seule lampe de poche forte autorisée pour l'équipe."},
-      {title:"Pas de sel",desc:"Le sel et ses traces ne peuvent pas être utilisés."},
-      {title:"Sans encens",desc:"Aucun encens pendant toute la partie."},
-      {title:"Photo obligatoire",desc:"Une photo du fantôme est obligatoire avant de partir."},
-      {title:"Objectifs obligatoires",desc:"Les trois objectifs secondaires doivent être terminés."},
-      {title:"Pas de cachette préparée",desc:"Interdit de bloquer ou préparer une cachette avec des objets."},
-      {title:"Radio muette",desc:"Le vocal radio est interdit, seules les communications de proximité sont autorisées."},
-      {title:"Thermo interdit",desc:"Aucun thermomètre pendant la partie."},
-      {title:"Camion limité",desc:"Après l'ouverture de la porte, chaque joueur ne peut retourner au camion qu'une seule fois."},
-      {title:"Preuve maudite",desc:"Si un objet maudit est trouvé, il doit être utilisé une fois."},
-      {title:"No sprint",desc:"Sprint interdit hors chasse."},
-      {title:"Starter imposé",desc:"Au moins un équipement Tier 1 doit être emporté volontairement."},
-      {title:"Chasse attendue",desc:"Une chasse doit être vécue avant de quitter la carte."},
-      {title:"Sans caméra vidéo",desc:"Aucune caméra vidéo ni trépied."},
-      {title:"Bougie en main",desc:"Un joueur doit garder une bougie ou un allumeur équipé pendant l'enquête."},
-      {title:"Silence en preuve",desc:"Pendant la collecte d'une preuve, personne ne parle pendant 30 secondes."},
-      {title:"Équipe séparée",desc:"Deux joueurs maximum dans la même pièce hors chasse."},
-      {title:"Départ groupé",desc:"Personne ne quitte la maison seul : sortie uniquement groupée."}
+      {title:"Pas de Talkie",desc:"Le talkie-walkie est interdit : communication de proximité uniquement."},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête."},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête."},
+      {title:"La Chasse continue",desc:"Mourir augmente la chasse au maximum."},
+      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi."},
+      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible."},
+      {title:"Sprint Off",desc:"Le sprint est interdit pendant la partie."},
+      {title:"Photo du Fantôme",desc:"Une photo du fantôme est obligatoire avant de partir."},
+      {title:"Plus d'Encens",desc:"Les encens sont interdits."},
+      {title:"Chaque Objet devient Unique",desc:"Chaque objet est limité à 1 exemplaire."},
+      {title:"25% Santé Mentale",desc:"Commencez ou jouez avec une santé mentale limitée à 25%."},
+      {title:"Pilules Interdites",desc:"Les pilules de santé mentale sont interdites."},
+      {title:"Os Obligatoire",desc:"L'os doit être trouvé et récupéré."},
+      {title:"1 Case en Plus par Round",desc:"Ouvrez 1 case supplémentaire avant chaque round."},
+      {title:"2/3 Objectifs",desc:"Au moins 2 objectifs secondaires sur 3 doivent être validés."},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête."},
+      {title:"Random Map",desc:"La carte doit être choisie aléatoirement."},
+      {title:"Moniteur Santé Mentale Off",desc:"Le moniteur de santé mentale du camion est interdit."},
+      {title:"Objets Électroniques Interdits",desc:"Les objets électroniques sont interdits."},
+      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres."},
+      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi."},
+      {title:"1 Round en plus",desc:"Le défi passe à 6 parties à valider."},
+      {title:"-50% Santé Mentale",desc:"Retirez 50% de santé mentale à l'équipe."},
+      {title:"Sans Livre",desc:"Le livre est interdit pour cocher les preuves."},
+      {title:"-25% Santé Mentale",desc:"Retirez 25% de santé mentale à l'équipe."},
+      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres."},
+      {title:"Souffle moi le bout",desc:"Souffler une bougie est obligatoire."},
+      {title:"Plus de Période de Grace",desc:"La période de grâce doit être désactivée."},
+      {title:"Moniteur Activité Off",desc:"Le moniteur d'activité du camion est interdit."},
+      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible."},
+      {title:"Pas de Cachettes",desc:"Les cachettes sont interdites."},
+      {title:"Mange moi le Cruci",desc:"Un crucifix doit être consommé par l'entité."},
+      {title:"Courant Cassé",desc:"Le courant doit rester coupé."}
     ];
-    let wallMalusOrder=wallMaluses.map((_,index)=>index),wallOpenedIndexes=[],wallRound=1,wallWins=0,wallOutcome=null,wallStatusText="Ouvre 2 cases avant de lancer la première partie.";
+    let wallMalusOrder=wallMaluses.map((_,index)=>index),wallOpenedIndexes=[],wallRoundStartIndex=0,wallRound=1,wallWins=0,wallOutcome=null,wallStatusText="Ouvre 2 cases avant de lancer la première partie.";
 
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
@@ -2398,14 +2411,18 @@
     }
     function closeMediaPopup(){mediaPopup.classList.remove("open","win","loss");mediaPopup.hidden=true;scheduleRoomChallengeSync("media")}
 
-    function wallCurrentRoundOpenCount(){return Math.max(0,wallOpenedIndexes.length-((wallRound-1)*2))}
-    function wallCanOpen(){return !wallOutcome&&wallRound<=5&&wallCurrentRoundOpenCount()<2&&wallOpenedIndexes.length<wallMalusOrder.length}
     function wallMalusAt(index){return wallMaluses[wallMalusOrder[index]??index]||wallMaluses[index%wallMaluses.length]}
+    function wallHasActiveMalus(title){return wallOpenedIndexes.some(index=>wallMalusAt(index).title===title)}
+    function wallTargetWins(){return wallHasActiveMalus("1 Round en plus")?6:5}
+    function wallRequiredOpenCount(){return 2+(wallHasActiveMalus("1 Case en Plus par Round")?1:0)}
+    function wallCurrentRoundOpenCount(){return Math.max(0,wallOpenedIndexes.length-wallRoundStartIndex)}
+    function wallRemainingOpenCount(){return Math.max(0,wallRequiredOpenCount()-wallCurrentRoundOpenCount())}
+    function wallCanOpen(){return !wallOutcome&&wallWins<wallTargetWins()&&wallRemainingOpenCount()>0&&wallOpenedIndexes.length<wallMalusOrder.length}
     function wallSetStatus(message){wallStatusText=message;renderWallChallenge()}
     function wallOpenCell(index){
       if(!wallCanOpen()||wallOpenedIndexes.includes(index))return;
       wallOpenedIndexes.push(index);
-      const malus=wallMalusAt(index),remaining=2-wallCurrentRoundOpenCount();
+      const malus=wallMalusAt(index),remaining=wallRemainingOpenCount();
       wallSetStatus(remaining>0?`Case ${index+1} ouverte : ${malus.title}. Ouvre encore ${remaining} case.`:`Case ${index+1} ouverte : ${malus.title}. Lance la partie ${wallRound} avec les malus actifs.`)
     }
     function wallOpenRandom(){
@@ -2416,22 +2433,23 @@
     }
     function wallWinRound(){
       if(wallOutcome)return;
-      if(wallCurrentRoundOpenCount()<2){wallSetStatus("Ouvre les 2 cases de la partie avant de la valider.");return}
+      const required=wallRequiredOpenCount();
+      if(wallCurrentRoundOpenCount()<required){wallSetStatus(`Ouvre les ${required} cases de la partie avant de la valider.`);return}
       wallWins++;
-      if(wallWins>=5){wallOutcome="victory";wallSetStatus("Défi réussi : 5 parties validées en Professionnel avec au moins un survivant.");return}
-      wallRound=Math.min(5,wallRound+1);
-      wallSetStatus(`Partie ${wallWins} validée. Ouvre 2 nouvelles cases avant la partie ${wallRound}.`)
+      if(wallWins>=wallTargetWins()){wallOutcome="victory";wallSetStatus(`Défi réussi : ${wallTargetWins()} parties validées en Professionnel avec au moins un survivant.`);return}
+      wallRound=wallWins+1;wallRoundStartIndex=wallOpenedIndexes.length;
+      wallSetStatus(`Partie ${wallWins} validée. Ouvre ${wallRequiredOpenCount()} nouvelles cases avant la partie ${wallRound}.`)
     }
     function wallLoseChallenge(){if(wallOutcome)return;wallOutcome="defeat";wallSetStatus("Défi perdu : entité mal identifiée ou aucun joueur survivant.")}
     function resetWallChallenge(){
-      wallMalusOrder=secureShuffle(wallMaluses.map((_,index)=>index));wallOpenedIndexes=[];wallRound=1;wallWins=0;wallOutcome=null;wallStatusText="Ouvre 2 cases avant de lancer la première partie.";renderWallChallenge()
+      wallMalusOrder=secureShuffle(wallMaluses.map((_,index)=>index));wallOpenedIndexes=[];wallRoundStartIndex=0;wallRound=1;wallWins=0;wallOutcome=null;wallStatusText="Ouvre 2 cases avant de lancer la première partie.";renderWallChallenge()
     }
     function renderWallChallenge(){
       if(!wallChallengeView||!wallGrid)return;
       const openedSet=new Set(wallOpenedIndexes),activeMaluses=wallOpenedIndexes.map(wallMalusAt);
-      wallRoundDisplay.textContent=`${Math.min(wallRound,5)} / 5`;wallWinCountDisplay.textContent=wallWins;wallOpenCountDisplay.textContent=wallOpenedIndexes.length;wallNeededCountDisplay.textContent=wallOutcome?"0":Math.max(0,2-wallCurrentRoundOpenCount());
+      wallRoundDisplay.textContent=`${Math.min(wallRound,wallTargetWins())} / ${wallTargetWins()}`;wallWinCountDisplay.textContent=wallWins;wallOpenCountDisplay.textContent=wallOpenedIndexes.length;wallNeededCountDisplay.textContent=wallOutcome?"0":wallRemainingOpenCount();
       wallStatus.textContent=wallStatusText;
-      wallOpenRandomButton.disabled=!wallCanOpen();wallWinRoundButton.disabled=!!wallOutcome||wallCurrentRoundOpenCount()<2;wallLoseButton.disabled=!!wallOutcome;
+      wallOpenRandomButton.disabled=!wallCanOpen();wallWinRoundButton.disabled=!!wallOutcome||wallRemainingOpenCount()>0;wallLoseButton.disabled=!!wallOutcome;
       wallGrid.innerHTML=wallMalusOrder.map((_,index)=>{
         const open=openedSet.has(index),malus=wallMalusAt(index),locked=!open&&!wallCanOpen();
         return `<button class="wall-cell${open?" open":""}${locked?" locked":""}" type="button" data-index="${index}" ${locked?"disabled":""}><span class="wall-cell-index">${open?"Case "+(index+1):String(index+1).padStart(2,"0")}</span>${open?`<span class="wall-cell-title">${escapeHtml(malus.title)}</span><span class="wall-cell-desc">${escapeHtml(malus.desc)}</span>`:"<span class=\"wall-cell-title\">Case fermée</span>"}</button>`
@@ -2522,12 +2540,12 @@
       renderMediaChallenge();if(mediaResult&&state.resultHtml)mediaResult.innerHTML=state.resultHtml;
       if(mediaOutcome&&state.popupOpen)showMediaOutcome(mediaOutcome);else closeMediaPopup()
     }
-    function captureWallRoomState(){return {order:[...wallMalusOrder],opened:[...wallOpenedIndexes],round:wallRound,wins:wallWins,outcome:wallOutcome,status:wallStatusText}}
+    function captureWallRoomState(){return {order:[...wallMalusOrder],opened:[...wallOpenedIndexes],roundStart:wallRoundStartIndex,round:wallRound,wins:wallWins,outcome:wallOutcome,status:wallStatusText}}
     function applyWallRoomState(state){
       if(!state)return;
       wallMalusOrder=Array.isArray(state.order)&&state.order.length?state.order.map(Number):wallMaluses.map((_,index)=>index);
       wallOpenedIndexes=Array.isArray(state.opened)?state.opened.map(Number):[];
-      wallRound=Number(state.round)||1;wallWins=Number(state.wins)||0;wallOutcome=state.outcome||null;wallStatusText=state.status||"Ouvre 2 cases avant de lancer la partie.";
+      wallRound=Number(state.round)||1;wallWins=Number(state.wins)||0;wallRoundStartIndex=Number.isFinite(Number(state.roundStart))?Number(state.roundStart):Math.max(0,(wallRound-1)*2);wallOutcome=state.outcome||null;wallStatusText=state.status||"Ouvre 2 cases avant de lancer la partie.";
       renderWallChallenge()
     }
     function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():captureTarotRoomState())}
