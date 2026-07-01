@@ -83,6 +83,25 @@
     /* barre supérieure globale (marque + retour + langue) sur toutes les pages */
     .ph-topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 28px;border-bottom:1px solid var(--line-soft);background:linear-gradient(180deg,rgba(8,6,5,.95),rgba(8,6,5,.6));backdrop-filter:blur(4px)}
     .ph-topbar-left{display:flex;align-items:center;gap:16px;min-width:0}
+    .ph-topbar-controls{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+    .top-play-mode{display:flex;align-items:center;gap:6px;padding:6px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+    .top-play-mode-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin:0 4px}
+    .topbar-mode-btn{margin:0;padding:7px 10px;background:transparent;border:1px solid transparent;color:var(--muted);box-shadow:none;font-family:var(--mono);font-size:11px;letter-spacing:.08em}
+    .topbar-mode-btn:hover{background:rgba(255,255,255,.05);border-color:var(--line);transform:none;color:var(--ink)}
+    .topbar-mode-btn.active{background:var(--red);border-color:var(--red-bright);color:#fff}
+    .top-room-menu{position:relative;min-width:220px}
+    .top-room-menu[hidden],.top-room-players:empty{display:none!important}
+    .top-room-menu summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--ink);cursor:pointer;transition:border-color .2s,box-shadow .2s,background .2s}
+    .top-room-menu summary::-webkit-details-marker{display:none}
+    .top-room-menu summary::after{content:"▾";color:var(--muted2);font-size:13px;transition:transform .2s,color .2s}
+    .top-room-menu[open] summary{border-color:var(--green-bright);background:linear-gradient(180deg,rgba(111,174,126,.22),rgba(0,0,0,.48));box-shadow:0 0 0 1px rgba(111,174,126,.28),0 0 22px rgba(111,174,126,.16)}
+    .top-room-menu[open] summary::after{transform:rotate(180deg);color:var(--green-bright)}
+    .top-room-menu[open] .top-room-content{border-color:rgba(111,174,126,.45)}
+    .top-room-summary{color:var(--green-bright);font-size:11px}
+    .top-room-content{position:absolute;right:0;top:calc(100% + 8px);z-index:30;width:min(680px,calc(100vw - 32px));max-height:calc(100vh - 96px);overflow:auto;padding:12px;background:linear-gradient(180deg,#15110e,#0e0b09);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.65)}
+    .top-room-content .possessed-mode-panel{margin:0}
+    .top-room-content .possessed-box{margin:0 0 10px}
+    .top-room-players{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:360px}
     .ph-brand{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;margin:0;padding:0;background:none;border:none;box-shadow:none}
     .ph-brand:hover{transform:none;background:none}
     .ph-brand-name{font-family:var(--display);font-weight:900;letter-spacing:.14em;color:#ece7dd;font-size:18px;text-shadow:0 0 14px rgba(178,59,46,.35);text-transform:none}
@@ -96,6 +115,7 @@
       font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:9px 15px;box-shadow:none}
     .back-challenges-btn:hover{background:rgba(20,17,14,.9);border-color:var(--red);color:var(--ink);transform:none}
     .mode-control{display:flex;align-items:center;gap:12px;padding:8px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line)}
+    .ph-topbar .mode-control{margin:0;padding:6px 10px}
     .mode-control>strong{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:400}
     .mode-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted)}
     .mode-switch input{position:absolute;opacity:0;pointer-events:none}
@@ -273,9 +293,9 @@
     .lost-list .object-item img{border-color:#c0392b;filter:grayscale(.55);opacity:.7}
 
     /* ----- media challenge ----- */
-    .media-container,.possessed-container{position:relative}
-    .media-panel,.possessed-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
-    .media-panel h2,.possessed-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
+    .media-container,.possessed-container,.wall-container{position:relative}
+    .media-panel,.possessed-panel,.wall-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
+    .media-panel h2,.possessed-panel h2,.wall-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
     .media-phase-badge{color:var(--green-bright)!important}
     .media-type-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:16px 0}
     .media-type-btn{font-family:var(--serif);background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--muted2);
@@ -299,6 +319,21 @@
     .media-object.locked img{border-color:var(--muted3);filter:grayscale(.6)}
     .media-object-badge{display:inline-block;margin-top:4px;padding:2px 7px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--muted)}
     .media-result-card{display:flex;align-items:center;gap:12px}
+    .wall-grid{--wall-cell-size:clamp(178px,21vw,216px);display:grid;grid-template-columns:repeat(auto-fill,var(--wall-cell-size));justify-content:center;gap:10px;margin:18px 0}
+    .wall-cell{position:relative;width:var(--wall-cell-size);aspect-ratio:1/1;min-height:0;margin:0;padding:12px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
+    .wall-cell:hover{border-color:var(--red);transform:translateY(-1px)}
+    .wall-cell.open{background:linear-gradient(180deg,#2b1714,#140d0b);border-color:var(--red-bright);color:#f6e7e1}
+    .wall-cell.locked{opacity:.55;cursor:not-allowed}
+    .wall-cell-index{font-family:var(--display);font-size:24px;color:var(--red-bright)}
+    .wall-cell.open .wall-cell-index{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:#c79a4b}
+    .wall-cell-icon{width:46px;height:46px;flex:0 0 46px;background-image:var(--wall-icon);background-repeat:no-repeat;background-position:center;background-size:contain;opacity:.28;filter:drop-shadow(0 0 14px rgba(239,234,224,.2))}
+    .wall-cell.open .wall-cell-icon{opacity:.6}
+    .wall-cell-title{font-family:var(--serif);font-size:14px;letter-spacing:.04em;line-height:1.16;text-transform:none;color:#efeae0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .wall-cell-desc{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;font-family:var(--mono);font-size:10.5px;letter-spacing:0;line-height:1.28;color:#c9bfb3}
+    .wall-malus-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+    .wall-malus-item{padding:12px;background:rgba(0,0,0,.32);border:1px solid var(--line);font-size:13px;line-height:1.45;color:#bcb4a9}
+    .wall-malus-item strong{display:block;color:#efeae0;margin-bottom:4px}
+    .wall-empty{padding:16px;border:1px dashed var(--line);color:var(--muted);text-align:center}
 
     /* ----- memo / ghost chart ----- */
     .memo-shell{position:relative}
@@ -331,10 +366,13 @@
     .memo-empty{grid-column:1/-1;text-align:center;color:var(--muted2);font-family:var(--mono);padding:40px;border:1px dashed var(--line)}
 
     /* ----- fun memo ----- */
-    .fun-memo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .fun-card{background:linear-gradient(180deg,#1a1612,#13100d);border:1px solid var(--line);border-top:3px solid var(--muted3);padding:20px;text-align:center}
+    .fun-memo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,340px));justify-content:center;gap:18px}
+    .fun-card{background:linear-gradient(180deg,#1a1612,#13100d);border:1px solid var(--line);border-top:3px solid var(--muted3);padding:20px;text-align:center;display:flex;flex-direction:column;align-items:center}
     .fun-card.good{border-top-color:var(--green)}
     .fun-card.bad{border-top-color:var(--red)}
+    .fun-card img{width:100%;max-width:280px;height:200px;padding:10px;background:#0e0b09;border:1px solid var(--line);object-fit:cover;display:block;margin:0 auto 12px;box-sizing:border-box}
+    .fun-card.good img{object-position:50% 18%}
+    .fun-card.bad img{object-position:50% 16%}
     .fun-card h2,.fun-card h3{font-size:17px;letter-spacing:.05em}
     .fun-badge{display:inline-block;margin:8px 0;padding:4px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line)}
     .fun-card.good .fun-badge{color:var(--green-bright);border-color:rgba(111,174,126,.4)}
@@ -362,6 +400,7 @@
     .possessed-role-title{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:.06em;margin:12px 0 8px;color:#ece7dd}
     .possessed-role-text{color:#bcb4a9;font-size:14px;line-height:1.6;margin:0}
     .possessed-online-status{font-family:var(--mono);font-size:13px;color:var(--muted);margin:10px 0}
+    .room-sync-note{margin:10px 0 0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted2);letter-spacing:.04em}
     .possessed-room-code{font-family:var(--display);font-size:40px;letter-spacing:.3em;color:var(--red-bright);text-align:center;margin:10px 0;text-shadow:0 0 20px rgba(178,59,46,.4)}
     .possessed-share-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
     .possessed-share-row input{flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:13px;padding:10px 12px}
@@ -369,6 +408,9 @@
     .possessed-player-chip{font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:6px 12px;background:rgba(0,0,0,.4);border:1px solid var(--line);color:#cfc7bc}
     .possessed-player-chip.host{border-color:var(--red);color:var(--red-bright)}
     .possessed-card-symbol{margin:0}
+    .possessed-role-actions{max-width:720px;margin-left:auto;margin-right:auto;text-align:center}
+    .possessed-role-popup .challenge-popup-card{border-color:var(--line)}
+    .possessed-role-popup .possessed-role-card{margin:0 auto 18px}
 
     /* ----- popups ----- */
     .challenge-popup,.media-popup{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.82);backdrop-filter:blur(5px)}
@@ -394,12 +436,18 @@
       .tarot-grid{grid-template-columns:1fr}
       .tarot-card{grid-template-columns:100px minmax(0,1fr)}
       .media-lists{grid-template-columns:1fr}
+      .top-room-content{right:auto;left:0}
     }
     @media(max-width:640px){
       .app-view{padding:28px 16px 70px}
       .lists{grid-template-columns:1fr}
       .tarot-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .tarot-card{grid-template-columns:1fr;justify-items:center}
+      .ph-topbar-controls{width:100%;justify-content:flex-start}
+      .top-play-mode,.ph-topbar .mode-control,.top-room-menu{width:100%}
+      .topbar-mode-btn{flex:1}
+      .top-room-content{position:static;width:100%;max-height:none;margin-top:8px}
+      .top-room-players{justify-content:flex-start;max-width:none}
     }
   </style>
 </head>
@@ -416,11 +464,34 @@
       </button>
       <button type="button" id="ph-back-btn" class="ph-back" hidden>← Retour</button>
     </div>
-    <div class="lang-control">
-      <span class="lang-label">Langue</span>
-      <div class="lang-buttons">
-        <button type="button" class="lang-btn" data-lang="fr">FR</button>
-        <button type="button" class="lang-btn" data-lang="en">EN</button>
+    <div class="ph-topbar-controls">
+      <div class="top-play-mode" role="group" aria-label="Mode de jeu">
+        <span class="top-play-mode-label">Mode</span>
+        <button id="play-mode-solo" class="topbar-mode-btn active" type="button" data-play-mode="solo">Solo</button>
+        <button id="play-mode-local" class="topbar-mode-btn" type="button" data-play-mode="local">Multi local</button>
+        <button id="play-mode-room" class="topbar-mode-btn" type="button" data-play-mode="room">Room</button>
+      </div>
+      <div class="mode-control">
+        <strong>Streamer</strong>
+        <label class="mode-switch" for="streamer-mode">
+          <span>Off</span>
+          <input id="streamer-mode" type="checkbox" aria-describedby="mode-description">
+          <span class="switch-track" aria-hidden="true"></span>
+          <span>On</span>
+        </label>
+        <span id="mode-description" class="mode-label" hidden>Off</span>
+      </div>
+      <details id="top-room-menu" class="top-room-menu" hidden>
+        <summary>Room <span id="top-room-summary" class="top-room-summary">inactive</span></summary>
+        <div id="top-room-content" class="top-room-content"></div>
+      </details>
+      <div id="top-room-players" class="top-room-players" aria-live="polite"></div>
+      <div class="lang-control">
+        <span class="lang-label">Langue</span>
+        <div class="lang-buttons">
+          <button type="button" class="lang-btn" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
       </div>
     </div>
   </header>
@@ -461,10 +532,11 @@
       </div>
       <section class="credits-box" aria-labelledby="credits-title">
         <h2 id="credits-title">Sources et crédits</h2>
-        <p>Les défis Le Tarot Surprise et Média Surprise, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
+        <p>Les défis Le Tarot Surprise, Média Surprise et Le Mur de la mort, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
         <div class="credit-links">
           <a class="credit-link" href="https://mrtiboute.tv/defis/tarot-surprise" target="_blank" rel="noopener noreferrer">Source originale — Le Tarot Surprise</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Source originale — Média Surprise</a>
+          <a class="credit-link" href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Source originale — Le Mur de la mort</a>
           <a class="credit-link" href="https://mrtiboute.tv" target="_blank" rel="noopener noreferrer">Site officiel de MrTiboute</a>
         </div>
         <p>Les informations générales, noms d’objets et certaines images proviennent du wiki communautaire Phasmophobia / Fandom. Cette application est un projet non officiel et n’est affiliée ni à MrTiboute ni aux créateurs du jeu.</p>
@@ -488,8 +560,9 @@
       </div>
       <header class="hub-header">
         <h1 id="challenges-title">Défis Phasmophobia</h1>
-        <p>Choisis un défi pour ouvrir sa propre vue. Ta progression est conservée lorsque tu reviens à cette page.</p>
+        <p>Crée ou rejoins une room, puis lance un défi. Les joueurs connectés peuvent agir sur le suivi du défi depuis leur propre écran.</p>
       </header>
+      <p id="challenge-room-note" class="room-sync-note">Choisis un mode dans la barre du haut avant d’ouvrir un défi.</p>
       <div class="challenge-grid">
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
@@ -521,9 +594,21 @@
           </div>
           <div class="challenge-card-body">
             <h2>Le Possédé</h2>
-            <p>De trois à quatre joueurs, les Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.</p>
+            <p>Pour quatre joueurs : trois Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.</p>
             <div class="challenge-meta"><span>3-4 joueurs</span><span>Rôles secrets</span><span>Local ou en ligne</span></div>
             <button id="open-possessed-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">☠</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>Le Mur de la mort</h2>
+            <p>Ouvre 2 cases avant chaque partie, accumule des malus permanents et tente d'enchainer 5 contrats réussis en Professionnel.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>5 parties</span><span>Professionnel</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Défi original créé par MrTiboute.</a></p>
+            <button id="open-wall-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
       </div>
@@ -626,7 +711,7 @@
       </header>
       <div class="fun-memo-grid">
         <article class="fun-card good">
-          <img src="data:image/jpeg;base64,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" alt="Personnage du jeu Phasmophobia, côté gentil">
+          <img class="fun-img-player" src="https://static.wikia.nocookie.net/phasmophobia/images/1/10/Female5_Hair.png/revision/latest?cb=20260506000756&path-prefix=fr" alt="Personnage du jeu Phasmophobia, côté gentil">
           <span class="fun-badge">Gentil</span>
           <h2>Investigateur</h2>
           <p>Le personnage du jeu entre dans la maison pour chercher des preuves, poser du matériel et essayer de comprendre quelle entité hante les lieux.</p>
@@ -634,7 +719,7 @@
           <p class="fun-note">Bref : il est là pour résoudre le mystère, pas pour manger l’équipe.</p>
         </article>
         <article class="fun-card bad">
-          <img src="data:image/jpeg;base64,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" alt="Entité de Phasmophobia, côté pas gentil">
+          <img class="fun-img-ghost" src="https://static.wikia.nocookie.net/phasmophobia/images/b/b1/Entit%C3%A91.png/revision/latest/scale-to-width-down/1000?cb=20220901214054&path-prefix=fr" alt="Entité de Phasmophobia, côté pas gentil">
           <span class="fun-badge">Pas gentil</span>
           <h2>Entité</h2>
           <p>L’entité adore faire clignoter les lumières, lancer des objets, souffler les bougies et rappeler à tout le monde que rester seul dans le noir était une mauvaise idée.</p>
@@ -809,17 +894,6 @@
         <div class="stat">Objets T3<strong id="tier3-count">0</strong></div>
       </div>
       <div class="control-row">
-
-        <div class="mode-control">
-          <strong>Mode</strong>
-          <label class="mode-switch" for="streamer-mode">
-            <span>Local</span>
-            <input id="streamer-mode" type="checkbox" aria-describedby="mode-description">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span>Streamer</span>
-          </label>
-          <span id="mode-description" class="mode-label">Local</span>
-        </div>
         <button id="timer-btn" class="good-btn">Démarrer chrono</button>
         <button id="reset-round-btn" class="warning-btn">Reset manche</button>
         <button id="reset-game-btn" class="danger-btn">Reset défi entier</button>
@@ -965,6 +1039,64 @@
     </div>
   </main>
 
+  <main id="wall-challenge-view" class="app-view" hidden>
+    <div class="wall-container">
+      <div class="hub-topbar">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-toolbar"><button id="back-wall-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
+      <h1>Le Mur de la mort - Phasmophobia</h1>
+
+      <section class="fiche">
+        <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Objectif</div><div class="fiche-v">5 parties</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Professionnel</div></div></div>
+        <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enchainer 5 parties réussies en Professionnel et survivre au mur. Tous les objets doivent être débloqués au préalable, au Tier 1 ou plus.</p></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant chaque partie, ouvrez 2 cases du mur.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Les 2 cases révélées ajoutent 2 malus permanents, actifs jusqu'à la fin du défi.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>La partie est réussie si l'entité est correctement identifiée et qu'au moins un joueur quitte la partie en vie.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Si l'entité n'est pas correctement identifiée ou si tous les joueurs meurent, le défi est perdu.</p></div></div>
+        <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire après 5 parties réussies avec tous les malus révélés encore appliqués.</p></div>
+      </section>
+
+      <section class="wall-panel" aria-labelledby="wall-controls-title">
+        <h2 id="wall-controls-title">Suivi du mur</h2>
+        <div class="media-stats">
+          <div class="media-stat">Partie<strong id="wall-round">1 / 5</strong></div>
+          <div class="media-stat">Réussites<strong id="wall-win-count">0</strong></div>
+          <div class="media-stat">Cases ouvertes<strong id="wall-open-count">0</strong></div>
+          <div class="media-stat">À ouvrir<strong id="wall-needed-count">2</strong></div>
+        </div>
+        <div class="media-actions">
+          <button id="wall-open-random" class="warning-btn" type="button">Ouvrir une case aléatoire</button>
+          <button id="wall-win-round" class="good-btn" type="button">Partie réussie</button>
+          <button id="wall-lose-challenge" class="danger-btn" type="button">Défi perdu</button>
+          <button id="wall-reset" class="warning-btn" type="button">Reset du défi</button>
+          <button id="wall-open-all-debug" class="media-secondary-btn" type="button">Debug : ouvrir tout</button>
+        </div>
+        <p id="wall-status" class="media-progress-note">Ouvre 2 cases avant de lancer la première partie.</p>
+      </section>
+
+      <section class="wall-panel" aria-labelledby="wall-grid-title">
+        <h2 id="wall-grid-title">Mur des malus</h2>
+        <div id="wall-grid" class="wall-grid"></div>
+      </section>
+
+      <section class="wall-panel" aria-labelledby="wall-active-title">
+        <h2 id="wall-active-title">Malus permanents actifs</h2>
+        <div id="wall-active-list" class="wall-malus-list"></div>
+      </section>
+
+      <div class="credits-box">
+        <h3>Source du défi</h3>
+        <p>Le Mur de la mort et ses règles originales ont été créés par MrTiboute.</p>
+        <p><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
+        <p class="source">La page source décrit l'objectif, le démarrage et les conditions de réussite. Les cases du mur reprennent les malus fournis dans l'image de référence.</p>
+      </div>
+    </div>
+  </main>
+
   <main id="possessed-challenge-view" class="app-view" hidden>
     <div class="possessed-container">
       <div class="hub-topbar">
@@ -980,17 +1112,17 @@
       <h1>Le Possédé - Phasmophobia</h1>
 
       <section class="fiche">
-      <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">4</div></div><div class="fiche-cell"><div class="fiche-k">Rôles</div><div class="fiche-v">Secrets</div></div><div class="fiche-cell"><div class="fiche-k">Mode</div><div class="fiche-v">Local / en ligne</div></div></div>
-      <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enquêteurs : identifier correctement le type de fantôme. Possédé : faire échouer l’identification sans être démasqué.</p></div>
-      <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Tirez les rôles en secret : 3 Enquêteurs et 1 Possédé (utilisez le tirage ci-dessus).</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Les Enquêteurs collectent les preuves et votent en fin de partie sur le type de fantôme.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Le Possédé agit normalement mais sape l’enquête : fausses infos, gaspillage d’équipement, isolement d’un coéquipier.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Le Possédé ne doit jamais avouer ni saboter trop ouvertement : la discrétion prime.</p></div></div>
-      <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire des Enquêteurs si l’identification est correcte. Victoire du Possédé si elle est fausse, ou si l’équipe échoue à conclure.</p></div>
+      <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">4</div></div><div class="fiche-cell"><div class="fiche-k">Rôles</div><div class="fiche-v">3 + 1</div></div><div class="fiche-cell"><div class="fiche-k">Score</div><div class="fiche-v">Votes finaux</div></div></div>
+      <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>L’équipe doit toujours identifier correctement le fantôme. Le Possédé doit aider assez pour que l’enquête avance, tout en réalisant secrètement deux corruptions différentes.</p></div>
+      <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant la partie, chacun tire secrètement un rôle : trois Enquêteurs et un Possédé.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Le Possédé doit réaliser deux corruptions différentes : déplacer un équipement installé, couper le disjoncteur au mauvais moment, faire gaspiller un encens ou un crucifix, mentir une fois sur une interaction, déclencher l’objet maudit après cinq minutes, ou convaincre quelqu’un de rester seul dans la maison.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Il est interdit de cacher tout le matériel ou de provoquer volontairement une mort impossible à éviter.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>À la fin, chacun sélectionne le fantôme, puis désigne le joueur qu’il pense Possédé.</p></div></div>
+      <div class="fiche-block win"><div class="fiche-block-label">Points</div><p>Fantôme correct : 1 point pour tous. Possédé découvert : 2 points pour chaque Enquêteur. Possédé non découvert : 3 points pour lui. Possédé mort avant ses deux corruptions : 0 point.</p></div>
     </section>
 
       <section class="possessed-panel" aria-labelledby="possessed-room-title">
-        <h2 id="possessed-room-title">Choisir le mode de distribution</h2>
+        <h2 id="possessed-room-title">Distribution locale des rôles</h2>
         <div class="possessed-tabs" role="tablist">
-          <button id="possessed-local-tab" class="possessed-tab active" type="button" role="tab" aria-selected="true">Même appareil</button>
-          <button id="possessed-online-tab" class="possessed-tab" type="button" role="tab" aria-selected="false">Room en ligne (bêta)</button>
+          <button id="possessed-local-tab" class="possessed-tab active" type="button" role="tab" aria-selected="true">Multi local</button>
+          <button id="possessed-online-tab" class="possessed-tab" type="button" role="tab" aria-selected="false">Room</button>
         </div>
 
         <div id="possessed-local-panel" class="possessed-mode-panel">
@@ -999,9 +1131,9 @@
             <p>Les joueurs se passent le même téléphone. Le rôle est masqué avant de passer au joueur suivant.</p>
             <div class="possessed-field">
               <label for="possessed-local-count">Nombre de joueurs</label>
-              <select id="possessed-local-count"><option value="3">3</option><option value="4" selected>4</option></select>
+              <select id="possessed-local-count"><option value="4" selected>4</option></select>
             </div>
-            <p class="possessed-note">Le défi accepte 3 à 4 joueurs : un Possédé et tous les autres Enquêteurs.</p>
+            <p class="possessed-note">Le défi est prévu pour 4 joueurs : 3 Enquêteurs et 1 Possédé.</p>
             <div id="possessed-local-names" class="possessed-names"></div>
             <button id="possessed-local-prepare" class="good-btn" type="button">Préparer les rôles</button>
           </div>
@@ -1018,7 +1150,7 @@
           <div id="possessed-online-setup" class="possessed-setup-grid">
             <div id="possessed-create-box" class="possessed-box">
               <h3>Créer une room</h3>
-              <p>Le créateur devient l’hôte et doit garder cette page ouverte pendant la distribution.</p>
+              <p>Le créateur devient l’hôte et doit garder cette page ouverte pendant toute la durée du défi.</p>
               <div class="possessed-field"><label for="possessed-host-name">Ton pseudo</label><input id="possessed-host-name" type="text" maxlength="24" placeholder="Hôte"></div>
               <button id="possessed-create-room" class="good-btn" type="button">Créer la room</button>
             </div>
@@ -1039,12 +1171,18 @@
               <div class="possessed-share-row"><input id="possessed-share-link" type="text" readonly aria-label="Lien d’invitation"><button id="possessed-copy-link" type="button">Copier le lien</button></div>
             </div>
             <div id="possessed-lobby-list" class="possessed-lobby-list"></div>
-            <button id="possessed-start-online" class="good-btn" type="button" hidden>Distribuer les rôles</button>
-            <button id="possessed-redraw-online" class="warning-btn" type="button" hidden>Redistribuer les rôles</button>
             <button id="possessed-leave-room" class="danger-btn" type="button">Quitter la room</button>
           </div>
           <div id="possessed-online-role" class="possessed-stage" hidden></div>
           <p class="possessed-beta">Cette room utilise une connexion directe WebRTC entre les appareils et le service public de signalement PeerJS. Aucun compte n’est nécessaire et les rôles ne sont pas enregistrés. L’hôte doit rester connecté ; certains réseaux très restrictifs peuvent bloquer la connexion.</p>
+        </div>
+      </section>
+      <section id="possessed-role-actions" class="possessed-panel possessed-role-actions" aria-labelledby="possessed-role-actions-title" hidden>
+        <h2 id="possessed-role-actions-title">Distribution des rôles</h2>
+        <p class="possessed-note">Visible uniquement par l’hôte de la room. Lance la distribution quand les 4 joueurs sont prêts dans le défi.</p>
+        <div class="media-actions">
+          <button id="possessed-start-online" class="good-btn" type="button" hidden>Distribuer les rôles</button>
+          <button id="possessed-redraw-online" class="warning-btn" type="button" hidden>Redistribuer les rôles</button>
         </div>
       </section>
     </div>
@@ -1074,6 +1212,17 @@
       <div class="popup-actions">
         <button id="challenge-popup-close" class="good-btn" type="button">Fermer</button>
         <button id="challenge-popup-reset" class="warning-btn" type="button">Recommencer le défi</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="possessed-role-popup" class="challenge-popup possessed-role-popup" role="dialog" aria-modal="true" aria-labelledby="possessed-role-popup-title" hidden>
+    <div class="challenge-popup-card">
+      <button id="possessed-role-popup-x" class="popup-close-x" type="button" aria-label="Fermer">×</button>
+      <h2 id="possessed-role-popup-title">Ton rôle</h2>
+      <div id="possessed-role-popup-body"></div>
+      <div class="popup-actions">
+        <button id="possessed-role-popup-close" class="good-btn" type="button">J’ai compris</button>
       </div>
     </div>
   </div>
@@ -1498,12 +1647,83 @@
     let roundCount=1,winCount=0,lossCount=0,elapsedSeconds=0,timerInterval=null,nextTarotMultiplier=1,challengeOutcome=null;
     const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
+    function wallIconSvg(icon){
+      const icons={
+        radio:`<path d="M44 34h32v66H44z"/><path d="M54 34V20h12v14"/><path d="M76 42h12"/><path d="M52 54h16M52 66h16M52 78h16"/>`,
+        evidence:`<circle cx="55" cy="54" r="24"/><path d="M72 72l28 28"/><path d="M43 51c10-8 24-8 34 0"/>`,
+        hunt:`<path d="M32 94c28-2 54-21 62-50"/><path d="M58 31l36 13-23 31"/><path d="M45 74l-16 16"/>`,
+        item:`<path d="M34 46h60v48H34z"/><path d="M45 46c1-16 28-16 30 0"/><path d="M44 62h40"/>`,
+        tier:`<path d="M31 38h58v48H31z"/><path d="M45 58h30"/><path d="M82 28v20M92 38H72"/>`,
+        sprint:`<path d="M58 30a10 10 0 1 0 0 1"/><path d="M54 45l-16 18 22 8 17 24"/><path d="M60 71l-23 25M70 50l20 10"/><path d="M25 45h18M20 62h15"/>`,
+        photo:`<path d="M28 44h64v46H28z"/><path d="M42 44l7-12h22l7 12"/><circle cx="60" cy="67" r="14"/>`,
+        incense:`<path d="M74 88L42 56"/><path d="M40 54l10-10 32 32-10 10z"/><path d="M70 34c10 10-8 14 4 26M56 25c9 11-8 16 5 27"/>`,
+        unique:`<path d="M60 27v66"/><path d="M44 43l16-16 16 16"/><path d="M36 93h48"/><text x="60" y="75" text-anchor="middle" font-size="28" font-family="Arial" font-weight="900">1</text>`,
+        sanity:`<path d="M36 67c-17-18-3-43 21-34 16-24 49 0 34 26 18 10 6 38-15 33H49c-7 0-13-4-15-11"/><path d="M43 69h14l7-16 10 29 8-13h14"/>`,
+        pill:`<path d="M35 79l36-36a17 17 0 0 1 24 24L59 103A17 17 0 0 1 35 79z"/><path d="M53 61l24 24"/>`,
+        bone:`<path d="M38 42a12 12 0 1 1 18 14l28 28a12 12 0 1 1-14 18 12 12 0 1 1-18-14L24 60a12 12 0 1 1 14-18z"/>`,
+        plus:`<path d="M60 28v64M28 60h64"/><path d="M39 39h42v42H39z"/>`,
+        objectives:`<path d="M30 36h60v60H30z"/><path d="M43 54l9 9 22-24M43 78l9 9 22-24"/>`,
+        map:`<path d="M28 40l22-10 22 10 20-10v62l-20 10-22-10-22 10z"/><path d="M50 30v62M72 40v62"/>`,
+        monitor:`<path d="M26 34h68v44H26z"/><path d="M46 94h28M60 78v16"/><path d="M36 60h13l6-14 9 24 6-10h14"/>`,
+        electronics:`<path d="M52 24h28L66 52h22L48 102l12-36H38z"/>`,
+        speed:`<path d="M25 83a38 38 0 1 1 70 0"/><path d="M60 83l24-32"/><path d="M38 83h44"/><path d="M34 51h12M74 51h12"/>`,
+        round:`<path d="M35 60a25 25 0 0 1 43-18l8 8"/><path d="M86 32v18H68"/><path d="M85 60a25 25 0 0 1-43 18l-8-8"/><path d="M34 88V70h18"/>`,
+        book:`<path d="M30 32h34c10 0 16 6 16 16v48H46c-10 0-16-6-16-16z"/><path d="M80 48c0-10 6-16 16-16h4v64H80"/><path d="M47 50h17M47 64h17"/>`,
+        candle:`<path d="M51 54h18v46H51z"/><path d="M45 100h30"/><path d="M60 19c14 18-12 19 0 35 0-13 19-18 0-35z"/>`,
+        grace:`<path d="M60 26l36 64H24z"/><path d="M60 46v23M60 80v3"/><path d="M44 93h32"/>`,
+        hide:`<path d="M38 30h44v72H38z"/><path d="M50 42h20v60"/><circle cx="72" cy="66" r="3"/>`,
+        crucifix:`<path d="M54 22h12v28h26v12H66v42H54V62H28V50h26z"/>`,
+        power:`<path d="M52 22h26L66 52h24L44 106l13-40H34z"/><path d="M25 32l16 16M95 32L79 48"/>`
+        ,locked:`<path d="M34 52h52v44H34z"/><path d="M45 52V40a15 15 0 0 1 30 0v12"/><path d="M60 68v12"/>`
+      };
+      const shape=icons[icon]||icons.item;
+      const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" fill="none"/><g fill="none" stroke="#efeae0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">${shape}</g></svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
+    }
+    const wallMaluses=[
+      {title:"Pas de Talkie",desc:"Le talkie-walkie est interdit : communication de proximité uniquement.",icon:"radio"},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête.",icon:"evidence"},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête.",icon:"evidence"},
+      {title:"La Chasse continue",desc:"Mourir augmente la chasse au maximum.",icon:"hunt"},
+      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi.",icon:"item"},
+      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible.",icon:"tier"},
+      {title:"Sprint Off",desc:"Le sprint est interdit pendant la partie.",icon:"sprint"},
+      {title:"Photo du Fantôme",desc:"Une photo du fantôme est obligatoire avant de partir.",icon:"photo"},
+      {title:"Plus d'Encens",desc:"Les encens sont interdits.",icon:"incense"},
+      {title:"Chaque Objet devient Unique",desc:"Chaque objet est limité à 1 exemplaire.",icon:"unique"},
+      {title:"25% Santé Mentale",desc:"Commencez ou jouez avec une santé mentale limitée à 25%.",icon:"sanity"},
+      {title:"Pilules Interdites",desc:"Les pilules de santé mentale sont interdites.",icon:"pill"},
+      {title:"Os Obligatoire",desc:"L'os doit être trouvé et récupéré.",icon:"bone"},
+      {title:"1 Case en Plus par Round",desc:"Ouvrez 1 case supplémentaire avant chaque round.",icon:"plus"},
+      {title:"2/3 Objectifs",desc:"Au moins 2 objectifs secondaires sur 3 doivent être validés.",icon:"objectives"},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête.",icon:"evidence"},
+      {title:"Random Map",desc:"La carte doit être choisie aléatoirement.",icon:"map"},
+      {title:"Moniteur Santé Mentale Off",desc:"Le moniteur de santé mentale du camion est interdit.",icon:"monitor"},
+      {title:"Objets Électroniques Interdits",desc:"Les objets électroniques sont interdits.",icon:"electronics"},
+      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres.",icon:"speed"},
+      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi.",icon:"item"},
+      {title:"1 Round en plus",desc:"Le défi passe à 6 parties à valider.",icon:"round"},
+      {title:"-50% Santé Mentale",desc:"Retirez 50% de santé mentale à l'équipe.",icon:"sanity"},
+      {title:"Sans Livre",desc:"Le livre est interdit pour cocher les preuves.",icon:"book"},
+      {title:"-25% Santé Mentale",desc:"Retirez 25% de santé mentale à l'équipe.",icon:"sanity"},
+      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres.",icon:"speed"},
+      {title:"Souffle moi le bout",desc:"Souffler une bougie est obligatoire.",icon:"candle"},
+      {title:"Plus de Période de Grace",desc:"La période de grâce doit être désactivée.",icon:"grace"},
+      {title:"Moniteur Activité Off",desc:"Le moniteur d'activité du camion est interdit.",icon:"monitor"},
+      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible.",icon:"tier"},
+      {title:"Pas de Cachettes",desc:"Les cachettes sont interdites.",icon:"hide"},
+      {title:"Mange moi le Cruci",desc:"Un crucifix doit être consommé par l'entité.",icon:"crucifix"},
+      {title:"Courant Cassé",desc:"Le courant doit rester coupé.",icon:"power"}
+    ];
+    let wallMalusOrder=wallMaluses.map((_,index)=>index),wallOpenedIndexes=[],wallRoundStartIndex=0,wallRound=1,wallWins=0,wallOutcome=null,wallStatusText="Ouvre 2 cases avant de lancer la première partie.";
 
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
-    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
+    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
-    let currentLanguage="fr",isApplyingLanguage=false,languageObserver=null;
+    const wallRoundDisplay=document.getElementById("wall-round"),wallWinCountDisplay=document.getElementById("wall-win-count"),wallOpenCountDisplay=document.getElementById("wall-open-count"),wallNeededCountDisplay=document.getElementById("wall-needed-count"),wallOpenRandomButton=document.getElementById("wall-open-random"),wallWinRoundButton=document.getElementById("wall-win-round"),wallLoseButton=document.getElementById("wall-lose-challenge"),wallResetButton=document.getElementById("wall-reset"),wallOpenAllDebugButton=document.getElementById("wall-open-all-debug"),wallStatus=document.getElementById("wall-status"),wallGrid=document.getElementById("wall-grid"),wallActiveList=document.getElementById("wall-active-list");
+    const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),topRoomPlayers=document.getElementById("top-room-players"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");
+    let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
     const englishTranslations={
@@ -1563,6 +1783,17 @@
       "Consulter la page originale du défi":"View the original challenge page",
       "← Retour à l’accueil":"← Back to home",
       "Choisis un défi pour ouvrir sa propre vue. Ta progression est conservée lorsque tu reviens à cette page.":"Choose a challenge to open its dedicated view. Your progress is preserved when you return to this page.",
+      "Crée ou rejoins une room, puis lance un défi. Les joueurs connectés peuvent agir sur le suivi du défi depuis leur propre écran.":"Create or join a room, then start a challenge. Connected players can use the challenge tracker from their own screen.",
+      "Une room active est nécessaire pour ouvrir un défi interactif.":"An active room is required to open an interactive challenge.",
+      "Choisis un mode dans la barre du haut avant d’ouvrir un défi.":"Choose a mode in the top bar before opening a challenge.",
+      "Mode de jeu":"Game mode",
+      "Solo":"Solo",
+      "Multi local":"Local multi",
+      "Room":"Room",
+      "Streamer":"Streamer",
+      "Off":"Off",
+      "On":"On",
+      "inactive":"inactive",
       "Mémos Phasmophobia":"Phasmophobia Reference Guides",
       "Choisis un mémo pour ouvrir sa propre vue. Tu peux consulter des informations utiles ou juste quelque chose de plus léger.":"Choose a memo to open its dedicated view. You can check useful information or just something lighter.",
       "Entités":"Ghosts",
@@ -1633,6 +1864,8 @@
       "Le Possédé doit donc aider suffisamment l’équipe pour gagner la partie, tout en semant discrètement le doute.":"The Possessed must help the team enough to win the game while subtly spreading doubt.",
       "Le défi accepte 3 à 4 joueurs : un Possédé et tous les autres Enquêteurs.":"The challenge supports 3 to 4 players: one Possessed player and everyone else as Investigators.",
       "Choisir le mode de distribution":"Choose the distribution mode",
+      "Room de défi":"Challenge room",
+      "Distribution locale des rôles":"Local role distribution",
       "Même appareil":"Same device",
       "Room en ligne (bêta)":"Online room (beta)",
       "Distribution locale":"Local distribution",
@@ -1647,6 +1880,7 @@
       "Tu n’es pas le Possédé. Identifie le fantôme, observe les comportements suspects et désigne le Possédé à la fin.":"You are not the Possessed. Identify the ghost, watch for suspicious behavior and name the Possessed at the end.",
       "Créer une room":"Create a room",
       "Le créateur devient l’hôte et doit garder cette page ouverte pendant la distribution.":"The creator becomes the host and must keep this page open during distribution.",
+      "Le créateur devient l’hôte et doit garder cette page ouverte pendant toute la durée du défi.":"The creator becomes the host and must keep this page open for the entire challenge.",
       "Ton pseudo":"Your nickname",
       "Hôte":"Host",
       "Créer la room":"Create room",
@@ -1984,25 +2218,32 @@
       let page="hub";
       if(!tarotChallengeView.hidden)page="tarot";
       else if(!mediaChallengeView.hidden)page="media";
+      else if(!wallChallengeView.hidden)page="wall";
       else if(!possessedChallengeView.hidden)page="possessed";
       else if(!funMemoView.hidden)page="funMemo";
       else if(!ghostMemoView.hidden)page="ghostMemo";
       else if(!memoView.hidden)page="memo";
       else if(!challengeSelectionView.hidden)page="challenges";
       const titles={
-        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Média Surprise - Phasmophobia",possessed:"Le Possédé - Phasmophobia"},
-        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Media Surprise - Phasmophobia",possessed:"The Possessed - Phasmophobia"}
+        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Média Surprise - Phasmophobia",wall:"Mur de la mort - Phasmophobia",possessed:"Le Possédé - Phasmophobia"},
+        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Media Surprise - Phasmophobia",wall:"Wall of Death - Phasmophobia",possessed:"The Possessed - Phasmophobia"}
       };
       document.title=titles[currentLanguage][page]
     }
-    function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
+    function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
+    function hasPossessedInvite(){return normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom")).length===5}
+    function allowChallengeOpen(){
+      if(hasChallengeRoom())return true;
+      if(hasPossessedInvite()){prefillPossessedRoomFromUrl();return true}
+      showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return false
+    }
     function showHub(updateHistory=true){
       if(updateHistory&&location.hash){location.hash="";return}
       closeChallengePopup();hideAllViews();hubView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
     }
     function showChallengeSelection(updateHistory=true){
       if(updateHistory&&location.hash!=="#challenges"){location.hash="challenges";return}
-      closeChallengePopup();hideAllViews();challengeSelectionView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
+      closeChallengePopup();hideAllViews();challengeSelectionView.hidden=false;relocateRoomControls();prefillPossessedRoomFromUrl();updateDocumentTitle();window.scrollTo(0,0)
     }
     function showMemo(updateHistory=true){
       if(updateHistory&&location.hash!=="#memo"){location.hash="memo";return}
@@ -2018,19 +2259,28 @@
     }
     function openTarotChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#tarot-surprise"){location.hash="tarot-surprise";return}
+      if(!allowChallengeOpen())return;
       hideAllViews();tarotChallengeView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
     }
     function openMediaChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#media-surprise"){location.hash="media-surprise";return}
+      if(!allowChallengeOpen())return;
       hideAllViews();mediaChallengeView.hidden=false;renderMediaChallenge();updateDocumentTitle();window.scrollTo(0,0)
+    }
+    function openWallChallenge(updateHistory=true){
+      if(updateHistory&&location.hash!=="#mur-de-la-mort"){location.hash="mur-de-la-mort";return}
+      if(!allowChallengeOpen())return;
+      hideAllViews();wallChallengeView.hidden=false;renderWallChallenge();updateDocumentTitle();window.scrollTo(0,0)
     }
     function openPossessedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#le-possede"){location.hash="le-possede";return}
-      hideAllViews();possessedChallengeView.hidden=false;prefillPossessedRoomFromUrl();updateDocumentTitle();window.scrollTo(0,0)
+      if(!allowChallengeOpen())return;
+      hideAllViews();possessedChallengeView.hidden=false;relocateRoomControls();prefillPossessedRoomFromUrl();updateLocalDistributionVisibility();updateDocumentTitle();window.scrollTo(0,0)
     }
     function applyRoute(){
       if(location.hash==="#tarot-surprise")openTarotChallenge(false);
       else if(location.hash==="#media-surprise")openMediaChallenge(false);
+      else if(location.hash==="#mur-de-la-mort")openWallChallenge(false);
       else if(location.hash==="#le-possede")openPossessedChallenge(false);
       else if(location.hash==="#memo-ghosts")showGhostMemo(false);
       else if(location.hash==="#memo-fun")showFunMemo(false);
@@ -2044,7 +2294,7 @@
     }
     function goBack(){
       if(!ghostMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
-      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
+      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
       showHub(true)
     }
 
@@ -2135,7 +2385,7 @@
     }
     function mediaSetResult(message,obj=null){
       if(!mediaResult)return;
-      mediaResult.innerHTML=obj?`<div class="media-result-card">${mediaObjectImageTag(obj)}<div>${message}</div></div>`:message
+      mediaResult.innerHTML=obj?`<div class="media-result-card">${mediaObjectImageTag(obj)}<div>${message}</div></div>`:message;scheduleRoomChallengeSync("media")
     }
     function mediaUnlockSpecific(name,reason){
       const obj=phasmophobiaObjects.find(item=>item.name===name);
@@ -2201,7 +2451,7 @@
       mediaUnlockedList.innerHTML=unlocked.map(obj=>mediaRenderObject(obj,false)).join("");mediaLockedList.innerHTML=locked.map(obj=>mediaRenderObject(obj,true)).join("");
       document.getElementById("media-unlocked-list-count").textContent=unlocked.length;document.getElementById("media-locked-list-count").textContent=locked.length;
       const note=document.getElementById("media-progress-note");
-      note.textContent=allPagesComplete?(currentLanguage==="en"?"All media pages are complete. Journal objectives may still unlock remaining items.":"Toutes les pages de médias sont terminées. Les objectifs du journal peuvent encore débloquer les objets restants."):(currentPageComplete?(currentLanguage==="en"?"This media page is full. Select another available media type.":"Cette page de médias est remplie. Sélectionnez un autre type de média disponible."):(currentLanguage==="en"?"Unique media and objectives each unlock one random item that is still locked.":"Les médias uniques et les objectifs débloquent chacun un objet aléatoire encore verrouillé."))
+      note.textContent=allPagesComplete?(currentLanguage==="en"?"All media pages are complete. Journal objectives may still unlock remaining items.":"Toutes les pages de médias sont terminées. Les objectifs du journal peuvent encore débloquer les objets restants."):(currentPageComplete?(currentLanguage==="en"?"This media page is full. Select another available media type.":"Cette page de médias est remplie. Sélectionnez un autre type de média disponible."):(currentLanguage==="en"?"Unique media and objectives each unlock one random item that is still locked.":"Les médias uniques et les objectifs débloquent chacun un objet aléatoire encore verrouillé."));scheduleRoomChallengeSync("media")
     }
     function refreshMediaResultLanguage(){
       if(!mediaResult)return;
@@ -2221,14 +2471,161 @@
       mediaOutcome=type;mediaPopup.hidden=false;mediaPopup.classList.remove("win","loss");mediaPopup.classList.add("open",type);
       const win=type==="win";mediaPopupIcon.textContent=win?"🏆":"💀";mediaPopupTitle.textContent=currentLanguage==="en"?(win?"Victory!":"Defeat"):(win?"Victoire !":"Défaite");
       mediaPopupMessage.textContent=currentLanguage==="en"?(win?"The ghost was correctly identified and at least one player survived.":"The ghost was not correctly identified or every player died."):(win?"L’entité a été correctement identifiée et au moins un joueur a survécu.":"L’entité n’a pas été correctement identifiée ou tous les joueurs sont morts.");
-      mediaPopupStats.innerHTML=`<div class="media-popup-stat"><strong>${mediaUnlockedNames.size}</strong><br>${currentLanguage==="en"?"items unlocked":"objets débloqués"}</div><div class="media-popup-stat"><strong>${mediaUniqueCount}</strong><br>${currentLanguage==="en"?"unique media":"médias uniques"}</div><div class="media-popup-stat"><strong>${mediaObjectiveCount}</strong><br>${currentLanguage==="en"?"objectives":"objectifs"}</div>`
+      mediaPopupStats.innerHTML=`<div class="media-popup-stat"><strong>${mediaUnlockedNames.size}</strong><br>${currentLanguage==="en"?"items unlocked":"objets débloqués"}</div><div class="media-popup-stat"><strong>${mediaUniqueCount}</strong><br>${currentLanguage==="en"?"unique media":"médias uniques"}</div><div class="media-popup-stat"><strong>${mediaObjectiveCount}</strong><br>${currentLanguage==="en"?"objectives":"objectifs"}</div>`;scheduleRoomChallengeSync("media")
     }
-    function closeMediaPopup(){mediaPopup.classList.remove("open","win","loss");mediaPopup.hidden=true}
+    function closeMediaPopup(){mediaPopup.classList.remove("open","win","loss");mediaPopup.hidden=true;scheduleRoomChallengeSync("media")}
 
-    const possessedLocalTab=document.getElementById("possessed-local-tab"),possessedOnlineTab=document.getElementById("possessed-online-tab"),possessedLocalPanel=document.getElementById("possessed-local-panel"),possessedOnlinePanel=document.getElementById("possessed-online-panel");
-    const possessedLocalCount=document.getElementById("possessed-local-count"),possessedLocalNames=document.getElementById("possessed-local-names"),possessedLocalStage=document.getElementById("possessed-local-stage"),possessedLocalPlayerTitle=document.getElementById("possessed-local-player-title"),possessedLocalInstruction=document.getElementById("possessed-local-instruction"),possessedLocalReveal=document.getElementById("possessed-local-reveal"),possessedLocalRole=document.getElementById("possessed-local-role"),possessedLocalNext=document.getElementById("possessed-local-next");
+    function wallMalusAt(index){return wallMaluses[wallMalusOrder[index]??index]||wallMaluses[index%wallMaluses.length]}
+    function wallHasActiveMalus(title){return wallOpenedIndexes.some(index=>wallMalusAt(index).title===title)}
+    function wallTargetWins(){return wallHasActiveMalus("1 Round en plus")?6:5}
+    function wallRequiredOpenCount(){return 2+(wallHasActiveMalus("1 Case en Plus par Round")?1:0)}
+    function wallCurrentRoundOpenCount(){return Math.max(0,wallOpenedIndexes.length-wallRoundStartIndex)}
+    function wallRemainingOpenCount(){return Math.max(0,wallRequiredOpenCount()-wallCurrentRoundOpenCount())}
+    function wallCanOpen(){return !wallOutcome&&wallWins<wallTargetWins()&&wallRemainingOpenCount()>0&&wallOpenedIndexes.length<wallMalusOrder.length}
+    function wallSetStatus(message){wallStatusText=message;renderWallChallenge()}
+    function wallOpenCell(index){
+      if(!wallCanOpen()||wallOpenedIndexes.includes(index))return;
+      wallOpenedIndexes.push(index);
+      const malus=wallMalusAt(index),remaining=wallRemainingOpenCount();
+      wallSetStatus(remaining>0?`Case ${index+1} ouverte : ${malus.title}. Ouvre encore ${remaining} case.`:`Case ${index+1} ouverte : ${malus.title}. Lance la partie ${wallRound} avec les malus actifs.`)
+    }
+    function wallOpenRandom(){
+      if(!wallCanOpen())return;
+      const closed=wallMalusOrder.map((_,index)=>index).filter(index=>!wallOpenedIndexes.includes(index));
+      if(!closed.length)return;
+      wallOpenCell(closed[Math.floor(Math.random()*closed.length)])
+    }
+    function wallWinRound(){
+      if(wallOutcome)return;
+      const required=wallRequiredOpenCount();
+      if(wallCurrentRoundOpenCount()<required){wallSetStatus(`Ouvre les ${required} cases de la partie avant de la valider.`);return}
+      wallWins++;
+      if(wallWins>=wallTargetWins()){wallOutcome="victory";wallSetStatus(`Défi réussi : ${wallTargetWins()} parties validées en Professionnel avec au moins un survivant.`);return}
+      wallRound=wallWins+1;wallRoundStartIndex=wallOpenedIndexes.length;
+      wallSetStatus(`Partie ${wallWins} validée. Ouvre ${wallRequiredOpenCount()} nouvelles cases avant la partie ${wallRound}.`)
+    }
+    function wallLoseChallenge(){if(wallOutcome)return;wallOutcome="defeat";wallSetStatus("Défi perdu : entité mal identifiée ou aucun joueur survivant.")}
+    function resetWallChallenge(){
+      wallMalusOrder=secureShuffle(wallMaluses.map((_,index)=>index));wallOpenedIndexes=[];wallRoundStartIndex=0;wallRound=1;wallWins=0;wallOutcome=null;wallStatusText="Ouvre 2 cases avant de lancer la première partie.";renderWallChallenge()
+    }
+    function wallOpenAllDebug(){
+      wallOpenedIndexes=wallMalusOrder.map((_,index)=>index);wallOutcome=null;wallStatusText="Debug : toutes les cases du mur sont ouvertes.";renderWallChallenge()
+    }
+    function renderWallChallenge(){
+      if(!wallChallengeView||!wallGrid)return;
+      const openedSet=new Set(wallOpenedIndexes),activeMaluses=wallOpenedIndexes.map(wallMalusAt);
+      wallRoundDisplay.textContent=`${Math.min(wallRound,wallTargetWins())} / ${wallTargetWins()}`;wallWinCountDisplay.textContent=wallWins;wallOpenCountDisplay.textContent=wallOpenedIndexes.length;wallNeededCountDisplay.textContent=wallOutcome?"0":wallRemainingOpenCount();
+      wallStatus.textContent=wallStatusText;
+      wallOpenRandomButton.disabled=!wallCanOpen();wallWinRoundButton.disabled=!!wallOutcome||wallRemainingOpenCount()>0;wallLoseButton.disabled=!!wallOutcome;
+      wallGrid.innerHTML=wallMalusOrder.map((_,index)=>{
+        const open=openedSet.has(index),malus=wallMalusAt(index),locked=!open&&!wallCanOpen();
+        return `<button class="wall-cell${open?" open":""}${locked?" locked":""}" type="button" data-index="${index}" style="--wall-icon:url('${wallIconSvg(open?malus.icon:"locked")}')" ${locked?"disabled":""}><span class="wall-cell-index">${open?index+1:String(index+1).padStart(2,"0")}</span><span class="wall-cell-icon" aria-hidden="true"></span>${open?`<span class="wall-cell-title">${escapeHtml(malus.title)}</span><span class="wall-cell-desc">${escapeHtml(malus.desc)}</span>`:"<span class=\"wall-cell-title\">Case fermée</span>"}</button>`
+      }).join("");
+      wallGrid.querySelectorAll(".wall-cell:not(.open)").forEach(button=>button.addEventListener("click",()=>wallOpenCell(Number(button.dataset.index))));
+      wallActiveList.innerHTML=activeMaluses.length?activeMaluses.map(malus=>`<div class="wall-malus-item"><strong>${escapeHtml(malus.title)}</strong>${escapeHtml(malus.desc)}</div>`).join(""):`<div class="wall-empty">Aucun malus actif pour le moment.</div>`;
+      scheduleRoomChallengeSync("wall")
+    }
+
+    const possessedLocalTab=document.getElementById("possessed-local-tab"),possessedOnlineTab=document.getElementById("possessed-online-tab"),possessedLocalPanel=document.getElementById("possessed-local-panel"),possessedOnlinePanel=document.getElementById("possessed-online-panel"),possessedRoleActions=document.getElementById("possessed-role-actions");
+    const possessedLocalCount=document.getElementById("possessed-local-count"),possessedLocalNames=document.getElementById("possessed-local-names"),possessedLocalStage=document.getElementById("possessed-local-stage"),possessedLocalPlayerTitle=document.getElementById("possessed-local-player-title"),possessedLocalInstruction=document.getElementById("possessed-local-instruction"),possessedLocalReveal=document.getElementById("possessed-local-reveal"),possessedLocalRole=document.getElementById("possessed-local-role"),possessedLocalNext=document.getElementById("possessed-local-next"),possessedRolePopup=document.getElementById("possessed-role-popup"),possessedRolePopupBody=document.getElementById("possessed-role-popup-body"),possessedRolePopupTitle=document.getElementById("possessed-role-popup-title");
     const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedRedrawOnline=document.getElementById("possessed-redraw-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
-    let possessedLocalAssignments=[],possessedLocalIndex=0,possessedLocalRevealed=false;
+    let possessedLocalAssignments=[],possessedLocalIndex=0,possessedLocalRevealed=false,possessedGuestRoomPanelClosed=false;
+    let applyingRoomState=false,roomSyncTimers={},currentRoomChallenge=null;
+    function isRoomConnected(){return !!possessedPeer&&possessedPlayers.length>0}
+    function hasChallengeRoom(){return playMode!=="room"||isRoomConnected()}
+    function shouldSyncRoom(){return playMode==="room"&&isRoomConnected()}
+    function renderTopRoomPlayers(){
+      if(!topRoomPlayers)return;
+      topRoomPlayers.innerHTML=playMode==="room"&&isRoomConnected()?possessedPlayers.map(player=>`<span class="possessed-player-chip${player.host?" host":""}">${escapeHtml(player.name)}</span>`).join(""):""
+    }
+    function updateLocalDistributionVisibility(){
+      if(possessedRolePanel)possessedRolePanel.hidden=playMode!=="local";
+      if(possessedLocalPanel)possessedLocalPanel.hidden=playMode!=="local"
+    }
+    function renderChallengeRoomGate(){
+      const connected=isRoomConnected(),needsRoom=playMode==="room",active=!needsRoom||connected;
+      const message=needsRoom?(connected?possessedText(`${possessedPlayers.length} joueur(s) dans la room. Les défis sont synchronisés.`,`${possessedPlayers.length} player(s) in the room. Challenges are synced.`):possessedText("Crée ou rejoins une room avant d'ouvrir un défi interactif.","Create or join a room before opening an interactive challenge.")):(playMode==="local"?possessedText("Mode Multi local actif. Les défis utilisent cet écran.","Local multi mode is active. Challenges use this screen."):possessedText("Mode Solo actif. Les défis ne sont pas synchronisés.","Solo mode is active. Challenges are not synced."));
+      challengeLaunchButtons.forEach(button=>{button.disabled=!active;button.title=message});
+      if(challengeRoomNote)challengeRoomNote.textContent=message;
+      if(topRoomMenu)topRoomMenu.hidden=!needsRoom;
+      if(topRoomSummary)topRoomSummary.textContent=connected?possessedText(`${possessedPlayers.length} joueur(s)`,`${possessedPlayers.length} player(s)`):possessedText("inactive","inactive");
+      renderTopRoomPlayers();updateLocalDistributionVisibility()
+    }
+    function sendRoomMessage(message,exceptPeer=null){
+      if(!message||!shouldSyncRoom())return;
+      if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
+      else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
+    }
+    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",possessed:"le-possede"}[challenge]||"challenges"}
+    function updatePossessedInviteLink(challenge=currentRoomChallenge){
+      if(!possessedRoomCode||!possessedShareLink)return;
+      const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
+    }
+    function rememberRoomChallenge(challenge){currentRoomChallenge=challenge||null;updatePossessedInviteLink(currentRoomChallenge)}
+    function sendCurrentChallengeTo(connection){
+      if(!currentRoomChallenge||!connection||!connection.open)return;
+      connection.send({type:"challenge-route",challenge:currentRoomChallenge});
+      if(currentRoomChallenge!=="possessed")connection.send({type:"challenge-state",challenge:currentRoomChallenge,state:captureRoomChallengeState(currentRoomChallenge)})
+    }
+    function pauseTarotIfLeavingChallenge(nextChallenge){if(currentRoomChallenge==="tarot"&&nextChallenge!=="tarot")pauseTimer()}
+    function applyRoomChallengeRoute(challenge){
+      if(challenge==="tarot")openTarotChallenge(true);
+      else if(challenge==="media")openMediaChallenge(true);
+      else if(challenge==="wall")openWallChallenge(true);
+      else if(challenge==="possessed")openPossessedChallenge(true)
+    }
+    function openRoomChallenge(challenge){
+      if(!hasChallengeRoom()){setPlayMode("room");showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer un défi.","Create or join a room before starting a challenge.");return}
+      if(playMode==="room")pauseTarotIfLeavingChallenge(challenge);
+      if(playMode==="room")rememberRoomChallenge(challenge);
+      applyRoomChallengeRoute(challenge);
+      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge!=="possessed")sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
+    }
+    function objectByName(name){return allObjects.find(obj=>obj.name===name)||phasmophobiaObjects.find(obj=>obj.name===name)||null}
+    function objectsFromNames(names){return (Array.isArray(names)?names:[]).map(objectByName).filter(Boolean)}
+    function captureTarotRoomState(){
+      const tiers={};allObjects.forEach(obj=>{tiers[obj.name]=obj.tier});
+      return {tiers,remainingNames:remainingObjects.map(obj=>obj.name),selectedNames:selectedObjects.map(obj=>obj.name),removedNames:removedObjects.map(obj=>obj.name),lostNames:permanentlyLostObjects.map(obj=>obj.name),permanentLostNames:[...permanentLostNames],singleCopyNames:[...singleCopyNames],roundEffects:[...roundEffects],roundCount,winCount,lossCount,elapsedSeconds,nextTarotMultiplier,streamerModeChecked:streamerMode.checked,challengeOutcome,resultHtml:resultDiv.innerHTML,popupOpen:challengePopup.classList.contains("open"),popupMessage:challengePopupMessage.textContent,timerRunning:!!timerInterval}
+    }
+    function applyTarotRoomState(state){
+      if(!state)return;
+      if(timerInterval){clearInterval(timerInterval);timerInterval=null}
+      const tiers=state.tiers||{};allObjects=structuredClone(phasmophobiaObjects);allObjects.forEach(obj=>{if(tiers[obj.name])obj.tier=tiers[obj.name]});
+      permanentLostNames=new Set(state.permanentLostNames||[]);singleCopyNames=new Set(state.singleCopyNames||[]);roundEffects=Array.isArray(state.roundEffects)?[...state.roundEffects]:[];
+      remainingObjects=objectsFromNames(state.remainingNames);selectedObjects=objectsFromNames(state.selectedNames);removedObjects=objectsFromNames(state.removedNames);permanentlyLostObjects=objectsFromNames(state.lostNames);
+      roundCount=Number(state.roundCount)||1;winCount=Number(state.winCount)||0;lossCount=Number(state.lossCount)||0;elapsedSeconds=Number(state.elapsedSeconds)||0;nextTarotMultiplier=Number(state.nextTarotMultiplier)||1;
+      const outcome=state.challengeOutcome||null;challengeOutcome=null;closeChallengePopup();
+      streamerMode.checked=Boolean(state.streamerModeChecked);resultDiv.innerHTML=state.resultHtml||"";updateTimerButton();updateTimer();updateModeDisplay();updateTarotStatus();renderActiveEffects();updateLists();
+      if(outcome&&state.popupOpen)showChallengePopup(outcome,state.popupMessage||"");else challengeOutcome=outcome;
+      if(state.timerRunning){timerInterval=setInterval(()=>{elapsedSeconds++;updateTimer();checkChallengeState()},1000)}
+      updateTimerButton()
+    }
+    function captureMediaRoomState(){return {unlockedNames:[...mediaUnlockedNames],mediaUniqueCount,mediaDuplicateCount,mediaObjectiveCount,mediaPhase,pagesCompleted:[...mediaPagesCompleted],mediaLastUnlockedName,mediaOutcome,resultHtml:mediaResult?mediaResult.innerHTML:"",popupOpen:mediaPopup.classList.contains("open")}}
+    function applyMediaRoomState(state){
+      if(!state)return;
+      mediaUnlockedNames=new Set(state.unlockedNames||mediaStartingNames);mediaUniqueCount=Number(state.mediaUniqueCount)||0;mediaDuplicateCount=Number(state.mediaDuplicateCount)||0;mediaObjectiveCount=Number(state.mediaObjectiveCount)||0;mediaPhase=state.mediaPhase||"photo";mediaPagesCompleted=new Set(state.pagesCompleted||[]);mediaLastUnlockedName=state.mediaLastUnlockedName||null;mediaOutcome=state.mediaOutcome||null;
+      renderMediaChallenge();if(mediaResult&&state.resultHtml)mediaResult.innerHTML=state.resultHtml;
+      if(mediaOutcome&&state.popupOpen)showMediaOutcome(mediaOutcome);else closeMediaPopup()
+    }
+    function captureWallRoomState(){return {order:[...wallMalusOrder],opened:[...wallOpenedIndexes],roundStart:wallRoundStartIndex,round:wallRound,wins:wallWins,outcome:wallOutcome,status:wallStatusText}}
+    function applyWallRoomState(state){
+      if(!state)return;
+      wallMalusOrder=Array.isArray(state.order)&&state.order.length?state.order.map(Number):wallMaluses.map((_,index)=>index);
+      wallOpenedIndexes=Array.isArray(state.opened)?state.opened.map(Number):[];
+      wallRound=Number(state.round)||1;wallWins=Number(state.wins)||0;wallRoundStartIndex=Number.isFinite(Number(state.roundStart))?Number(state.roundStart):Math.max(0,(wallRound-1)*2);wallOutcome=state.outcome||null;wallStatusText=state.status||"Ouvre 2 cases avant de lancer la partie.";
+      renderWallChallenge()
+    }
+    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():captureTarotRoomState())}
+    function applyRoomChallengeState(message){
+      applyingRoomState=true;
+      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else applyTarotRoomState(message.state)}
+      finally{applyingRoomState=false}
+    }
+    function scheduleRoomChallengeSync(challenge){
+      if(applyingRoomState||!shouldSyncRoom())return;
+      clearTimeout(roomSyncTimers[challenge]);
+      roomSyncTimers[challenge]=setTimeout(()=>{if(!applyingRoomState&&shouldSyncRoom())sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})},0)
+    }
     let possessedPeer=null,possessedHostConnection=null,possessedConnections=new Map(),possessedPlayers=[],possessedIsHost=false,possessedRoomCode="",possessedOnlineStarted=false,possessedDistributionRound=0;
 
     function possessedText(fr,en){return currentLanguage==="en"?en:fr}
@@ -2253,9 +2650,15 @@
       const description=isPossessed?possessedText("Garde ton rôle secret. Aide l’équipe à identifier le fantôme tout en réalisant discrètement deux corruptions différentes.","Keep your role secret. Help the team identify the ghost while secretly completing two different corruptions."):possessedText("Tu n’es pas le Possédé. Identifie le fantôme, observe les comportements suspects et désigne le Possédé à la fin.","You are not the Possessed. Identify the ghost, watch for suspicious behavior and name the Possessed at the end.");
       return `<div class="possessed-role-card ${isPossessed?"possessed":"investigator"}"><div class="possessed-role-icon" aria-hidden="true">${isPossessed?"😈":"🔦"}</div><p class="possessed-role-title">${escapeHtml(title)}</p><p class="possessed-role-text">${escapeHtml(description)}</p></div>`
     }
+    function showPossessedRolePopup(role,name=""){
+      possessedRolePopupTitle.textContent=name?possessedText(`Rôle de ${name}`,`${name}'s role`):possessedText("Ton rôle","Your role");
+      possessedRolePopupBody.innerHTML=createRoleCard(role);
+      possessedRolePopup.hidden=false;possessedRolePopup.classList.add("open")
+    }
+    function closePossessedRolePopup(){possessedRolePopup.classList.remove("open");possessedRolePopup.hidden=true}
     function prepareLocalPossessedRoles(){
       const names=[...possessedLocalNames.querySelectorAll("input")].map((input,index)=>input.value.trim()||possessedText(`Joueur ${index+1}`,`Player ${index+1}`));
-      if(names.length<3||names.length>4)return;
+      if(names.length!==4)return;
       const roles=secureShuffle(["possessed",...Array(names.length-1).fill("investigator")]);
       possessedLocalAssignments=names.map((name,index)=>({name,role:roles[index]}));possessedLocalIndex=0;possessedLocalRevealed=false;possessedLocalStage.hidden=false;renderLocalPossessedStage();possessedLocalStage.scrollIntoView({behavior:"smooth",block:"center"})
     }
@@ -2273,7 +2676,8 @@
     }
     function revealLocalPossessedRole(){
       if(possessedLocalIndex>=possessedLocalAssignments.length)return;
-      possessedLocalRole.innerHTML=createRoleCard(possessedLocalAssignments[possessedLocalIndex].role);possessedLocalReveal.hidden=true;possessedLocalNext.hidden=false;possessedLocalRevealed=true
+      const assignment=possessedLocalAssignments[possessedLocalIndex];
+      possessedLocalRole.innerHTML="";showPossessedRolePopup(assignment.role,assignment.name);possessedLocalReveal.hidden=true;possessedLocalNext.hidden=false;possessedLocalRevealed=true
     }
     function nextLocalPossessedPlayer(){
       if(possessedLocalIndex>=possessedLocalAssignments.length){prepareLocalPossessedRoles();return}
@@ -2282,27 +2686,40 @@
     function setPossessedMode(mode){
       const online=mode==="online";possessedLocalTab.classList.toggle("active",!online);possessedOnlineTab.classList.toggle("active",online);possessedLocalTab.setAttribute("aria-selected",String(!online));possessedOnlineTab.setAttribute("aria-selected",String(online));possessedLocalPanel.hidden=online;possessedOnlinePanel.hidden=!online
     }
+    function relocateRoomControls(){if(topRoomContent&&possessedOnlinePanel&&possessedOnlinePanel.parentElement!==topRoomContent)topRoomContent.appendChild(possessedOnlinePanel)}
+    function setPlayMode(mode){
+      playMode=["solo","local","room"].includes(mode)?mode:"solo";
+      playModeButtons.forEach(button=>button.classList.toggle("active",button.dataset.playMode===playMode));
+      try{localStorage.setItem("phasmo-play-mode",playMode)}catch(error){}
+      relocateRoomControls();
+      if(playMode==="room"){setPossessedMode("online");if(topRoomMenu)topRoomMenu.open=!isRoomConnected()}
+      else{if(possessedOnlinePanel)possessedOnlinePanel.hidden=true;if(playMode==="local")setPossessedMode("local")}
+      renderChallengeRoomGate()
+    }
+    function loadPlayMode(){let saved="solo";try{saved=localStorage.getItem("phasmo-play-mode")||"solo"}catch(error){}setPlayMode(saved)}
     function randomRoomCode(){
       const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",buffer=new Uint32Array(5);crypto.getRandomValues(buffer);return [...buffer].map(value=>alphabet[value%alphabet.length]).join("")
     }
     function normalizeRoomCode(value){return String(value||"").toUpperCase().replace(/[^A-Z2-9]/g,"").slice(0,5)}
     function setPossessedOnlineStatus(fr,en){possessedOnlineStatus.textContent=possessedText(fr,en)}
-    function showPossessedOnlineSetup(){possessedOnlineSetup.hidden=false;possessedOnlineSetup.style.removeProperty("display");possessedOnlineLobby.hidden=true}
-    function showPossessedOnlineLobby(){possessedOnlineSetup.hidden=true;possessedOnlineSetup.style.display="none";possessedOnlineLobby.hidden=false;possessedOnlineRole.hidden=true}
+    function showPossessedOnlineSetup(){possessedOnlineSetup.hidden=false;possessedOnlineSetup.style.removeProperty("display");possessedOnlineLobby.hidden=true;renderChallengeRoomGate()}
+    function showPossessedOnlineLobby(){possessedOnlineSetup.hidden=true;possessedOnlineSetup.style.display="none";possessedOnlineLobby.hidden=false;possessedOnlineRole.hidden=true;renderChallengeRoomGate()}
     function renderPossessedLobby(){
       possessedLobbyList.innerHTML="";
       possessedPlayers.forEach(player=>{const chip=document.createElement("span");chip.className=`possessed-player-chip${player.host?" host":""}`;chip.textContent=player.name;possessedLobbyList.appendChild(chip)});
-      const count=possessedPlayers.length,validCount=count>=3&&count<=4;
+      const count=possessedPlayers.length,validCount=count===4;
       if(possessedIsHost){
         possessedHostRoomInfo.hidden=false;
+        possessedRoleActions.hidden=false;
         possessedStartOnline.hidden=possessedOnlineStarted;
         possessedStartOnline.disabled=!validCount;
-        possessedStartOnline.textContent=validCount?possessedText(`Démarrer à ${count} joueurs et distribuer les rôles`,`Start with ${count} players and assign roles`):possessedText(`En attente de ${Math.max(0,3-count)} joueur(s)`,`Waiting for ${Math.max(0,3-count)} player(s)`);
+        possessedStartOnline.textContent=validCount?possessedText(`Distribuer les rôles aux ${count} joueurs`,`Assign roles to all ${count} players`):possessedText(`En attente de ${Math.max(0,4-count)} joueur(s)`,`Waiting for ${Math.max(0,4-count)} player(s)`);
         possessedRedrawOnline.hidden=!possessedOnlineStarted;
         possessedRedrawOnline.disabled=!validCount;
-        possessedRedrawOnline.textContent=possessedText(`Redistribuer les rôles à ${count} joueurs`,`Reassign roles for ${count} players`)
+        possessedRedrawOnline.textContent=possessedText(`Redistribuer les rôles aux ${count} joueurs`,`Reassign roles for all ${count} players`);
+        renderChallengeRoomGate()
       }else{
-        possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;possessedHostRoomInfo.hidden=true
+        possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;possessedHostRoomInfo.hidden=true;renderChallengeRoomGate()
       }
     }
     function broadcastPossessedLobby(){
@@ -2314,7 +2731,7 @@
       possessedConnections.forEach(connection=>{try{connection.close()}catch(error){}});possessedConnections.clear();
       if(possessedHostConnection){try{possessedHostConnection.close()}catch(error){}possessedHostConnection=null}
       if(possessedPeer){try{possessedPeer.destroy()}catch(error){}possessedPeer=null}
-      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;
+      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";currentRoomChallenge=null;possessedGuestRoomPanelClosed=false;possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;closePossessedRolePopup();renderChallengeRoomGate();
       if(showSetup){showPossessedOnlineSetup();setPossessedOnlineStatus("En attente…","Waiting…")}
     }
     function plog(){console.log("[possessed]",...arguments)}
@@ -2322,18 +2739,20 @@
       let joined=false;
       plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
-        if(!data||data.type!=="join"||joined)return;
+        if(!data)return;
+        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer)}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}return}
+        if(data.type!=="join")return;
         if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
-        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
+        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
       });
       connection.on("close",()=>{plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
       connection.on("error",error=>{console.warn("[possessed] hôte: erreur connexion",error&&error.type,error)})
     }
     function createPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
-      cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
+      setPlayMode("room");cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
       const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;plog("création room, peerId =",peerId);possessedPeer=new Peer(peerId);
-      possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="le-possede";possessedShareLink.value=url.toString();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
+      possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="challenges";possessedShareLink.value=url.toString();updatePossessedInviteLink();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
       possessedPeer.on("connection",setupHostConnection);
       possessedPeer.on("disconnected",()=>console.warn("[possessed] hôte: déconnecté du broker PeerJS"));
       possessedPeer.on("error",error=>{console.warn("[possessed] hôte: erreur peer",error&&error.type,error);setPossessedOnlineStatus(error&&error.type==="unavailable-id"?"Ce code est déjà utilisé. Réessaie.":"Connexion impossible. Réessaie ou utilise le mode local.",error&&error.type==="unavailable-id"?"This code is already in use. Try again.":"Unable to connect. Try again or use local mode.")})
@@ -2341,34 +2760,32 @@
     function handlePossessedGuestData(data){
       if(!data)return;
       plog("invité: message reçu de l’hôte →",data.type,data.type==="reject"?("raison="+data.reason):"");
-      if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
-      else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(data.role)}`;setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})}
+      if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;if(!possessedIsHost&&!possessedGuestRoomPanelClosed&&possessedPlayers.length){if(topRoomMenu)topRoomMenu.open=false;possessedGuestRoomPanelClosed=true}renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
+      else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";showPossessedRolePopup(data.role);setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.")}
+      else if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}
+      else if(data.type==="challenge-state")applyRoomChallengeState(data);
       else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
     function joinPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
       const code=normalizeRoomCode(document.getElementById("possessed-join-code").value),nameRaw=document.getElementById("possessed-join-name").value.trim(),name=nameRaw||possessedText("Joueur","Player");savePossessedName(nameRaw);
       if(code.length!==5){setPossessedOnlineStatus("Entre un code de room valide à 5 caractères.","Enter a valid 5-character room code.");return}
-      plog("tentative de jointure, code =",code);cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
+      setPlayMode("room");plog("tentative de jointure, code =",code);cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;possessedGuestRoomPanelClosed=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
       possessedPeer.on("open",id=>{const hostId=`phasmo-possessed-${code.toLowerCase()}`;plog("invité: peer ouvert",id,"→ connexion à",hostId);possessedHostConnection=possessedPeer.connect(hostId,{reliable:true});possessedHostConnection.on("open",()=>{plog("invité: connexion à l’hôte ouverte, envoi du join");possessedHostConnection.send({type:"join",name});setPossessedOnlineStatus("Connecté. En attente de l’hôte…","Connected. Waiting for the host…")});possessedHostConnection.on("data",handlePossessedGuestData);possessedHostConnection.on("close",()=>{plog("invité: connexion à l’hôte fermée");if(!possessedPeer)return;cleanupPossessedPeer(false);showPossessedOnlineSetup();setPossessedOnlineStatus("L’hôte a quitté la room.","The host left the room.")});possessedHostConnection.on("error",error=>{console.warn("[possessed] invité: erreur connexion hôte",error&&error.type,error);setPossessedOnlineStatus("Connexion à l’hôte impossible.","Unable to connect to the host.")})});
       possessedPeer.on("disconnected",()=>console.warn("[possessed] invité: déconnecté du broker PeerJS"));
       possessedPeer.on("error",error=>{console.warn("[possessed] invité: erreur peer",error&&error.type,error);setPossessedOnlineStatus("Room introuvable ou connexion impossible.","Room not found or unable to connect.")})
     }
     function startPossessedOnlineGame(){
-      const count=possessedPlayers.length;if(!possessedIsHost||count<3||count>4)return;
+      const count=possessedPlayers.length;if(!possessedIsHost||count!==4)return;
       possessedOnlineStarted=true;possessedDistributionRound++;const shuffled=secureShuffle(possessedPlayers.map(player=>player.id)),possessedId=shuffled[0];
-      possessedPlayers.forEach(player=>{const role=player.id===possessedId?"possessed":"investigator";if(player.host){possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(role)}`}else{const connection=possessedConnections.get(player.id);if(connection&&connection.open)connection.send({type:"role",role,round:possessedDistributionRound})}});
-      broadcastPossessedLobby();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");renderPossessedLobby();possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})
+      possessedPlayers.forEach(player=>{const role=player.id===possessedId?"possessed":"investigator";if(player.host){possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";showPossessedRolePopup(role,player.name)}else{const connection=possessedConnections.get(player.id);if(connection&&connection.open)connection.send({type:"role",role,round:possessedDistributionRound})}});
+      broadcastPossessedLobby();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");renderPossessedLobby()
     }
     async function copyPossessedInvite(){
       const value=possessedShareLink.value;if(!value)return;
       try{await navigator.clipboard.writeText(value);document.getElementById("possessed-copy-link").textContent=possessedText("Lien copié !","Link copied!")}catch(error){possessedShareLink.select();document.execCommand("copy")}
     }
-    function relocatePossessedPanel(){
-      const container=document.querySelector("#possessed-challenge-view .possessed-container");if(!container)return;
-      const panel=container.querySelector(".possessed-panel"),rules=container.querySelector(".fiche");
-      if(panel&&rules&&panel.compareDocumentPosition(rules)&Node.DOCUMENT_POSITION_PRECEDING)container.insertBefore(panel,rules);
-    }
+    function relocatePossessedPanel(){relocateRoomControls();renderChallengeRoomGate()}
     function savePossessedName(name){try{if(name)localStorage.setItem("phasmo-possessed-name",name)}catch(error){}}
     function loadPossessedName(){
       let saved="";try{saved=localStorage.getItem("phasmo-possessed-name")||""}catch(error){}
@@ -2378,7 +2795,7 @@
       const code=normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom"));
       if(code){
         document.getElementById("possessed-join-code").value=code;
-        setPossessedMode("online");
+        setPlayMode("room");
         const createBox=document.getElementById("possessed-create-box");if(createBox)createBox.hidden=true;
         possessedOnlineSetup.classList.add("join-only");
         const nameInput=document.getElementById("possessed-join-name");if(nameInput){try{nameInput.focus({preventScroll:true})}catch(error){nameInput.focus()}}
@@ -2388,7 +2805,7 @@
       cleanupPossessedPeer(true);
       const createBox=document.getElementById("possessed-create-box");if(createBox)createBox.hidden=false;
       possessedOnlineSetup.classList.remove("join-only");
-      try{history.replaceState(null,"",location.pathname+"#le-possede")}catch(error){}
+      try{history.replaceState(null,"",location.pathname+"#challenges")}catch(error){}
     }
     function refreshPossessedLanguage(){
       renderPossessedLocalNames();
@@ -2425,14 +2842,17 @@
     document.getElementById("open-fun-memo").addEventListener("click",()=>showFunMemo(true));
     document.getElementById("back-ghost-memo").addEventListener("click",()=>showMemo(true));
     document.getElementById("back-fun-memo").addEventListener("click",()=>showMemo(true));
-    document.getElementById("open-tarot-challenge").addEventListener("click",()=>openTarotChallenge(true));
+    document.getElementById("open-tarot-challenge").addEventListener("click",()=>openRoomChallenge("tarot"));
     document.getElementById("back-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
-    document.getElementById("open-media-challenge").addEventListener("click",()=>openMediaChallenge(true));
+    document.getElementById("open-media-challenge").addEventListener("click",()=>openRoomChallenge("media"));
     document.getElementById("back-media-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
-    document.getElementById("open-possessed-challenge").addEventListener("click",()=>openPossessedChallenge(true));
+    document.getElementById("open-wall-challenge").addEventListener("click",()=>openRoomChallenge("wall"));
+    document.getElementById("back-wall-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
+    document.getElementById("open-possessed-challenge").addEventListener("click",()=>openRoomChallenge("possessed"));
     document.getElementById("back-possessed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
-    possessedLocalTab.addEventListener("click",()=>setPossessedMode("local"));
-    possessedOnlineTab.addEventListener("click",()=>setPossessedMode("online"));
+    possessedLocalTab.addEventListener("click",()=>setPlayMode("local"));
+    possessedOnlineTab.addEventListener("click",()=>setPlayMode("room"));
+    playModeButtons.forEach(button=>button.addEventListener("click",()=>setPlayMode(button.dataset.playMode)));
     possessedLocalCount.addEventListener("change",renderPossessedLocalNames);
     document.getElementById("possessed-local-prepare").addEventListener("click",prepareLocalPossessedRoles);
     possessedLocalReveal.addEventListener("click",revealLocalPossessedRole);
@@ -2443,6 +2863,9 @@
     document.getElementById("possessed-host-name").addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();createPossessedRoom()}});
     document.getElementById("possessed-start-online").addEventListener("click",startPossessedOnlineGame);
     document.getElementById("possessed-redraw-online").addEventListener("click",startPossessedOnlineGame);
+    document.getElementById("possessed-role-popup-close").addEventListener("click",closePossessedRolePopup);
+    document.getElementById("possessed-role-popup-x").addEventListener("click",closePossessedRolePopup);
+    possessedRolePopup.addEventListener("click",event=>{if(event.target===possessedRolePopup)closePossessedRolePopup()});
     document.getElementById("possessed-copy-link").addEventListener("click",copyPossessedInvite);
     document.getElementById("possessed-leave-room").addEventListener("click",exitPossessedRoom);
     mediaUniqueButton.addEventListener("click",mediaAddUnique);
@@ -2455,6 +2878,11 @@
     document.getElementById("media-win-btn").addEventListener("click",()=>showMediaOutcome("win"));
     document.getElementById("media-loss-btn").addEventListener("click",()=>showMediaOutcome("loss"));
     document.getElementById("media-reset-btn").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Reset the entire Media Surprise challenge? All unlocked items and media progress will be lost.":"Réinitialiser tout le défi Média Surprise ? Tous les objets débloqués et la progression des médias seront perdus."))resetMediaChallenge()});
+    wallOpenRandomButton.addEventListener("click",wallOpenRandom);
+    wallWinRoundButton.addEventListener("click",wallWinRound);
+    wallLoseButton.addEventListener("click",wallLoseChallenge);
+    wallResetButton.addEventListener("click",()=>{if(confirm("Réinitialiser le Mur de la mort ? Les cases ouvertes et la progression seront perdues."))resetWallChallenge()});
+    wallOpenAllDebugButton.addEventListener("click",wallOpenAllDebug);
     document.getElementById("media-popup-close").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-x").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-reset").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Restart the Media Surprise challenge?":"Recommencer le défi Média Surprise ?"))resetMediaChallenge()});
@@ -2465,7 +2893,7 @@
     document.getElementById("challenge-popup-x").addEventListener("click",closeChallengePopup);
     document.getElementById("challenge-popup-reset").addEventListener("click",()=>{if(confirm("Recommencer le défi entier ? Le chrono, les manches, les scores, les pertes définitives et tous les tiers seront remis à zéro.")){closeChallengePopup();resetGame()}});
     challengePopup.addEventListener("click",event=>{if(event.target===challengePopup)closeChallengePopup()});
-    document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;if(challengePopup.classList.contains("open"))closeChallengePopup();if(mediaPopup.classList.contains("open"))closeMediaPopup()});
+    document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;if(challengePopup.classList.contains("open"))closeChallengePopup();if(mediaPopup.classList.contains("open"))closeMediaPopup();if(possessedRolePopup.classList.contains("open"))closePossessedRolePopup()});
 
     window.addEventListener("beforeunload",()=>{plog("beforeunload → destruction du peer (la room meurt si tu étais l’hôte)");cleanupPossessedPeer(false)});
 
@@ -2479,17 +2907,17 @@
     window.handleImageError=handleImageError;
     function imageTag(obj,extra=""){const image=tierImage(obj);return `<img src="${image.url}" data-file="${escapeHtml(image.file)}" alt="${escapeHtml(obj.name)} — Tier ${obj.tier}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)" ${extra}>`}
     function card(obj){return `${imageTag(obj)}<p>${escapeHtml(obj.name)}</p><span class="tier-badge tier-${obj.tier}">T${obj.tier}</span>${singleCopyNames.has(obj.name)?'<span class="quantity-badge">1 exemplaire</span>':''}`}
-    function resetSelectionDisplay(){resultDiv.innerHTML="Aucun objet en cours de sélection."}
-    function showMessage(title,message){resultDiv.innerHTML=`<p><strong>${escapeHtml(title)}</strong></p><p class="selection-note">${message}</p>`}
+    function resetSelectionDisplay(){resultDiv.innerHTML="Aucun objet en cours de sélection.";scheduleRoomChallengeSync("tarot")}
+    function showMessage(title,message){resultDiv.innerHTML=`<p><strong>${escapeHtml(title)}</strong></p><p class="selection-note">${message}</p>`;scheduleRoomChallengeSync("tarot")}
 
-    function updateModeDisplay(){modeDescription.textContent=streamerMode.checked?"Streamer":"Local"}
+    function updateModeDisplay(){modeDescription.textContent=streamerMode.checked?"On":"Off";scheduleRoomChallengeSync("tarot")}
     function updateTarotStatus(){
       if(nextTarotMultiplier>1){tarotStatus.classList.add("active");tarotStatus.textContent=`Haute-Prêtresse active : le prochain effet sera renforcé ×${nextTarotMultiplier}.`}
-      else{tarotStatus.classList.remove("active");tarotStatus.textContent="Haute-Prêtresse : aucun renforcement en attente."}
+      else{tarotStatus.classList.remove("active");tarotStatus.textContent="Haute-Prêtresse : aucun renforcement en attente."}scheduleRoomChallengeSync("tarot")
     }
     function consumeTarotMultiplier(){const value=nextTarotMultiplier;nextTarotMultiplier=1;updateTarotStatus();return value}
     function addRoundEffect(effect){if(!roundEffects.includes(effect))roundEffects.push(effect);renderActiveEffects()}
-    function renderActiveEffects(){activeEffectsDiv.innerHTML=`<strong>Effets actifs de la manche :</strong> ${roundEffects.length?roundEffects.map(escapeHtml).join(" • "):"aucun."}`}
+    function renderActiveEffects(){activeEffectsDiv.innerHTML=`<strong>Effets actifs de la manche :</strong> ${roundEffects.length?roundEffects.map(escapeHtml).join(" • "):"aucun."}`;scheduleRoomChallengeSync("tarot")}
 
     function handleTarotCard(cardName){
       switch(cardName){
@@ -2555,7 +2983,10 @@
     function drawRandomDecisions(count){
       if(!remainingObjects.length){showMessage("Le Fou","Il n’y a plus d’objet restant.");return}
       const choices=getRandomObjects(Math.min(count,remainingObjects.length));
-      showFoolDecision(choices,0)
+      choices.forEach(obj=>moveObject(obj,selectedObjects));
+      updateLists();
+      resultDiv.innerHTML=`<p><strong>Le Fou</strong></p><p class="selection-note">Objet${choices.length>1?"s":""} tiré${choices.length>1?"s":""} aléatoirement et pris automatiquement.</p><div class="choice-container">${choices.map(obj=>`<div class="choice-card">${card(obj)}</div>`).join("")}</div>`;
+      scheduleRoomChallengeSync("tarot")
     }
     function drawOne(){drawRandomDecisions(1)}
     function showFoolDecision(choices,index){
@@ -2657,7 +3088,7 @@
       const h=String(Math.floor(elapsedSeconds/3600)).padStart(2,"0"),m=String(Math.floor((elapsedSeconds%3600)/60)).padStart(2,"0"),s=String(elapsedSeconds%60).padStart(2,"0");
       return `${h}:${m}:${s}`
     }
-    function pauseTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;updateTimerButton()}}
+    function pauseTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;updateTimerButton();scheduleRoomChallengeSync("tarot")}}
     function showChallengePopup(type,message){
       if(challengeOutcome)return;
       challengeOutcome=type;pauseTimer();
@@ -2669,12 +3100,12 @@
       challengePopupMessage.textContent=message;
       challengePopupStats.innerHTML=`<span>Temps : <strong>${formatElapsedTime()}</strong></span><span>Manche : <strong>${roundCount}</strong></span><span>Victoires : <strong>${winCount}</strong></span><span>Défaites : <strong>${lossCount}</strong></span>`;
       document.getElementById("challenge-popup-close").className=victory?"good-btn":"danger-btn";
-      setTimeout(()=>document.getElementById("challenge-popup-close").focus(),0)
+      setTimeout(()=>document.getElementById("challenge-popup-close").focus(),0);scheduleRoomChallengeSync("tarot")
     }
-    function closeChallengePopup(){challengePopup.classList.remove("open","victory","defeat");challengePopup.hidden=true}
+    function closeChallengePopup(){challengePopup.classList.remove("open","victory","defeat");challengePopup.hidden=true;scheduleRoomChallengeSync("tarot")}
 
     function updateTimerButton(){timerButton.textContent=timerInterval?"Pause chrono":"Démarrer chrono"}
-    function toggleTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;updateTimerButton();return}timerInterval=setInterval(()=>{elapsedSeconds++;updateTimer();checkChallengeState()},1000);updateTimerButton()}
+    function toggleTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;updateTimerButton();scheduleRoomChallengeSync("tarot");return}timerInterval=setInterval(()=>{elapsedSeconds++;updateTimer();checkChallengeState()},1000);updateTimerButton();scheduleRoomChallengeSync("tarot")}
     function updateTimer(){const h=String(Math.floor(elapsedSeconds/3600)).padStart(2,"0"),m=String(Math.floor((elapsedSeconds%3600)/60)).padStart(2,"0"),s=String(elapsedSeconds%60).padStart(2,"0");document.getElementById("timer").textContent=`${h}:${m}:${s}`}
     function checkChallengeState(){
       if(challengeOutcome)return;
@@ -2706,16 +3137,19 @@
       remainingCount.textContent=remainingObjects.length;selectedCount.textContent=selectedObjects.length;removedCount.textContent=removedObjects.length;lostCount.textContent=permanentlyLostObjects.length;
       document.getElementById("round-count").textContent=roundCount;document.getElementById("win-count").textContent=winCount;document.getElementById("loss-count").textContent=lossCount;
       document.getElementById("tier1-count").textContent=allObjects.filter(o=>o.tier===1).length;document.getElementById("tier2-count").textContent=allObjects.filter(o=>o.tier===2).length;document.getElementById("tier3-count").textContent=allObjects.filter(o=>o.tier===3).length;
-      renderList(remainingList,remainingObjects,chooseRemainingObject);renderList(selectedList,selectedObjects,null);renderList(removedList,removedObjects,null);renderList(lostList,permanentlyLostObjects,null)
+      renderList(remainingList,remainingObjects,chooseRemainingObject);renderList(selectedList,selectedObjects,null);renderList(removedList,removedObjects,null);renderList(lostList,permanentlyLostObjects,null);scheduleRoomChallengeSync("tarot")
     }
     resetGame();
+    resetWallChallenge();
     renderGhostMemo();
     renderMediaChallenge();
     renderPossessedLocalNames();
-    relocatePossessedPanel();
+    relocateRoomControls();
     loadPossessedName();
+    loadPlayMode();
     initializeLanguage();
     applyRoute();
+    renderChallengeRoomGate();
   </script>
 </body>
 </html>
