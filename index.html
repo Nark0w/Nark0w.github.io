@@ -3,294 +3,442 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tarot Surprise - Phasmophobia</title>
+  <title>Compagnon Phasmophobia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=Special+Elite&display=swap" rel="stylesheet">
   <style>
-    :root{color-scheme:dark;--bg:#1a1a2e;--panel:#16213e;--panel2:#0f3460;--accent:#e94560;--good:#2ecc71;--danger:#c0392b;--warning:#f39c12;--muted:#999}
+    :root{
+      color-scheme:dark;
+      --bg:#110e0b;--ink:#e9e4da;--muted:#9b9389;--muted2:#7d736a;--muted3:#6b645b;
+      --red:#b23b2e;--red-bright:#d24a39;--danger:#8f2c22;
+      --green:#6fae7e;--green-bright:#8fd6a0;--amber:#c79a4b;
+      --panel:#15110e;--panel2:#13100d;--panel3:#0e0b09;
+      --line:rgba(255,255,255,0.09);--line-soft:rgba(255,255,255,0.06);
+      --serif:'Cinzel',serif;--display:'Cinzel Decorative',serif;--mono:'Special Elite','Courier New',monospace;
+    }
     *{box-sizing:border-box}
-    body{font-family:Arial,sans-serif;text-align:center;margin:0;padding:20px;background-color:var(--bg);color:#e6e6e6}
-    .container{max-width:1180px;margin:0 auto;background:var(--panel);padding:20px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,.5)}
-    h1{color:#fff;text-shadow:0 0 5px var(--accent)}
-    button{padding:12px 18px;font-size:16px;cursor:pointer;margin:5px;border:none;border-radius:5px;background-color:var(--accent);color:white;transition:background-color .3s,transform .2s}
-    button:hover{background-color:#c81e45;transform:scale(1.05)}
-    button:focus-visible,.choice-card:focus-visible,.object-item:focus-visible{outline:3px solid #fff;outline-offset:3px}
-    .info{margin:10px 0 20px;font-size:14px;opacity:.85}
-    #result{margin:20px 0;padding:15px;font-size:18px;font-weight:bold;min-height:140px;background-color:var(--panel2);border-radius:8px}
-    #result img{width:140px;height:140px;object-fit:contain;margin-top:10px;border-radius:5px;border:2px solid var(--accent);background-color:var(--bg)}
-    .choice-container{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:15px}
-    .choice-card{width:160px;padding:10px;background-color:var(--panel);border:2px solid var(--accent);border-radius:8px;cursor:pointer;transition:transform .2s,background-color .2s}
-    .choice-card:hover{transform:scale(1.05);background-color:var(--bg)}
-    .choice-card img{width:100px;height:100px;object-fit:contain}
-    .choice-card p{min-height:2.4em;margin:7px 0}
-    .lists{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-top:20px}
-    .list-box{padding:15px;background-color:var(--panel2);border-radius:8px;min-height:160px}
-    .list-box h2{margin-top:0;font-size:18px;color:#fff}
-    .items{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-    .object-item{display:flex;flex-direction:column;align-items:center;width:96px;font-size:12px;text-align:center;cursor:pointer;transition:transform .2s,opacity .2s;padding:4px;border-radius:7px}
-    .object-item:hover{transform:scale(1.08);opacity:.85;background:rgba(255,255,255,.04)}
-    .object-item img{width:62px;height:62px;object-fit:contain;border-radius:5px;border:1px solid var(--accent);background-color:var(--bg)}
-    .object-item .object-name{min-height:2.5em;margin:4px 0}
-    .selected-list .object-item img{border-color:var(--good)}
-    .removed-list .object-item img{border-color:var(--muted);opacity:.55}
-    .lost-list .object-item img{border-color:var(--danger);filter:grayscale(.55);opacity:.72}
-    .quantity-badge{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:999px;background:#8e44ad;color:#fff;font-size:10px;font-weight:bold}
-    .stat{background:var(--bg);padding:10px 14px;border-radius:8px;min-width:110px;border:1px solid var(--accent)}
-    .stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-    .game-panel{margin:18px 0;padding:15px;background:var(--panel2);border-radius:8px}
-    .stat strong{display:block;font-size:20px}
-    .tier-badge{display:inline-block;padding:2px 7px;border-radius:999px;color:white;font-size:11px;font-weight:bold;margin-top:3px}
-    .tier-1{background:var(--muted)}.tier-2{background:var(--warning)}.tier-3{background:var(--good)}
-    .good-btn{background:var(--good)}.good-btn:hover{background:#27ae60}
-    .danger-btn{background:var(--danger)}.danger-btn:hover{background:#962d22}
-    .warning-btn{background:var(--warning)}.warning-btn:hover{background:#d68910}
-    .choice-card.marked{border-color:var(--good);box-shadow:0 0 12px var(--good)}
-    .rules{text-align:left;max-width:960px;margin:0 auto 22px;padding:20px 24px;font-size:15px;line-height:1.55;background:var(--panel2);border:1px solid var(--accent);border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.25)}
-    .rules h2{margin:0 0 12px;text-align:center;color:#fff;text-shadow:0 0 4px var(--accent)}
-    .rules h3{margin:16px 0 5px;color:#fff;font-size:17px}
-    .rules p{margin:5px 0}
-    .rules .player-count{text-align:center;font-weight:bold;color:#fff;margin-bottom:12px}
-    .tarot-guide{text-align:left;max-width:1080px;margin:0 auto 22px;padding:20px 24px;background:var(--panel2);border:1px solid var(--accent);border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.25)}
-    .tarot-guide>h2{margin:0 0 8px;text-align:center;color:#fff;text-shadow:0 0 4px var(--accent)}
-    .tarot-intro{text-align:center;margin:0 0 18px;opacity:.86}
-    .tarot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .tarot-card{display:grid;grid-template-columns:125px minmax(0,1fr);gap:15px;padding:14px;background:var(--panel);border:1px solid rgba(233,69,96,.72);border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,.22)}
-    .tarot-image-wrap{display:flex;align-items:flex-start;justify-content:center;min-height:190px;border-radius:8px;background:var(--bg);padding:7px;overflow:hidden}
-    .tarot-card img{display:block;width:111px;height:178px;object-fit:contain;border-radius:5px}
-    .tarot-image-fallback{display:none;width:111px;height:178px;align-items:center;justify-content:center;text-align:center;padding:10px;border:1px dashed var(--accent);border-radius:5px;color:#fff;font-size:13px}
-    .tarot-card h3{margin:0;color:#fff;font-size:20px}
-    .tarot-effect{margin-top:8px;padding:10px 12px;border-radius:8px;background:rgba(15,52,96,.72)}
-    .tarot-effect strong{display:block;margin-bottom:4px;color:#fff}
-    .tarot-effect p{margin:4px 0;line-height:1.45}
-    .tarot-effect.challenge{border-left:4px solid var(--good)}
-    .tarot-effect.game{border-left:4px solid var(--accent)}
-    .tarot-subcase{margin-top:8px;padding-left:11px;border-left:2px solid rgba(255,255,255,.25)}
-    .tarot-subcase b{color:#fff}
-    .tarot-source{margin:16px 0 0;text-align:center;font-size:12px;opacity:.68}
-    .source{margin-top:16px;font-size:12px;opacity:.65}
-    .credits-box{margin:24px auto 0;padding:18px 20px;max-width:980px;text-align:left;background:rgba(15,52,96,.72);border:1px solid rgba(255,255,255,.16);border-left:4px solid var(--accent);border-radius:12px;line-height:1.55}
-    .credits-box h2,.credits-box h3{margin:0 0 10px;color:#fff}
-    .credits-box p{margin:7px 0}
-    .credits-box a{color:#fff;text-decoration:underline;text-underline-offset:3px}
-    .credits-box a:hover{color:#ffd7df}
-    .challenge-credit{margin:10px 0 0;font-size:13px;opacity:.82}
-    .challenge-credit a{color:#fff;text-decoration:underline;text-underline-offset:3px}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      background:radial-gradient(ellipse 120% 90% at 50% 0%, #1c1714 0%, #110e0b 55%, #0a0807 100%) fixed,#110e0b;
+      color:var(--ink);
+      font-family:var(--mono);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    ::selection{background:var(--red);color:#fff}
+    a{color:#c8907f}
+    a:hover{color:#e9b3a4}
 
-
-    .control-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:14px}
-    .mode-control{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--accent);border-radius:8px}
-    .mode-control>strong{font-size:14px}
-    .language-control{border-color:#8e44ad}
-    .language-control .switch-track{background:#3498db}
-    .language-control .mode-switch input:checked+.switch-track{background:#8e44ad}
-    .mode-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-size:13px;font-weight:bold}
-    .mode-switch input{position:absolute;opacity:0;pointer-events:none}
-    .switch-track{position:relative;width:52px;height:28px;border-radius:999px;background:#596275;box-shadow:inset 0 0 0 2px rgba(255,255,255,.14);transition:.2s}
-    .switch-track::after{content:"";position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
-    .mode-switch input:checked+.switch-track{background:var(--accent)}
-    .mode-switch input:checked+.switch-track::after{transform:translateX(24px)}
-    .mode-switch input:focus-visible+.switch-track{outline:3px solid #fff;outline-offset:3px}
-    .mode-label{min-width:66px;text-align:left;color:#fff}
-    .tarot-status,.active-effects{margin:10px auto 0;max-width:960px;padding:9px 12px;border-radius:8px;background:rgba(26,26,46,.78);font-size:13px;line-height:1.45}
-    .tarot-status.active{border:1px solid var(--good);box-shadow:0 0 9px rgba(46,204,113,.28)}
-    .active-effects strong{color:#fff}
-    .round-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:8px}
-    .tarot-actions{margin:18px 0;padding:18px;background:var(--panel2);border-radius:10px;border:1px solid rgba(233,69,96,.72)}
-    .tarot-actions h2{margin:0 0 5px;color:#fff;text-shadow:0 0 4px var(--accent)}
-    .tarot-actions>p{margin:0 0 14px;opacity:.84;font-size:14px}
-    .tarot-action-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-    button.tarot-action-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:218px;margin:0;padding:10px 8px;background:var(--panel);border:2px solid rgba(233,69,96,.72);border-radius:10px}
-    button.tarot-action-card:hover{background:var(--bg);border-color:#fff;transform:translateY(-3px) scale(1.02)}
-    .tarot-action-card img{width:82px;height:132px;object-fit:contain;border-radius:5px;background:var(--bg);margin-bottom:8px}
-    .tarot-action-card .tarot-action-name{font-size:15px;font-weight:bold;line-height:1.15}
-    .variant-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
-    .green-btn{background:#1e8449}.green-btn:hover{background:#176b3b}
-    .red-btn{background:#b03a2e}.red-btn:hover{background:#922b21}
-    .selection-note{font-size:13px;font-weight:normal;opacity:.86;margin-top:8px}
-    @media(max-width:1050px){.lists{grid-template-columns:repeat(2,minmax(0,1fr))}.tarot-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-
-    .challenge-popup{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(5px)}
-    .challenge-popup.open{display:flex;animation:popup-fade .2s ease-out}
-    .challenge-popup-card{position:relative;width:min(520px,100%);padding:30px 26px 24px;border:2px solid var(--accent);border-radius:16px;background:linear-gradient(145deg,var(--panel2),var(--panel));box-shadow:0 18px 60px rgba(0,0,0,.65);animation:popup-rise .25s ease-out}
-    .challenge-popup.victory .challenge-popup-card{border-color:var(--good);box-shadow:0 0 35px rgba(46,204,113,.35),0 18px 60px rgba(0,0,0,.65)}
-    .challenge-popup.defeat .challenge-popup-card{border-color:var(--danger);box-shadow:0 0 35px rgba(192,57,43,.4),0 18px 60px rgba(0,0,0,.65)}
-    .challenge-popup-icon{font-size:70px;line-height:1;margin-bottom:8px}
-    .challenge-popup h2{margin:0 0 10px;font-size:32px;color:#fff}
-    .challenge-popup-message{margin:0 auto 18px;max-width:420px;font-size:17px;line-height:1.5}
-    .challenge-popup-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 18px}
-    .challenge-popup-stats span{padding:7px 10px;border-radius:999px;background:var(--bg);border:1px solid rgba(255,255,255,.18);font-size:13px}
-    .popup-close-x{position:absolute;top:8px;right:9px;width:38px;height:38px;margin:0;padding:0;border-radius:50%;font-size:24px;line-height:38px;background:transparent;color:#fff}
-    .popup-close-x:hover{background:rgba(255,255,255,.12)}
-    .popup-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    /* ----- keyframes ----- */
+    @keyframes phGrain{0%{transform:translate(0,0)}10%{transform:translate(-4%,-4%)}20%{transform:translate(-8%,3%)}30%{transform:translate(5%,-7%)}40%{transform:translate(-3%,8%)}50%{transform:translate(-9%,2%)}60%{transform:translate(7%,4%)}70%{transform:translate(2%,-8%)}80%{transform:translate(-6%,6%)}90%{transform:translate(8%,-3%)}100%{transform:translate(0,0)}}
+    @keyframes phFlicker{0%,100%{opacity:1}42%{opacity:1}43%{opacity:.72}44%{opacity:1}71%{opacity:1}72%{opacity:.84}73%{opacity:1}}
+    @keyframes phPulse{0%,100%{opacity:.55}50%{opacity:1}}
     @keyframes popup-fade{from{opacity:0}to{opacity:1}}
-    @keyframes popup-rise{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-    @media(max-width:850px){.tarot-grid{grid-template-columns:1fr}.container{padding:14px}body{padding:10px}}
-    @media(max-width:620px){.lists{grid-template-columns:1fr}.tarot-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}button.tarot-action-card{min-height:198px}.tarot-action-card img{width:72px;height:116px}}
-    @media(max-width:520px){.tarot-card{grid-template-columns:1fr}.tarot-image-wrap{min-height:auto}.tarot-guide{padding:16px 12px}.control-row{flex-direction:column}.control-row>*{width:100%}.mode-control{justify-content:center}}
+    @keyframes popup-rise{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+    @keyframes possessedFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
-    .app-view[hidden]{display:none!important}
-    .challenge-select-view{min-height:calc(100vh - 40px);display:flex;align-items:center;justify-content:center}
-    .challenge-hub{width:min(1050px,100%);margin:0 auto;padding:28px;background:linear-gradient(145deg,rgba(22,33,62,.98),rgba(15,52,96,.96));border:1px solid rgba(233,69,96,.72);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45)}
-    .hub-topbar{display:flex;align-items:center;justify-content:flex-end;margin-bottom:8px}
-    .hub-header{max-width:760px;margin:0 auto 28px}
-    .hub-header h1{font-size:clamp(34px,7vw,62px);margin:8px 0 12px}
-    .hub-header p{font-size:18px;line-height:1.55;margin:0;opacity:.88}
-    .challenge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,360px));justify-content:center;gap:20px}
-    .challenge-select-card{position:relative;overflow:hidden;padding:0;background:var(--panel);border:2px solid rgba(233,69,96,.72);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.32);transition:transform .22s,border-color .22s,box-shadow .22s}
-    .challenge-select-card:hover{transform:translateY(-6px);border-color:#fff;box-shadow:0 16px 38px rgba(0,0,0,.46)}
-    .challenge-card-visual{position:relative;height:245px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(233,69,96,.2),transparent 62%),var(--bg)}
-    .challenge-card-visual::after{content:"";position:absolute;inset:auto 0 0;height:48%;background:linear-gradient(transparent,var(--panel));pointer-events:none}
-    .challenge-card-visual img{height:220px;width:142px;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.65));transform:rotate(-3deg)}
-    .challenge-card-body{padding:20px;text-align:left}
-    .challenge-card-body h2{margin:0 0 9px;font-size:25px;color:#fff}
-    .challenge-card-body p{min-height:4.5em;margin:0 0 16px;line-height:1.5;opacity:.85}
-    .challenge-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:15px}
-    .challenge-meta span{padding:5px 9px;border-radius:999px;background:var(--bg);border:1px solid rgba(255,255,255,.14);font-size:12px;font-weight:bold}
-    .challenge-launch-btn{width:100%;margin:0;background:var(--good);font-weight:bold}
-    .challenge-launch-btn:hover{background:#27ae60}
-    .possessed-card-symbol{position:relative;z-index:1;font-size:112px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.7));animation:possessedFloat 3.2s ease-in-out infinite}
-    @keyframes possessedFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-    .possessed-container{max-width:1180px;margin:0 auto;background:var(--panel);padding:20px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.5)}
-    .possessed-rules,.possessed-panel{margin:18px 0;padding:20px;text-align:left;background:var(--panel2);border-radius:12px}
-    .possessed-rules h2,.possessed-panel h2{margin-top:0;color:#fff}
-    .possessed-rules h3{margin-bottom:5px;color:#fff}
-    .possessed-note{padding:12px 14px;background:rgba(26,26,46,.78);border-left:4px solid var(--warning);border-radius:8px;line-height:1.5}
-    .possessed-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:15px 0}
-    .possessed-tab{background:#596275}
-    .possessed-tab.active{background:var(--accent);box-shadow:0 0 0 2px rgba(255,255,255,.22)}
-    .possessed-mode-panel[hidden]{display:none!important}
-    .possessed-setup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-    .possessed-box{padding:16px;background:rgba(22,33,62,.94);border:1px solid rgba(255,255,255,.14);border-radius:10px}
-    .possessed-box h3{margin-top:0;color:#fff}
-    .possessed-field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
-    .possessed-field label{font-size:13px;font-weight:bold}
-    .possessed-field input,.possessed-field select{width:100%;padding:11px 12px;border:1px solid rgba(255,255,255,.24);border-radius:7px;background:var(--bg);color:#fff;font-size:15px}
-    .possessed-names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
-    .possessed-stage{margin-top:16px;padding:18px;text-align:center;background:rgba(22,33,62,.96);border:2px solid var(--accent);border-radius:12px}
-    .possessed-stage h3{margin:0 0 10px;color:#fff}
-    .possessed-role-card{max-width:540px;margin:14px auto;padding:22px;border-radius:14px;background:var(--bg);border:3px solid #3498db;text-align:center;box-shadow:0 12px 34px rgba(0,0,0,.35)}
-    .possessed-role-card.possessed{border-color:var(--danger);background:linear-gradient(145deg,#260f1a,var(--bg))}
-    .possessed-role-card.investigator{border-color:var(--good);background:linear-gradient(145deg,#0f2b25,var(--bg))}
-    .possessed-role-icon{font-size:62px;margin-bottom:7px}
-    .possessed-role-title{font-size:30px;font-weight:bold;color:#fff;margin:0 0 8px}
-    .possessed-role-text{line-height:1.55;margin:0}
-    .possessed-online-status{margin:12px 0;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid rgba(255,255,255,.18);text-align:center}
-    .possessed-room-code{display:inline-block;padding:9px 14px;border-radius:8px;background:var(--bg);border:2px solid var(--good);font-size:28px;font-weight:bold;letter-spacing:.18em;color:#fff}
-    .possessed-share-row{display:flex;gap:8px;align-items:center;margin-top:10px}
-    .possessed-share-row input{flex:1;min-width:0;padding:10px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:var(--bg);color:#fff}
-    .possessed-lobby-list{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:14px 0}
-    .possessed-player-chip{padding:8px 12px;border-radius:999px;background:var(--bg);border:1px solid #3498db;font-weight:bold}
-    .possessed-player-chip.host::after{content:" ★";color:var(--warning)}
-    .possessed-beta{margin-top:15px;font-size:12px;line-height:1.5;opacity:.75}
-    .possessed-hidden{display:none!important}
-    @media(max-width:720px){.possessed-setup-grid,.possessed-names{grid-template-columns:1fr}.possessed-share-row{flex-direction:column}.possessed-share-row button,.possessed-share-row input{width:100%}}
-    .challenge-toolbar{display:flex;align-items:center;justify-content:flex-start;margin:0 0 10px}
-    .back-challenges-btn{display:inline-flex;align-items:center;gap:7px;margin:0;padding:9px 13px;background:rgba(15,52,96,.92);border:1px solid rgba(255,255,255,.2);font-size:14px}
-    .back-challenges-btn:hover{background:var(--bg)}
-    .hub-footnote{margin:24px 0 0;font-size:13px;opacity:.68}
-    @media(max-width:620px){.challenge-hub{padding:18px 14px}.hub-topbar{justify-content:center}.hub-header p{font-size:16px}.challenge-card-visual{height:220px}}
+    /* ----- texture overlays ----- */
+    .ph-grain,.ph-scan,.ph-vignette{position:fixed;pointer-events:none;z-index:1}
+    .ph-grain{inset:-50%;opacity:.045;mix-blend-mode:overlay;animation:phGrain .55s steps(5) infinite;
+      background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22220%22 height=%22220%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E')}
+    .ph-scan{inset:0;opacity:.5;background:repeating-linear-gradient(0deg,rgba(0,0,0,.32) 0px,rgba(0,0,0,.32) 1px,transparent 1px,transparent 3px)}
+    .ph-vignette{inset:0;box-shadow:inset 0 0 200px 40px rgba(0,0,0,.9),inset 0 0 60px 10px rgba(0,0,0,.6)}
 
+    /* ----- views ----- */
+    [hidden]{display:none!important}
+    .app-view{position:relative;z-index:10;max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+    .container{position:relative}
 
-    /* Navigation principale et mémo */
-    .portal-grid{display:grid;grid-template-columns:repeat(2,minmax(260px,390px));justify-content:center;gap:22px}
-    .portal-card{display:flex;flex-direction:column;overflow:hidden;background:var(--panel);border:2px solid rgba(233,69,96,.7);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.32);transition:transform .22s,border-color .22s,box-shadow .22s}
-    .portal-card:hover{transform:translateY(-6px);border-color:#fff;box-shadow:0 16px 38px rgba(0,0,0,.46)}
-    .portal-card.memo{border-color:rgba(52,152,219,.75)}
-    .portal-card-visual{height:190px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at center,rgba(233,69,96,.22),transparent 65%),var(--bg)}
-    .portal-card.memo .portal-card-visual{background:radial-gradient(circle at center,rgba(52,152,219,.24),transparent 65%),var(--bg)}
-    .portal-icon{font-size:88px;filter:drop-shadow(0 10px 12px rgba(0,0,0,.55))}
-    .portal-card-body{display:flex;flex:1;flex-direction:column;padding:22px;text-align:left}
-    .portal-card-body h2{margin:0 0 9px;font-size:28px;color:#fff}
-    .portal-card-body p{flex:1;margin:0 0 18px;line-height:1.55;opacity:.86}
-    .portal-launch-btn{width:100%;margin:0;font-weight:bold}
-    .portal-card.memo .portal-launch-btn{background:#2980b9}
-    .portal-card.memo .portal-launch-btn:hover{background:#21618c}
-    .section-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .memo-shell{width:min(1180px,100%);margin:0 auto;padding:24px;background:linear-gradient(145deg,rgba(22,33,62,.98),rgba(15,52,96,.96));border:1px solid rgba(52,152,219,.75);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45)}
-    .memo-header{max-width:900px;margin:0 auto 18px}
-    .memo-header h1{font-size:clamp(32px,6vw,54px);margin:5px 0 10px}
-    .memo-header p{margin:5px 0;line-height:1.5;opacity:.88}
-    .memo-warning{max-width:940px;margin:14px auto;padding:12px 15px;text-align:left;background:rgba(26,26,46,.82);border-left:4px solid var(--warning);border-radius:8px;line-height:1.5}
-    .memo-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;margin:18px 0}
-    .memo-search{width:min(520px,100%);padding:13px 16px;border:1px solid rgba(255,255,255,.25);border-radius:9px;background:var(--bg);color:#fff;font-size:16px;outline:none}
-    .memo-search:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(52,152,219,.3)}
-    .ghost-count{padding:9px 13px;border-radius:999px;background:var(--bg);border:1px solid #3498db;font-weight:bold;white-space:nowrap}
-    .ghost-scale{display:grid;grid-template-columns:220px minmax(0,1fr);gap:14px;align-items:end;margin:8px 0 10px;text-align:left}
-    .ghost-scale-spacer{font-size:12px;opacity:.7;text-transform:uppercase;letter-spacing:.08em}
-    .ghost-scale-bar{position:relative;height:24px}
-    .ghost-scale-bar::before{content:"";position:absolute;inset:0;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:linear-gradient(90deg,rgba(255,255,255,.08) 0,rgba(255,255,255,.08) 25%,rgba(255,255,255,.03) 25%,rgba(255,255,255,.03) 50%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.08) 75%,rgba(255,255,255,.03) 75%,rgba(255,255,255,.03) 100%)}
-    .ghost-scale-labels{position:absolute;inset:100% 0 auto 0;display:flex;justify-content:space-between;gap:10px;padding-top:6px;font-size:11px;opacity:.75}
-    .ghost-chart{display:flex;flex-direction:column;gap:12px;text-align:left;margin-top:22px}
-    .ghost-row{display:grid;grid-template-columns:220px minmax(0,1fr);gap:14px;align-items:start;padding:14px 16px;background:rgba(22,33,62,.96);border:1px solid rgba(255,255,255,.14);border-left:4px solid #3498db;border-radius:12px;box-shadow:0 5px 16px rgba(0,0,0,.25)}
-    .ghost-row.early{border-left-color:var(--danger);--tone-color:var(--danger)}
-    .ghost-row.standard{border-left-color:#3498db;--tone-color:#3498db}
-    .ghost-row.late{border-left-color:var(--good);--tone-color:var(--good)}
-    .ghost-row.variable{border-left-color:var(--warning);--tone-color:var(--warning)}
-    .ghost-row-main{display:flex;flex-direction:column;gap:8px}
-    .ghost-row-name{margin:0;color:#fff;font-size:22px;line-height:1.15}
-    .ghost-threshold-badge{display:inline-flex;align-self:flex-start;max-width:fit-content;padding:5px 10px;border-radius:999px;background:rgba(26,26,46,.94);border:1px solid var(--tone-color,#3498db);color:#fff;font-size:12px;font-weight:bold}
-    .ghost-row-note{margin:0;font-size:12px;line-height:1.45;opacity:.76}
-    .ghost-bar-wrap{display:flex;flex-direction:column;gap:9px;min-width:0}
-    .ghost-bar-track{position:relative;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(90deg,rgba(255,255,255,.08) 0,rgba(255,255,255,.08) 25%,rgba(255,255,255,.03) 25%,rgba(255,255,255,.03) 50%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.08) 75%,rgba(255,255,255,.03) 75%,rgba(255,255,255,.03) 100%);overflow:hidden}
-    .ghost-bar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:color-mix(in srgb,var(--tone-color,#3498db) 76%, transparent);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
-    .ghost-bar-range{position:absolute;top:4px;bottom:4px;border-radius:999px;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--tone-color,#3498db) 88%, white 12%) 0 10px,color-mix(in srgb,var(--tone-color,#3498db) 58%, transparent) 10px 20px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
-    .ghost-bar-marker{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--tone-color,#3498db);transform:translate(-50%,-50%);box-shadow:0 0 0 2px rgba(15,52,96,.55)}
-    .ghost-row-labels{display:flex;justify-content:space-between;gap:10px;font-size:11px;opacity:.72}
-    .ghost-summary{margin:0;font-size:13px;line-height:1.45;opacity:.9}
-    .memo-source{margin:20px 0 0;font-size:12px;opacity:.68}
-    .memo-empty{padding:30px;text-align:center;background:var(--bg);border:1px dashed rgba(255,255,255,.25);border-radius:10px}
-    .fun-memo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px;text-align:left}
-    .fun-card{padding:18px;background:rgba(22,33,62,.96);border:1px solid rgba(255,255,255,.14);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.28);overflow:hidden}
-    .fun-card.good{border-top:5px solid var(--good)}
-    .fun-card.bad{border-top:5px solid var(--danger)}
-    .fun-card img{display:block;width:100%;max-height:320px;object-fit:cover;border-radius:10px;background:var(--bg)}
-    .fun-badge{display:inline-block;margin:12px 0 8px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:bold;color:#fff}
-    .fun-card.good .fun-badge{background:var(--good)}
-    .fun-card.bad .fun-badge{background:var(--danger)}
-    .fun-card h2{margin:0 0 8px;color:#fff}
-    .fun-card p{margin:0 0 10px;line-height:1.55;opacity:.92}
-    .fun-card .fun-note{font-size:13px;opacity:.74}
-    @media(max-width:900px){.ghost-scale,.ghost-row{grid-template-columns:180px minmax(0,1fr)}.ghost-row-name{font-size:20px}}
-    @media(max-width:680px){.portal-grid,.fun-memo-grid{grid-template-columns:1fr}.section-topbar{flex-direction:column-reverse}.section-topbar .hub-topbar{justify-content:center;width:100%}.memo-shell{padding:17px 12px}.ghost-scale,.ghost-row{grid-template-columns:1fr}.ghost-scale-spacer{display:none}.ghost-scale{gap:8px;margin-top:16px}.ghost-row{padding:14px}.ghost-row-main{gap:6px}}
+    /* ----- generic typography ----- */
+    h1,h2,h3{font-family:var(--display);color:#ece7dd;letter-spacing:.06em}
+    .info{margin:10px 0 20px;font-size:13px;color:var(--muted)}
+    .source,.tarot-source,.memo-source{margin-top:16px;font-size:12px;color:var(--muted3);text-align:center;letter-spacing:.04em}
 
+    /* ----- buttons ----- */
+    button{font-family:var(--serif);cursor:pointer;font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+      padding:12px 20px;margin:5px;border:1px solid var(--red-bright);border-radius:0;
+      background:linear-gradient(180deg,var(--red),var(--danger));color:#fbeae6;
+      box-shadow:0 6px 20px rgba(178,59,46,.25);transition:background .2s,border-color .2s,transform .15s,box-shadow .2s}
+    button:hover{background:linear-gradient(180deg,#c8463a,#a13226);transform:translateY(-1px)}
+    button:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+    button:focus-visible,.choice-card:focus-visible,.object-item:focus-visible,.mode-switch input:focus-visible+.switch-track{outline:2px solid var(--green-bright);outline-offset:3px}
+    .good-btn,.green-btn{background:linear-gradient(180deg,#4f7d5b,#34593f);border-color:var(--green);color:#eafaef;box-shadow:0 6px 20px rgba(111,174,126,.22)}
+    .good-btn:hover,.green-btn:hover{background:linear-gradient(180deg,#5e9069,#3f6b4c)}
+    .danger-btn,.red-btn{background:linear-gradient(180deg,#962d22,#5e1c15);border-color:#c0392b}
+    .danger-btn:hover,.red-btn:hover{background:linear-gradient(180deg,#b03a2e,#722219)}
+    .warning-btn{background:linear-gradient(180deg,#9c7a32,#6b5320);border-color:var(--amber);color:#fff5e2}
+    .warning-btn:hover{background:linear-gradient(180deg,#b58e3c,#7d6126)}
 
-    /* Média Surprise */
-    .media-container{max-width:1180px;margin:0 auto;background:var(--panel);padding:20px;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,.5)}
-    .media-rules{max-width:960px;margin:18px auto;padding:20px 24px;text-align:left;background:var(--panel2);border-left:5px solid #3498db;border-radius:12px;line-height:1.55}
-    .media-rules h2{margin:0 0 8px;color:#fff;text-align:center}.media-rules h3{margin:19px 0 5px;color:#fff}.media-rules p{margin:7px 0}.media-rules .player-count{text-align:center;font-weight:bold;color:#fff}
-    .media-panel{margin:18px 0;padding:18px;background:var(--panel2);border-radius:12px;border:1px solid rgba(52,152,219,.55)}
-    .media-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:14px}
-    .media-stat{padding:11px 9px;background:var(--bg);border:1px solid rgba(52,152,219,.65);border-radius:9px;font-size:13px}
-    .media-stat strong{display:block;margin-top:4px;font-size:21px;color:#fff}.media-phase-badge{color:#fff}
-    .media-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.media-actions button{margin:0}
-    .media-type-selector{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:0 0 14px}.media-type-btn{margin:0;background:#34495e;border:1px solid rgba(255,255,255,.2)}.media-type-btn:hover{background:#2c3e50}.media-type-btn.active{background:#2980b9;box-shadow:0 0 0 2px rgba(255,255,255,.2)}.media-type-btn.completed::after{content:" ✓"}.media-type-btn:disabled{cursor:not-allowed;opacity:.42;transform:none}
-    .media-primary-btn{background:#2980b9}.media-primary-btn:hover{background:#21618c}.media-secondary-btn{background:#7f8c8d}.media-secondary-btn:hover{background:#616a6b}
-    .media-objective-btn{background:#8e44ad}.media-objective-btn:hover{background:#71368a}.media-page-btn{background:#f39c12}.media-page-btn:hover{background:#d68910}
-    .media-result{min-height:100px;margin:16px 0;padding:16px;display:flex;align-items:center;justify-content:center;background:var(--panel2);border-radius:10px;font-size:17px;font-weight:bold;line-height:1.5}
-    .media-result-card{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}.media-result-card img{width:90px;height:90px;object-fit:contain;border-radius:7px;border:2px solid #3498db;background:var(--bg)}
-    .media-lists{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:18px}.media-list-box{padding:15px;background:var(--panel2);border-radius:10px;min-height:180px}.media-list-box h2{margin-top:0;font-size:19px}.media-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:10px}
-    .media-object{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-height:133px;padding:9px 7px;background:var(--panel);border:1px solid rgba(255,255,255,.14);border-radius:9px;font-size:12px}.media-object img{width:68px;height:68px;object-fit:contain}.media-object.locked{filter:grayscale(1);opacity:.42}.media-object.starting{border-color:#2ecc71}.media-object.new-unlock{border-color:#f39c12;box-shadow:0 0 12px rgba(243,156,18,.55)}
-    .media-object-badge{display:inline-block;padding:2px 6px;border-radius:999px;background:#2ecc71;color:#fff;font-size:10px;font-weight:bold}.media-object.locked .media-object-badge{background:#7f8c8d}.media-progress-note{margin:12px 0 0;font-size:13px;opacity:.82}
-    .media-popup{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.78);backdrop-filter:blur(6px)}.media-popup.open{display:flex}.media-popup-card{position:relative;width:min(520px,100%);padding:28px;background:linear-gradient(145deg,#16213e,#0f3460);border:2px solid #3498db;border-radius:16px;box-shadow:0 20px 80px rgba(0,0,0,.7);text-align:center}.media-popup.win .media-popup-card{border-color:#2ecc71}.media-popup.loss .media-popup-card{border-color:#c0392b}.media-popup-icon{font-size:68px}.media-popup h2{font-size:32px;margin:8px 0}.media-popup-message{line-height:1.5}.media-popup-stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0}.media-popup-stat{padding:9px 12px;background:var(--bg);border-radius:8px;border:1px solid rgba(255,255,255,.2)}
-    @media(max-width:850px){.media-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.media-lists{grid-template-columns:1fr}}
-    @media(max-width:520px){.media-container{padding:14px 10px}.media-rules{padding:17px 15px}.media-stats{grid-template-columns:1fr 1fr}.media-actions button{width:100%}.media-items{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    /* ----- top bars / language switch ----- */
+    .hub-topbar,.section-topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+    .hub-topbar{justify-content:flex-end}
+    .lang-control{display:flex;align-items:center;gap:10px}
+    .lang-label{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted3)}
+    .lang-buttons{display:flex;border:1px solid var(--line);background:rgba(0,0,0,.4)}
+    .lang-btn{margin:0;padding:8px 15px;font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:none;border:none;border-radius:0;background:transparent;color:var(--muted);box-shadow:none}
+    .lang-btn:hover{background:rgba(255,255,255,.05);color:var(--ink);transform:none}
+    .lang-btn.active{background:var(--red);color:#fff}
+    /* barre supérieure globale (marque + retour + langue) sur toutes les pages */
+    .ph-topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 28px;border-bottom:1px solid var(--line-soft);background:linear-gradient(180deg,rgba(8,6,5,.95),rgba(8,6,5,.6));backdrop-filter:blur(4px)}
+    .ph-topbar-left{display:flex;align-items:center;gap:16px;min-width:0}
+    .ph-brand{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;margin:0;padding:0;background:none;border:none;box-shadow:none}
+    .ph-brand:hover{transform:none;background:none}
+    .ph-brand-name{font-family:var(--display);font-weight:900;letter-spacing:.14em;color:#ece7dd;font-size:18px;text-shadow:0 0 14px rgba(178,59,46,.35);text-transform:none}
+    .ph-brand-sub{font-family:var(--mono);letter-spacing:.34em;color:var(--muted2);font-size:9px;text-transform:uppercase}
+    .ph-back{margin:0;background:rgba(20,17,14,.7);border:1px solid var(--line);color:#cfc7bc;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;box-shadow:none}
+    .ph-back:hover{border-color:var(--red);color:var(--ink);background:rgba(20,17,14,.9);transform:none}
+    .hub-topbar,.section-topbar,.challenge-toolbar{display:none!important}
+    .section-topbar{border-bottom:1px solid var(--line-soft);padding-bottom:14px}
+    .challenge-toolbar{margin:0 0 18px}
+    .back-challenges-btn{margin:0;background:rgba(20,17,14,.7);border:1px solid var(--line);color:#cfc7bc;
+      font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:9px 15px;box-shadow:none}
+    .back-challenges-btn:hover{background:rgba(20,17,14,.9);border-color:var(--red);color:var(--ink);transform:none}
+    .mode-control{display:flex;align-items:center;gap:12px;padding:8px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line)}
+    .mode-control>strong{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:400}
+    .mode-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted)}
+    .mode-switch input{position:absolute;opacity:0;pointer-events:none}
+    .switch-track{position:relative;width:50px;height:26px;border-radius:0;background:#2a221c;box-shadow:inset 0 0 0 1px var(--line);transition:.2s}
+    .switch-track::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;background:#cfc7bc;transition:.2s}
+    .mode-switch input:checked+.switch-track{background:var(--red)}
+    .mode-switch input:checked+.switch-track::after{transform:translateX(24px);background:#fff}
+    .mode-label{min-width:62px;text-align:left;font-family:var(--mono);font-size:12px;color:var(--ink)}
+    .control-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:14px}
+
+    /* ----- hub header / hero ----- */
+    .hub-header,.memo-header{text-align:center;margin:18px auto 40px;max-width:640px}
+    .hub-header.hero{max-width:1000px}
+    .hub-header h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5.5vw,52px);line-height:1.05;margin:0;
+      color:#efeae0;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 0 26px rgba(178,59,46,.35)}
+    .hero-kicker{font-family:var(--mono);letter-spacing:.5em;color:var(--muted2);font-size:12px;text-transform:uppercase;margin-bottom:18px}
+    .hub-header h1.hero-title{font-family:var(--display);font-weight:900;font-size:clamp(40px,8vw,86px);line-height:.98;letter-spacing:.04em;text-transform:none;
+      text-shadow:0 0 30px rgba(178,59,46,.4),0 4px 30px rgba(0,0,0,.8);animation:phFlicker 7s infinite}
+    .hero-sub{font-family:var(--serif);font-weight:600;letter-spacing:.46em;color:var(--red);font-size:clamp(13px,2.4vw,20px);text-transform:uppercase;margin-top:14px}
+    .hub-header.hero p{max-width:560px;margin:26px auto 0}
+    .memo-header h1{font-weight:700;font-size:clamp(30px,5.5vw,52px);text-transform:uppercase;letter-spacing:.08em;text-shadow:0 0 24px rgba(111,174,126,.3)}
+    .hub-header p,.memo-header p{color:var(--muted);font-size:14px;line-height:1.7;margin:20px auto 0}
+
+    /* ----- portal / challenge cards ----- */
+    .portal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:10px}
+    .portal-card{display:flex;flex-direction:column;text-align:left;background:linear-gradient(180deg,#1b1713,#15110e);
+      border:1px solid rgba(178,59,46,.35);box-shadow:0 18px 50px rgba(0,0,0,.55);transition:border-color .2s,box-shadow .2s}
+    .portal-card:hover{border-color:var(--red);box-shadow:0 18px 60px rgba(178,59,46,.22)}
+    .portal-card.memo{border-color:rgba(111,174,126,.32)}
+    .portal-card.memo:hover{border-color:var(--green)}
+    .portal-card-visual{height:150px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line-soft);
+      background:repeating-linear-gradient(135deg,#1a1512 0 8px,#181310 8px 16px);position:relative;overflow:hidden}
+    .portal-card.memo .portal-card-visual{background:repeating-linear-gradient(0deg,#101512 0 2px,#0d110f 2px 4px)}
+    .portal-card-visual::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(178,59,46,.25),transparent 60%)}
+    .portal-card.memo .portal-card-visual::before{background:radial-gradient(circle at 50% 40%,rgba(111,174,126,.18),transparent 60%)}
+    .portal-icon{font-size:54px;position:relative;filter:drop-shadow(0 0 18px rgba(178,59,46,.45))}
+    .portal-card.memo .portal-icon{filter:drop-shadow(0 0 18px rgba(111,174,126,.4))}
+    .portal-card-body{padding:24px 24px 26px;display:flex;flex-direction:column;gap:12px;flex:1}
+    .portal-card-body h2{font-size:23px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin:0}
+    .portal-card-body p{color:var(--muted);font-size:14px;line-height:1.6;margin:0;flex:1}
+    .portal-launch-btn{align-self:flex-start;margin:8px 0 0;padding:0;background:none;border:none;border-radius:0;box-shadow:none;
+      font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red-bright)}
+    .portal-launch-btn::after{content:" \2192"}
+    .portal-launch-btn:hover{background:none;transform:none;color:#e9b3a4}
+    .portal-card.memo .portal-launch-btn{color:var(--green-bright)}
+    .portal-card.memo .portal-launch-btn:hover{color:#b6ecc3}
+
+    .challenge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+    .challenge-select-card{display:flex;flex-direction:column;background:linear-gradient(180deg,#1a1612,#13100d);
+      border:1px solid var(--line);box-shadow:0 16px 44px rgba(0,0,0,.5)}
+    .challenge-card-visual{height:190px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line-soft);
+      background:#0e0b09;position:relative;overflow:hidden;padding:18px}
+    .challenge-card-visual::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(178,59,46,.2),transparent 65%)}
+    .challenge-card-visual img{position:relative;max-height:150px;max-width:80%;object-fit:contain;filter:drop-shadow(0 8px 22px rgba(0,0,0,.6))}
+    .possessed-card-symbol{position:relative;font-size:64px;filter:drop-shadow(0 0 18px rgba(178,59,46,.45));animation:phFlicker 6s infinite}
+    .challenge-photo{position:relative;width:138px;min-height:148px;padding:9px;display:flex;align-items:center;justify-content:center;
+      background:repeating-linear-gradient(45deg,#1f1a16 0 6px,#1a1511 6px 12px);border:6px solid #e9e4da;box-shadow:0 10px 26px rgba(0,0,0,.7);transform:rotate(-3deg)}
+    .challenge-photo::before{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(2deg);width:56px;height:20px;background:rgba(218,210,196,.32);border:1px solid rgba(255,255,255,.12)}
+    .challenge-photo img{position:relative;max-width:100%;max-height:118px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.55))}
+    .challenge-photo .possessed-card-symbol{font-size:58px}
+    .challenge-card-body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:12px;flex:1}
+    .challenge-card-body h2{font-size:21px;font-weight:700;letter-spacing:.06em;margin:0}
+    .challenge-card-body p{color:var(--muted);font-size:13.5px;line-height:1.6;margin:0}
+    .challenge-card-body>p:first-of-type{flex:1}
+    .challenge-meta{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0}
+    .challenge-meta span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#bcae9d;
+      background:rgba(0,0,0,.4);border:1px solid var(--line);padding:4px 9px}
+    .challenge-credit{font-size:12px;color:var(--muted2);margin:0}
+    .challenge-launch-btn{align-self:stretch;margin:8px 0 0}
+    .hub-footnote{text-align:center;color:var(--muted3);font-size:12px;margin-top:32px;letter-spacing:.04em}
+
+    /* ----- credits ----- */
+    .credits-box{margin:42px auto 0;max-width:980px;text-align:left;border:1px solid var(--line);border-left:3px solid var(--red);
+      background:rgba(13,11,9,.6);padding:24px 26px;line-height:1.7}
+    .credits-box h2,.credits-box h3{font-size:16px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#cfc7bc;margin:0 0 12px}
+    .credits-box p{color:var(--muted);font-size:13px;margin:7px 0}
+    .credit-links{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+    .credit-link{width:fit-content;color:#c8907f;font-size:13px;text-decoration:none;border-bottom:1px solid rgba(178,59,46,.4)}
+    .credit-link::before{content:"\203A  ";color:var(--red-bright)}
+    .credit-link:hover{color:#e9b3a4;border-bottom-color:var(--red-bright)}
+
+    /* ----- rules panels ----- */
+    .rules,.media-rules,.possessed-rules{text-align:left;max-width:980px;margin:0 auto 24px;padding:22px 24px;
+      background:rgba(13,11,9,.55);border:1px solid var(--line);border-left:3px solid var(--red);line-height:1.6}
+    .rules h2,.media-rules h2,.possessed-rules h2{text-align:center;font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px}
+    .rules h3{margin:16px 0 5px;color:#d8d0c5;font-size:15px;letter-spacing:.08em}
+    .rules p,.media-rules p,.possessed-rules p{margin:6px 0;font-size:14px;color:#bcb4a9}
+    .rules .player-count,.player-count{text-align:center;font-weight:700;color:var(--red-bright);margin-bottom:12px;font-family:var(--mono);letter-spacing:.1em}
+
+    /* ----- fiche de défi (mise en place / objectif / règles / victoire) ----- */
+    .fiche{max-width:980px;margin:0 auto 26px}
+    .fiche-setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:24px}
+    .fiche-cell{background:#13100d;padding:16px 18px}
+    .fiche-k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted3);margin-bottom:6px}
+    .fiche-v{font-family:var(--serif);font-weight:600;font-size:16px;color:var(--ink)}
+    .fiche-block{padding:18px 22px;margin-bottom:24px}
+    .fiche-block.obj{border-left:3px solid var(--red);background:rgba(178,59,46,.06)}
+    .fiche-block.win{border:1px solid rgba(111,174,126,.3);background:rgba(111,174,126,.05)}
+    .fiche-block-label{font-family:var(--serif);font-weight:600;font-size:13px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+    .fiche-block.obj .fiche-block-label{color:var(--red-bright)}
+    .fiche-block.win .fiche-block-label{color:var(--green-bright)}
+    .fiche-block p{color:#dcd5ca;font-size:15px;line-height:1.65;margin:0}
+    .fiche-rules{margin-bottom:24px}
+    .fiche-rules-title{font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfc7bc;margin:0 0 16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+    .fiche-rule{display:flex;gap:16px;align-items:flex-start;margin-bottom:14px}
+    .fiche-rule-n{font-family:var(--serif);font-weight:700;font-size:18px;color:var(--red);min-width:28px;line-height:1.4}
+    .fiche-rule p{color:#bcb4a9;font-size:14.5px;line-height:1.65;margin:0}
+
+    /* ----- tarot guide ----- */
+    .tarot-guide{text-align:left;max-width:1080px;margin:0 auto 24px;padding:22px 24px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
+    .tarot-guide>h2{text-align:center;font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfc7bc;margin:0 0 8px}
+    .tarot-intro{text-align:center;margin:0 0 18px;color:var(--muted)}
+    .tarot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:16px}
+    .tarot-card{display:grid;grid-template-columns:125px minmax(0,1fr);gap:15px;padding:15px;
+      background:linear-gradient(180deg,#1a1612,#13100d);border:1px solid rgba(178,59,46,.4)}
+    .tarot-image-wrap{display:flex;align-items:flex-start;justify-content:center;min-height:190px;background:#0e0b09;padding:8px;overflow:hidden;border:1px solid var(--line-soft)}
+    .tarot-card img{display:block;width:111px;height:178px;object-fit:contain}
+    .tarot-image-fallback{display:none;width:111px;height:178px;align-items:center;justify-content:center;text-align:center;padding:10px;border:1px dashed var(--red);color:#fff;font-size:13px}
+    .tarot-card h3{margin:0;color:#ece7dd;font-size:20px;letter-spacing:.05em}
+    .tarot-effect{margin-top:8px;padding:10px 12px;background:rgba(0,0,0,.35);border-left:4px solid var(--line)}
+    .tarot-effect strong{display:block;margin-bottom:4px;color:#ece7dd}
+    .tarot-effect p{margin:4px 0;line-height:1.45;color:#bcb4a9}
+    .tarot-effect.challenge{border-left-color:var(--green)}
+    .tarot-effect.game{border-left-color:var(--red)}
+    .tarot-subcase{margin-top:8px;padding-left:11px;border-left:2px solid rgba(255,255,255,.2)}
+    .tarot-subcase b{color:#ece7dd}
+
+    /* ----- tarot actions (draw cards) ----- */
+    .tarot-actions{margin:20px 0;padding:20px;background:rgba(13,11,9,.55);border:1px solid rgba(178,59,46,.4)}
+    .tarot-actions h2{font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfc7bc;margin:0 0 5px}
+    .tarot-actions>p{margin:0 0 14px;color:var(--muted);font-size:14px}
+    .tarot-action-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+    button.tarot-action-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:218px;
+      margin:0;padding:12px 8px;background:linear-gradient(180deg,#1a1612,#13100d);border:1px solid rgba(178,59,46,.4);text-transform:none;letter-spacing:normal}
+    button.tarot-action-card:hover{border-color:var(--red);transform:translateY(-3px)}
+    .tarot-action-card img{width:82px;height:132px;object-fit:contain;background:#0e0b09;margin-bottom:8px}
+    .tarot-action-card .tarot-action-name{font-family:var(--serif);font-size:15px;font-weight:700;line-height:1.15;color:#ece7dd}
+
+    /* ----- game panel / stats ----- */
+    .game-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
+    .stats,.media-stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .stat,.media-stat{background:rgba(0,0,0,.4);padding:12px 16px;min-width:112px;border:1px solid var(--line);text-align:center;
+      font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
+    .stat strong,.media-stat strong{display:block;font-family:var(--serif);font-size:22px;color:var(--ink);letter-spacing:.04em;margin-top:4px}
+    .tier-badge{display:inline-block;padding:2px 8px;color:#0c100e;font-size:11px;font-weight:700;font-family:var(--mono);letter-spacing:.06em;margin-top:3px}
+    .tier-1{background:var(--muted2);color:#16110d}.tier-2{background:var(--amber);color:#1c1407}.tier-3{background:var(--green-bright);color:#0c1410}
+    .quantity-badge{display:inline-block;margin-top:4px;padding:2px 8px;background:#5a3b6e;color:#fff;font-size:10px;font-weight:700;font-family:var(--mono)}
+    .round-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px}
+    .variant-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
+    .tarot-status,.active-effects{margin:10px auto 0;max-width:980px;padding:10px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line);
+      font-family:var(--mono);font-size:13px;line-height:1.45;color:#bcb4a9}
+    .tarot-status.active{border-color:var(--green);box-shadow:0 0 10px rgba(111,174,126,.25)}
+    .active-effects strong{color:var(--ink)}
+    .selection-note{font-size:13px;color:var(--muted);margin-top:8px}
+
+    /* ----- result / object lists ----- */
+    #result,.media-result{margin:20px 0;padding:18px;min-height:120px;background:rgba(13,11,9,.55);border:1px solid var(--line);font-size:15px}
+    #result img{width:140px;height:140px;object-fit:contain;margin-top:10px;border:2px solid var(--red);background:#0e0b09}
+    .choice-container{display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:15px}
+    .choice-card{width:160px;padding:12px;background:linear-gradient(180deg,#1a1612,#13100d);border:2px solid var(--red);cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+    .choice-card:hover{transform:scale(1.04);border-color:var(--red-bright)}
+    .choice-card img{width:100px;height:100px;object-fit:contain}
+    .choice-card p{min-height:2.4em;margin:7px 0;font-size:13px;color:var(--ink)}
+    .choice-card.marked{border-color:var(--green-bright);box-shadow:0 0 14px rgba(143,214,160,.5)}
+    .lists{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-top:20px}
+    .list-box{padding:16px;background:rgba(13,11,9,.5);border:1px solid var(--line);min-height:160px}
+    .list-box h2{margin-top:0;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#cfc7bc}
+    .items{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+    .object-item{display:flex;flex-direction:column;align-items:center;width:96px;font-size:12px;text-align:center;cursor:pointer;padding:5px;transition:transform .2s,opacity .2s,background .2s}
+    .object-item:hover{transform:scale(1.07);background:rgba(255,255,255,.04)}
+    .object-item img{width:62px;height:62px;object-fit:contain;border:1px solid var(--red);background:#0e0b09}
+    .object-item .object-name{min-height:2.5em;margin:4px 0;color:var(--ink)}
+    .selected-list .object-item img{border-color:var(--green-bright)}
+    .removed-list .object-item img{border-color:var(--muted3);opacity:.55}
+    .lost-list .object-item img{border-color:#c0392b;filter:grayscale(.55);opacity:.7}
+
+    /* ----- media challenge ----- */
+    .media-container,.possessed-container{position:relative}
+    .media-panel,.possessed-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
+    .media-panel h2,.possessed-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
+    .media-phase-badge{color:var(--green-bright)!important}
+    .media-type-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:16px 0}
+    .media-type-btn{font-family:var(--serif);background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--muted2);
+      letter-spacing:.12em;padding:11px 22px;box-shadow:none}
+    .media-type-btn:hover{border-color:var(--red);color:var(--ink);transform:none}
+    .media-type-btn.active{color:#efeae0;border-color:var(--red);border-bottom:2px solid var(--red);box-shadow:0 -4px 18px rgba(178,59,46,.18)}
+    .media-type-btn.completed{color:var(--green-bright);border-color:var(--green)}
+    .media-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:8px 0}
+    .media-primary-btn{background:linear-gradient(180deg,#4f7d5b,#34593f);border-color:var(--green)}
+    .media-secondary-btn{background:rgba(0,0,0,.4);border-color:var(--line);color:#cfc7bc}
+    .media-objective-btn{background:linear-gradient(180deg,#9c7a32,#6b5320);border-color:var(--amber);color:#fff5e2}
+    .media-page-btn{background:rgba(0,0,0,.4);border-color:var(--line);color:#cfc7bc}
+    .media-progress-note{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 0}
+    .media-lists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:18px}
+    .media-list-box{padding:16px;background:rgba(13,11,9,.5);border:1px solid var(--line)}
+    .media-list-box h2{font-size:15px;text-align:left;margin:0 0 12px}
+    .media-items{display:flex;flex-wrap:wrap;gap:10px}
+    .media-object{display:flex;flex-direction:column;align-items:center;width:96px;font-size:11px;text-align:center;padding:6px;border:1px solid var(--line);background:rgba(0,0,0,.3)}
+    .media-object img{width:58px;height:58px;object-fit:contain;background:#0e0b09;border:1px solid var(--green);margin-bottom:4px}
+    .media-object.locked{opacity:.5}
+    .media-object.locked img{border-color:var(--muted3);filter:grayscale(.6)}
+    .media-object-badge{display:inline-block;margin-top:4px;padding:2px 7px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--muted)}
+    .media-result-card{display:flex;align-items:center;gap:12px}
+
+    /* ----- memo / ghost chart ----- */
+    .memo-shell{position:relative}
+    .memo-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;margin-bottom:24px}
+    .memo-search{width:100%;max-width:420px;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);
+      font-family:var(--mono);font-size:14px;padding:12px 16px;outline:none}
+    .memo-search:focus{border-color:var(--green)}
+    .ghost-count{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
+    .memo-warning,.possessed-beta,.possessed-note,.fun-note{font-size:13px;color:var(--muted);line-height:1.6}
+    .memo-warning{max-width:880px;margin:0 auto 20px;text-align:center;border:1px solid rgba(199,154,75,.4);background:rgba(199,154,75,.07);padding:12px 16px;color:#d8c79b}
+    .ghost-scale,.ghost-scale-bar,.ghost-scale-labels,.ghost-scale-spacer{font-family:var(--mono);font-size:11px;color:var(--muted2)}
+    .ghost-scale-labels{display:flex;justify-content:space-between;letter-spacing:.1em}
+    .ghost-chart{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+    .ghost-row{background:linear-gradient(180deg,#1a1612,#13100d);border:1px solid var(--line);border-left:3px solid var(--muted3);padding:18px 20px}
+    .ghost-row.good{border-left-color:var(--green)}
+    .ghost-row.neutral{border-left-color:var(--amber)}
+    .ghost-row.bad{border-left-color:var(--red)}
+    .ghost-row-main{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px}
+    .ghost-row-name{font-size:19px;font-weight:700;letter-spacing:.05em;color:#ece7dd;margin:0}
+    .ghost-threshold-badge{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--green-bright);
+      background:rgba(111,174,126,.1);border:1px solid rgba(111,174,126,.3);padding:4px 9px}
+    .ghost-row-note{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted3);margin:0;width:100%}
+    .ghost-bar-wrap{margin-top:4px}
+    .ghost-bar-track{position:relative;height:8px;background:rgba(0,0,0,.5);border:1px solid var(--line);margin-bottom:6px}
+    .ghost-bar-fill{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,rgba(178,59,46,.25),rgba(178,59,46,.5))}
+    .ghost-bar-range{position:absolute;top:0;height:100%;background:linear-gradient(90deg,#4f7d5b,#8fd6a0);box-shadow:0 0 10px rgba(143,214,160,.4)}
+    .ghost-bar-marker{position:absolute;top:-3px;width:2px;height:14px;background:#efeae0;box-shadow:0 0 6px rgba(239,234,224,.7)}
+    .ghost-row-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted3);margin-bottom:8px}
+    .ghost-summary{color:#a59c91;font-size:13px;line-height:1.6;margin:0}
+    .memo-empty{grid-column:1/-1;text-align:center;color:var(--muted2);font-family:var(--mono);padding:40px;border:1px dashed var(--line)}
+
+    /* ----- fun memo ----- */
+    .fun-memo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .fun-card{background:linear-gradient(180deg,#1a1612,#13100d);border:1px solid var(--line);border-top:3px solid var(--muted3);padding:20px;text-align:center}
+    .fun-card.good{border-top-color:var(--green)}
+    .fun-card.bad{border-top-color:var(--red)}
+    .fun-card h2,.fun-card h3{font-size:17px;letter-spacing:.05em}
+    .fun-badge{display:inline-block;margin:8px 0;padding:4px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line)}
+    .fun-card.good .fun-badge{color:var(--green-bright);border-color:rgba(111,174,126,.4)}
+    .fun-card.bad .fun-badge{color:var(--red-bright);border-color:rgba(178,59,46,.4)}
+
+    /* ----- possessed ----- */
+    .possessed-tabs{display:flex;justify-content:center;gap:0;margin-bottom:18px}
+    .possessed-tab{font-family:var(--serif);background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--muted2);letter-spacing:.12em;padding:11px 22px;box-shadow:none}
+    .possessed-tab:hover{border-color:var(--red);color:var(--ink);transform:none}
+    .possessed-tab.active{color:#efeae0;border-color:var(--red);border-bottom:2px solid var(--red)}
+    .possessed-mode-panel{margin-top:8px}
+    .possessed-setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+    .possessed-setup-grid.join-only{grid-template-columns:minmax(0,1fr);max-width:480px;margin:0 auto}
+    .possessed-box{padding:18px;background:rgba(13,11,9,.5);border:1px solid var(--line);margin:14px 0}
+    .possessed-field{display:flex;flex-direction:column;gap:6px;text-align:left;margin:8px 0}
+    .possessed-field label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
+    .possessed-field input,.possessed-names input,#possessed-local-count{background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:14px;padding:10px 12px;outline:none}
+    .possessed-field input:focus,.possessed-names input:focus{border-color:var(--red)}
+    .possessed-names{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+    .possessed-stage{text-align:center;padding:20px;background:rgba(13,11,9,.5);border:1px solid var(--line);margin-top:14px}
+    .possessed-role-card{max-width:420px;margin:16px auto;padding:26px;border:2px solid var(--line);background:linear-gradient(180deg,#15110e,#100d0b);text-align:center;animation:popup-rise .25s ease-out}
+    .possessed-role-card.possessed{border-color:var(--red);box-shadow:0 0 30px rgba(178,59,46,.3)}
+    .possessed-role-card.investigator{border-color:var(--green);box-shadow:0 0 30px rgba(111,174,126,.22)}
+    .possessed-role-icon{font-size:54px;line-height:1;animation:possessedFloat 3.2s ease-in-out infinite}
+    .possessed-role-title{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:.06em;margin:12px 0 8px;color:#ece7dd}
+    .possessed-role-text{color:#bcb4a9;font-size:14px;line-height:1.6;margin:0}
+    .possessed-online-status{font-family:var(--mono);font-size:13px;color:var(--muted);margin:10px 0}
+    .possessed-room-code{font-family:var(--display);font-size:40px;letter-spacing:.3em;color:var(--red-bright);text-align:center;margin:10px 0;text-shadow:0 0 20px rgba(178,59,46,.4)}
+    .possessed-share-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+    .possessed-share-row input{flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:13px;padding:10px 12px}
+    .possessed-lobby-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
+    .possessed-player-chip{font-family:var(--mono);font-size:12px;letter-spacing:.06em;padding:6px 12px;background:rgba(0,0,0,.4);border:1px solid var(--line);color:#cfc7bc}
+    .possessed-player-chip.host{border-color:var(--red);color:var(--red-bright)}
+    .possessed-card-symbol{margin:0}
+
+    /* ----- popups ----- */
+    .challenge-popup,.media-popup{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.82);backdrop-filter:blur(5px)}
+    .challenge-popup.open,.media-popup.open{display:flex;animation:popup-fade .2s ease-out}
+    .challenge-popup-card,.media-popup-card{position:relative;width:min(520px,100%);padding:32px 28px 26px;border:2px solid var(--red);
+      background:linear-gradient(145deg,#15110e,#0e0b09);box-shadow:0 18px 60px rgba(0,0,0,.7);animation:popup-rise .25s ease-out;text-align:center}
+    .challenge-popup.victory .challenge-popup-card,.media-popup.win .media-popup-card{border-color:var(--green);box-shadow:0 0 35px rgba(111,174,126,.3),0 18px 60px rgba(0,0,0,.7)}
+    .challenge-popup.defeat .challenge-popup-card,.media-popup.loss .media-popup-card{border-color:#c0392b;box-shadow:0 0 35px rgba(192,57,43,.35),0 18px 60px rgba(0,0,0,.7)}
+    .challenge-popup-icon,.media-popup-icon{font-size:64px;line-height:1;margin-bottom:8px}
+    .challenge-popup h2,.media-popup h2{font-size:30px;font-weight:700;letter-spacing:.05em;margin:0 0 10px}
+    .challenge-popup-message,.media-popup-message{margin:0 auto 18px;max-width:420px;font-size:16px;line-height:1.5;color:#cfc7bc}
+    .challenge-popup-stats,.media-popup-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 18px}
+    .challenge-popup-stats span,.media-popup-stats span,.media-popup-stat{padding:7px 11px;background:rgba(0,0,0,.5);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:#cfc7bc}
+    .popup-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .popup-close-x{position:absolute;top:8px;right:9px;width:38px;height:38px;margin:0;padding:0;font-size:22px;line-height:1;
+      background:transparent;color:#cfc7bc;border:1px solid var(--line);box-shadow:none}
+    .popup-close-x:hover{border-color:var(--red);color:var(--ink);background:transparent;transform:none}
+
+    /* ----- responsive ----- */
+    @media(max-width:1050px){
+      .lists{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .tarot-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .tarot-grid{grid-template-columns:1fr}
+      .tarot-card{grid-template-columns:100px minmax(0,1fr)}
+      .media-lists{grid-template-columns:1fr}
+    }
+    @media(max-width:640px){
+      .app-view{padding:28px 16px 70px}
+      .lists{grid-template-columns:1fr}
+      .tarot-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .tarot-card{grid-template-columns:1fr;justify-items:center}
+    }
   </style>
 </head>
 <body>
+  <div class="ph-grain" aria-hidden="true"></div>
+  <div class="ph-scan" aria-hidden="true"></div>
+  <div class="ph-vignette" aria-hidden="true"></div>
+
+  <header class="ph-topbar">
+    <div class="ph-topbar-left">
+      <button type="button" id="ph-home-btn" class="ph-brand">
+        <span class="ph-brand-name">PHASMOPHOBIA</span>
+        <span class="ph-brand-sub">Compagnon d’enquête</span>
+      </button>
+      <button type="button" id="ph-back-btn" class="ph-back" hidden>← Retour</button>
+    </div>
+    <div class="lang-control">
+      <span class="lang-label">Langue</span>
+      <div class="lang-buttons">
+        <button type="button" class="lang-btn" data-lang="fr">FR</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+      </div>
+    </div>
+  </header>
   <main id="hub-view" class="app-view challenge-select-view">
     <section class="challenge-hub" aria-labelledby="main-hub-title">
       <div class="hub-topbar">
-        <div class="mode-control language-control">
-          <strong>Langue</strong>
-          <label class="mode-switch" for="hub-language-mode">
-            <span>FR</span>
-            <input id="hub-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="hub-language-description">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span>EN</span>
-          </label>
-          <span id="hub-language-description" class="mode-label" data-language-description>Français</span>
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
         </div>
       </div>
-      <header class="hub-header">
-        <h1 id="main-hub-title">Compagnon Phasmophobia</h1>
+      <header class="hub-header hero">
+        <div class="hero-kicker">Dossier d’enquête — non officiel</div>
+        <h1 id="main-hub-title" class="hero-title">PHASMOPHOBIA</h1>
+        <div class="hero-sub">Compagnon d’enquête</div>
         <p>Choisis une rubrique. Les défis, les mémos et toute la progression sont réunis dans un seul fichier HTML.</p>
       </header>
       <div class="portal-grid">
@@ -314,9 +462,11 @@
       <section class="credits-box" aria-labelledby="credits-title">
         <h2 id="credits-title">Sources et crédits</h2>
         <p>Les défis Le Tarot Surprise et Média Surprise, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
-        <p><a href="https://mrtiboute.tv/defis/tarot-surprise" target="_blank" rel="noopener noreferrer">Source originale — Le Tarot Surprise</a></p>
-        <p><a href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Source originale — Média Surprise</a></p>
-        <p><a href="https://mrtiboute.tv" target="_blank" rel="noopener noreferrer">Site officiel de MrTiboute</a></p>
+        <div class="credit-links">
+          <a class="credit-link" href="https://mrtiboute.tv/defis/tarot-surprise" target="_blank" rel="noopener noreferrer">Source originale — Le Tarot Surprise</a>
+          <a class="credit-link" href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Source originale — Média Surprise</a>
+          <a class="credit-link" href="https://mrtiboute.tv" target="_blank" rel="noopener noreferrer">Site officiel de MrTiboute</a>
+        </div>
         <p>Les informations générales, noms d’objets et certaines images proviennent du wiki communautaire Phasmophobia / Fandom. Cette application est un projet non officiel et n’est affiliée ni à MrTiboute ni aux créateurs du jeu.</p>
       </section>
     </section>
@@ -327,16 +477,13 @@
       <div class="section-topbar">
         <button id="back-challenges-home" class="back-challenges-btn" type="button">← Retour à l’accueil</button>
         <div class="hub-topbar">
-          <div class="mode-control language-control">
-            <strong>Langue</strong>
-            <label class="mode-switch" for="challenges-language-mode">
-              <span>FR</span>
-              <input id="challenges-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="challenges-language-description">
-              <span class="switch-track" aria-hidden="true"></span>
-              <span>EN</span>
-            </label>
-            <span id="challenges-language-description" class="mode-label" data-language-description>Français</span>
+          <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
           </div>
+        </div>
         </div>
       </div>
       <header class="hub-header">
@@ -346,7 +493,7 @@
       <div class="challenge-grid">
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
-            <img src="https://phasmophobia.fandom.com/wiki/Special:Redirect/file/%21WheelOfFortune.png" alt="La Roue de la fortune" loading="eager" referrerpolicy="no-referrer">
+            <div class="challenge-photo"><img src="https://phasmophobia.fandom.com/wiki/Special:Redirect/file/%21WheelOfFortune.png" alt="La Roue de la fortune" loading="eager" referrerpolicy="no-referrer"></div>
           </div>
           <div class="challenge-card-body">
             <h2>Le Tarot Surprise</h2>
@@ -358,7 +505,7 @@
         </article>
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
-            <img src="https://static.wikia.nocookie.net/phasmophobia/images/a/a4/PhotoCamera090_T2.png/revision/latest" alt="Appareil photo de Phasmophobia" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)" data-file="PhotoCamera090_T2.png">
+            <div class="challenge-photo"><img src="https://static.wikia.nocookie.net/phasmophobia/images/a/a4/PhotoCamera090_T2.png/revision/latest" alt="Appareil photo de Phasmophobia" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)" data-file="PhotoCamera090_T2.png"></div>
           </div>
           <div class="challenge-card-body">
             <h2>Média Surprise</h2>
@@ -370,7 +517,7 @@
         </article>
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
-            <div class="possessed-card-symbol" aria-hidden="true">🕯️</div>
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">🕯️</span></div>
           </div>
           <div class="challenge-card-body">
             <h2>Le Possédé</h2>
@@ -389,16 +536,13 @@
       <div class="section-topbar">
         <button id="back-memo-home" class="back-challenges-btn" type="button">← Retour à l’accueil</button>
         <div class="hub-topbar">
-          <div class="mode-control language-control">
-            <strong>Langue</strong>
-            <label class="mode-switch" for="memo-language-mode">
-              <span>FR</span>
-              <input id="memo-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="memo-language-description">
-              <span class="switch-track" aria-hidden="true"></span>
-              <span>EN</span>
-            </label>
-            <span id="memo-language-description" class="mode-label" data-language-description>Français</span>
+          <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
           </div>
+        </div>
         </div>
       </div>
       <header class="hub-header">
@@ -431,16 +575,13 @@
       <div class="section-topbar">
         <button id="back-ghost-memo" class="back-challenges-btn" type="button">← Retour au mémo</button>
         <div class="hub-topbar">
-          <div class="mode-control language-control">
-            <strong>Langue</strong>
-            <label class="mode-switch" for="ghost-memo-language-mode">
-              <span>FR</span>
-              <input id="ghost-memo-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="ghost-memo-language-description">
-              <span class="switch-track" aria-hidden="true"></span>
-              <span>EN</span>
-            </label>
-            <span id="ghost-memo-language-description" class="mode-label" data-language-description>Français</span>
+          <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
           </div>
+        </div>
         </div>
       </div>
       <header class="memo-header">
@@ -470,16 +611,13 @@
       <div class="section-topbar">
         <button id="back-fun-memo" class="back-challenges-btn" type="button">← Retour au mémo</button>
         <div class="hub-topbar">
-          <div class="mode-control language-control">
-            <strong>Langue</strong>
-            <label class="mode-switch" for="fun-memo-language-mode">
-              <span>FR</span>
-              <input id="fun-memo-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="fun-memo-language-description">
-              <span class="switch-track" aria-hidden="true"></span>
-              <span>EN</span>
-            </label>
-            <span id="fun-memo-language-description" class="mode-label" data-language-description>Français</span>
+          <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
           </div>
+        </div>
         </div>
       </div>
       <header class="memo-header">
@@ -510,38 +648,21 @@
   <main id="tarot-challenge-view" class="app-view" hidden>
   <div class="container">
     <div class="hub-topbar">
-      <div class="mode-control language-control">
-        <strong>Langue</strong>
-        <label class="mode-switch" for="language-mode">
-          <span>FR</span>
-          <input id="language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="language-description">
-          <span class="switch-track" aria-hidden="true"></span>
-          <span>EN</span>
-        </label>
-        <span id="language-description" class="mode-label" data-language-description>Français</span>
-      </div>
+      <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
     </div>
     <div class="challenge-toolbar"><button id="back-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
     <h1>Tarot Surprise - Phasmophobia</h1>
-    <section class="rules" aria-labelledby="rules-title">
-      <h2 id="rules-title">Rappel des règles</h2>
-      <p class="player-count">1-4 joueurs</p>
-
-      <h3>Objectif</h3>
-      <p>Faire monter tous les objets du magasin au tier 3 en moins de 2h.</p>
-      <p>Les joueurs doivent avoir au préalable débloqué tous les objets de tier 3 (niveau 90).</p>
-
-      <h3>Démarrage</h3>
-      <p>Le défi démarre avec tous les objets au tier 2, sur une base de Cauchemar.</p>
-      <p>Les joueurs démarrent chaque partie avec pour seul objet leur lampe torche (tier au choix). Les autres objets sont débloqués via les cartes de tarots.</p>
-      <p>Les effets des cartes sont détaillés ci-dessous.</p>
-
-      <h3>Déroulement d'une partie</h3>
-      <p>Les joueurs peuvent tirer autant de cartes qu'ils veulent, il n'est pas nécessaire de toutes les tirer pour valider la partie.</p>
-      <p>En multijoueur, chaque joueur tire une carte à tour de rôle.</p>
-      <p>Une partie est considérée comme validée lorsque l'entité a été correctement identifiée et qu'au moins un joueur a pu partir en vie.</p>
-      <p>Les parties validées permettent de faire monter 4 objets vers un tier supérieur, les parties perdues font descendre 2 objets au tier 1.</p>
-      <p>Si 4 objets tombent au tier 1, ou si le défi dure plus de 2h, le défi est considéré comme perdu.</p>
+    <section class="fiche">
+      <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Durée</div><div class="fiche-v">~2 heures</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Cauchemar</div></div></div>
+      <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Faire monter TOUS les équipements achetables au Tier 3 avant la fin des deux heures, en n’améliorant que ce que les cartes de tarot vous autorisent.</p></div>
+      <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant chaque contrat, tirez une carte de tarot (jeu réel ou tirage en ligne).</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Chaque carte désigne une catégorie d’équipement : vous ne pouvez acheter ou améliorer que celle-ci pendant ce contrat.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Terminez le contrat (objectifs réussis ou équipe sortie vivante) pour avoir le droit de tirer la carte suivante.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Les cartes néfastes (La Mort, La Tour, Le Diable) imposent un malus : perte d’un équipement, contrat à refaire ou tour sauté.</p></div><div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Le chrono global de deux heures ne s’arrête jamais : gérez vos achats vite.</p></div></div>
+      <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si tous les équipements ci-dessous sont au Tier 3 avant la fin des deux heures. Échec si le temps expire avant.</p></div>
     </section>
 
     <section class="tarot-guide" aria-labelledby="tarot-title">
@@ -777,38 +898,23 @@
   <main id="media-challenge-view" class="app-view" hidden>
     <div class="media-container">
       <div class="hub-topbar">
-        <div class="mode-control language-control">
-          <strong>Langue</strong>
-          <label class="mode-switch" for="media-language-mode">
-            <span>FR</span>
-            <input id="media-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="media-language-description">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span>EN</span>
-          </label>
-          <span id="media-language-description" class="mode-label" data-language-description>Français</span>
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-media-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
       <h1>Média Surprise - Phasmophobia</h1>
 
-      <section class="media-rules" aria-labelledby="media-rules-title">
-        <h2 id="media-rules-title">Rappel des règles</h2>
-        <p class="player-count">1-4 joueurs</p>
-        <h3>Objectif</h3>
-        <p>Réussir la partie en identifiant correctement l'entité et sans mourir.</p>
-        <h3>Démarrage</h3>
-        <p>Le défi démarre avec uniquement une lampe torche, un briquet et un appareil photo.</p>
-        <p>Utilisez votre appareil photo pour débloquer de nouveaux objets.</p>
-        <h3>Déroulement d'une partie</h3>
-        <p>Chaque nouvelle photo unique déverrouille 1 objet aléatoire. Les photos dupliquées n'en déverrouillent pas.</p>
-        <p><strong>Attention :</strong> il est interdit de supprimer une photo du livre, sauf s'il n'y a rien dessus.</p>
-        <p>Si la caméra vidéo ou l'enregistreur de son sont débloqués aléatoirement, il est autorisé de s'en servir pour débloquer d'autres objets.</p>
-        <p>Chaque objectif du journal réussi donne droit à un objet aléatoire.</p>
-        <p>Une fois que la page des photos est pleine, qu'elles soient uniques ou dupliquées, la caméra vidéo est débloquée automatiquement.</p>
-        <p>On continue alors avec les médias vidéo selon les mêmes règles que les médias photo.</p>
-        <p>Lorsque la page des vidéos est remplie, l'enregistreur de son est automatiquement débloqué, puis les médias audio suivent le même principe.</p>
-        <p>Si l'entité n'est pas correctement identifiée ou que tous les joueurs meurent, le défi est perdu.</p>
-      </section>
+      <section class="fiche">
+      <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">1 partie</div></div><div class="fiche-cell"><div class="fiche-k">Thème</div><div class="fiche-v">Médias</div></div></div>
+      <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Débloquer assez d’équipement pour identifier le fantôme, en capturant des médias uniques. Chaque média réussi débloque un objet aléatoire.</p></div>
+      <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Vous démarrez l’enquête avec l’équipement de base minimum (lampe torche uniquement).</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Chaque média unique réussi (photo, vidéo ou capture audio de la liste) débloque un équipement tiré au hasard.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Un même type de média ne compte qu’une fois : variez vos preuves.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Vous ne pouvez utiliser que l’équipement déjà débloqué pour progresser.</p></div></div>
+      <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si vous identifiez correctement le fantôme avec l’équipement débloqué au cours de la partie.</p></div>
+    </section>
 
       <section class="media-panel" aria-labelledby="media-controls-title">
         <h2 id="media-controls-title">Suivi du défi</h2>
@@ -862,56 +968,23 @@
   <main id="possessed-challenge-view" class="app-view" hidden>
     <div class="possessed-container">
       <div class="hub-topbar">
-        <div class="mode-control language-control">
-          <strong>Langue</strong>
-          <label class="mode-switch" for="possessed-language-mode">
-            <span>FR</span>
-            <input id="possessed-language-mode" class="language-mode-input" type="checkbox" data-language-switch aria-describedby="possessed-language-description">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span>EN</span>
-          </label>
-          <span id="possessed-language-description" class="mode-label" data-language-description>Français</span>
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-possessed-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
       <h1>Le Possédé - Phasmophobia</h1>
 
-      <section class="possessed-rules" aria-labelledby="possessed-rules-title">
-        <h2 id="possessed-rules-title">Rappel des règles</h2>
-        <p class="player-count">4 joueurs</p>
-
-        <h3>Distribution des rôles</h3>
-        <p>Avant la partie, les rôles sont distribués secrètement : un joueur devient le Possédé et tous les autres deviennent Enquêteurs.</p>
-        <p>Chaque joueur doit garder son rôle secret. L’interface n’affiche à chaque participant que son propre rôle.</p>
-
-        <h3>Objectif commun</h3>
-        <p>L’équipe doit toujours identifier correctement le fantôme.</p>
-
-        <h3>Objectif du Possédé</h3>
-        <p>Le Possédé doit réaliser secrètement deux corruptions différentes parmi les suivantes :</p>
-        <ul>
-          <li>déplacer un équipement déjà installé ;</li>
-          <li>couper le disjoncteur à un mauvais moment ;</li>
-          <li>faire gaspiller un encens ou un crucifix ;</li>
-          <li>mentir une fois sur l’emplacement d’une interaction ;</li>
-          <li>déclencher l’objet maudit après cinq minutes ;</li>
-          <li>convaincre quelqu’un de rester seul dans la maison.</li>
-        </ul>
-        <div class="possessed-note"><strong>Interdictions :</strong> il est interdit de cacher tout le matériel ou de provoquer volontairement une mort impossible à éviter.</div>
-
-        <h3>Fin de partie</h3>
-        <p>À la fin, chacun sélectionne le fantôme, puis désigne le joueur qu’il pense possédé.</p>
-
-        <h3>Points</h3>
-        <ul>
-          <li><strong>Fantôme correct :</strong> 1 point pour tous.</li>
-          <li><strong>Possédé découvert :</strong> 2 points pour chaque Enquêteur.</li>
-          <li><strong>Possédé non découvert :</strong> 3 points pour le Possédé.</li>
-          <li><strong>Possédé mort avant ses deux corruptions :</strong> 0 point.</li>
-        </ul>
-
-        <p>Le Possédé doit donc aider suffisamment l’équipe pour gagner la partie, tout en semant discrètement le doute.</p>
-      </section>
+      <section class="fiche">
+      <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">4</div></div><div class="fiche-cell"><div class="fiche-k">Rôles</div><div class="fiche-v">Secrets</div></div><div class="fiche-cell"><div class="fiche-k">Mode</div><div class="fiche-v">Local / en ligne</div></div></div>
+      <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enquêteurs : identifier correctement le type de fantôme. Possédé : faire échouer l’identification sans être démasqué.</p></div>
+      <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Tirez les rôles en secret : 3 Enquêteurs et 1 Possédé (utilisez le tirage ci-dessus).</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Les Enquêteurs collectent les preuves et votent en fin de partie sur le type de fantôme.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Le Possédé agit normalement mais sape l’enquête : fausses infos, gaspillage d’équipement, isolement d’un coéquipier.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Le Possédé ne doit jamais avouer ni saboter trop ouvertement : la discrétion prime.</p></div></div>
+      <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire des Enquêteurs si l’identification est correcte. Victoire du Possédé si elle est fausse, ou si l’équipe échoue à conclure.</p></div>
+    </section>
 
       <section class="possessed-panel" aria-labelledby="possessed-room-title">
         <h2 id="possessed-room-title">Choisir le mode de distribution</h2>
@@ -943,13 +1016,13 @@
 
         <div id="possessed-online-panel" class="possessed-mode-panel" hidden>
           <div id="possessed-online-setup" class="possessed-setup-grid">
-            <div class="possessed-box">
+            <div id="possessed-create-box" class="possessed-box">
               <h3>Créer une room</h3>
               <p>Le créateur devient l’hôte et doit garder cette page ouverte pendant la distribution.</p>
               <div class="possessed-field"><label for="possessed-host-name">Ton pseudo</label><input id="possessed-host-name" type="text" maxlength="24" placeholder="Hôte"></div>
               <button id="possessed-create-room" class="good-btn" type="button">Créer la room</button>
             </div>
-            <div class="possessed-box">
+            <div id="possessed-join-box" class="possessed-box">
               <h3>Rejoindre une room</h3>
               <div class="possessed-field"><label for="possessed-join-name">Ton pseudo</label><input id="possessed-join-name" type="text" maxlength="24" placeholder="Joueur"></div>
               <div class="possessed-field"><label for="possessed-join-code">Code de la room</label><input id="possessed-join-code" type="text" maxlength="5" autocomplete="off" placeholder="ABCDE"></div>
@@ -1434,7 +1507,41 @@
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
     const englishTranslations={
+      "Joueurs":"Players",
+      "Durée":"Duration",
+      "Difficulté":"Difficulty",
+      "~2 heures":"~2 hours",
+      "Règles":"Rules",
+      "Conditions de victoire":"Win conditions",
+      "Thème":"Theme",
+      "Médias":"Media",
+      "1 partie":"1 run",
+      "Rôles":"Roles",
+      "Secrets":"Secret",
+      "Local / en ligne":"Local / online",
+      "Faire monter TOUS les équipements achetables au Tier 3 avant la fin des deux heures, en n’améliorant que ce que les cartes de tarot vous autorisent.":"Bring EVERY purchasable equipment up to Tier 3 within two hours, upgrading only what the tarot cards allow.",
+      "Débloquer assez d’équipement pour identifier le fantôme, en capturant des médias uniques. Chaque média réussi débloque un objet aléatoire.":"Unlock enough equipment to identify the ghost by capturing unique media. Each successful media unlocks a random item.",
+      "Enquêteurs : identifier correctement le type de fantôme. Possédé : faire échouer l’identification sans être démasqué.":"Investigators: correctly identify the ghost type. Possessed: make the ID fail without being unmasked.",
+      "Avant chaque contrat, tirez une carte de tarot (jeu réel ou tirage en ligne).":"Before each contract, draw a tarot card (real deck or online draw).",
+      "Chaque carte désigne une catégorie d’équipement : vous ne pouvez acheter ou améliorer que celle-ci pendant ce contrat.":"Each card points to an equipment category: you may only buy or upgrade that one this contract.",
+      "Terminez le contrat (objectifs réussis ou équipe sortie vivante) pour avoir le droit de tirer la carte suivante.":"Finish the contract (objectives done or team out alive) to earn the next draw.",
+      "Les cartes néfastes (La Mort, La Tour, Le Diable) imposent un malus : perte d’un équipement, contrat à refaire ou tour sauté.":"Bad cards (Death, Tower, Devil) impose a penalty: lose an item, replay the contract, or skip a turn.",
+      "Le chrono global de deux heures ne s’arrête jamais : gérez vos achats vite.":"The global two-hour timer never stops: manage purchases quickly.",
+      "Vous démarrez l’enquête avec l’équipement de base minimum (lampe torche uniquement).":"You start the investigation with the minimum starter gear (flashlight only).",
+      "Chaque média unique réussi (photo, vidéo ou capture audio de la liste) débloque un équipement tiré au hasard.":"Each unique media captured (photo, video or audio from the list) unlocks one randomly chosen item.",
+      "Un même type de média ne compte qu’une fois : variez vos preuves.":"The same media type only counts once: vary your evidence.",
+      "Vous ne pouvez utiliser que l’équipement déjà débloqué pour progresser.":"You may only use already-unlocked equipment to progress.",
+      "Tirez les rôles en secret : 3 Enquêteurs et 1 Possédé (utilisez le tirage ci-dessus).":"Draw roles secretly: 3 Investigators and 1 Possessed (use the draw above).",
+      "Les Enquêteurs collectent les preuves et votent en fin de partie sur le type de fantôme.":"Investigators collect evidence and vote on the ghost type at the end.",
+      "Le Possédé agit normalement mais sape l’enquête : fausses infos, gaspillage d’équipement, isolement d’un coéquipier.":"The Possessed acts normal but undermines the investigation: false info, wasted gear, isolating a teammate.",
+      "Le Possédé ne doit jamais avouer ni saboter trop ouvertement : la discrétion prime.":"The Possessed must never confess or sabotage too openly: discretion is everything.",
+      "Victoire si tous les équipements ci-dessous sont au Tier 3 avant la fin des deux heures. Échec si le temps expire avant.":"Win if every equipment below reaches Tier 3 before the two hours end. Fail if time runs out first.",
+      "Victoire si vous identifiez correctement le fantôme avec l’équipement débloqué au cours de la partie.":"Win if you correctly identify the ghost using the equipment unlocked during the run.",
+      "Victoire des Enquêteurs si l’identification est correcte. Victoire du Possédé si elle est fausse, ou si l’équipe échoue à conclure.":"Investigators win on a correct ID. The Possessed wins on a wrong ID, or if the team fails to conclude.",
       "Langue":"Language",
+      "Dossier d’enquête — non officiel":"Case file — unofficial",
+      "Compagnon d’enquête":"Investigation companion",
+      "← Retour":"← Back",
       "Compagnon Phasmophobia":"Phasmophobia Companion",
       "Choisis une rubrique. Les défis, les mémos et toute la progression sont réunis dans un seul fichier HTML.":"Choose a section. Challenges, reference guides and all progress are contained in a single HTML file.",
       "Défis":"Challenges",
@@ -1839,6 +1946,7 @@
     function setLanguage(language){
       currentLanguage=language==="en"?"en":"fr";
       languageInputs.forEach(input=>{input.checked=currentLanguage==="en"});
+      document.querySelectorAll(".lang-btn").forEach(button=>button.classList.toggle("active",button.dataset.lang===currentLanguage));
       try{localStorage.setItem("tarot-surprise-language",currentLanguage)}catch(error){}
       applyLanguage();
       renderGhostMemo();
@@ -1928,7 +2036,16 @@
       else if(location.hash==="#memo-fun")showFunMemo(false);
       else if(location.hash==="#challenges")showChallengeSelection(false);
       else if(location.hash==="#memo")showMemo(false);
-      else showHub(false)
+      else showHub(false);
+      updateTopbar()
+    }
+    function updateTopbar(){
+      const backBtn=document.getElementById("ph-back-btn");if(backBtn)backBtn.hidden=!hubView.hidden
+    }
+    function goBack(){
+      if(!ghostMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
+      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
+      showHub(true)
     }
 
 
@@ -2193,44 +2310,49 @@
       possessedConnections.forEach(connection=>{if(connection.open)connection.send(message)});renderPossessedLobby()
     }
     function cleanupPossessedPeer(showSetup=true){
+      plog("cleanup peer (destruction)",{hote:possessedIsHost,code:possessedRoomCode,peerVivant:!!possessedPeer});
       possessedConnections.forEach(connection=>{try{connection.close()}catch(error){}});possessedConnections.clear();
       if(possessedHostConnection){try{possessedHostConnection.close()}catch(error){}possessedHostConnection=null}
       if(possessedPeer){try{possessedPeer.destroy()}catch(error){}possessedPeer=null}
       possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;
       if(showSetup){showPossessedOnlineSetup();setPossessedOnlineStatus("En attente…","Waiting…")}
     }
+    function plog(){console.log("[possessed]",...arguments)}
     function setupHostConnection(connection){
       let joined=false;
+      plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
         if(!data||data.type!=="join"||joined)return;
-        if(possessedOnlineStarted){connection.send({type:"reject",reason:"started"});connection.close();return}
-        if(possessedPlayers.length>=4){connection.send({type:"reject",reason:"full"});connection.close();return}
-        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
+        if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
+        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
       });
-      connection.on("close",()=>{if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
-      connection.on("error",()=>{})
+      connection.on("close",()=>{plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
+      connection.on("error",error=>{console.warn("[possessed] hôte: erreur connexion",error&&error.type,error)})
     }
     function createPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
-      cleanupPossessedPeer(false);const hostName=document.getElementById("possessed-host-name").value.trim()||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
-      const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;possessedPeer=new Peer(peerId);
-      possessedPeer.on("open",()=>{possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="le-possede";possessedShareLink.value=url.toString();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
+      cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
+      const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;plog("création room, peerId =",peerId);possessedPeer=new Peer(peerId);
+      possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="le-possede";possessedShareLink.value=url.toString();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
       possessedPeer.on("connection",setupHostConnection);
-      possessedPeer.on("error",error=>{setPossessedOnlineStatus(error&&error.type==="unavailable-id"?"Ce code est déjà utilisé. Réessaie.":"Connexion impossible. Réessaie ou utilise le mode local.",error&&error.type==="unavailable-id"?"This code is already in use. Try again.":"Unable to connect. Try again or use local mode.")})
+      possessedPeer.on("disconnected",()=>console.warn("[possessed] hôte: déconnecté du broker PeerJS"));
+      possessedPeer.on("error",error=>{console.warn("[possessed] hôte: erreur peer",error&&error.type,error);setPossessedOnlineStatus(error&&error.type==="unavailable-id"?"Ce code est déjà utilisé. Réessaie.":"Connexion impossible. Réessaie ou utilise le mode local.",error&&error.type==="unavailable-id"?"This code is already in use. Try again.":"Unable to connect. Try again or use local mode.")})
     }
     function handlePossessedGuestData(data){
       if(!data)return;
+      plog("invité: message reçu de l’hôte →",data.type,data.type==="reject"?("raison="+data.reason):"");
       if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
       else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(data.role)}`;setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})}
       else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
     function joinPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
-      const code=normalizeRoomCode(document.getElementById("possessed-join-code").value),name=document.getElementById("possessed-join-name").value.trim()||possessedText("Joueur","Player");
+      const code=normalizeRoomCode(document.getElementById("possessed-join-code").value),nameRaw=document.getElementById("possessed-join-name").value.trim(),name=nameRaw||possessedText("Joueur","Player");savePossessedName(nameRaw);
       if(code.length!==5){setPossessedOnlineStatus("Entre un code de room valide à 5 caractères.","Enter a valid 5-character room code.");return}
-      cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
-      possessedPeer.on("open",()=>{const hostId=`phasmo-possessed-${code.toLowerCase()}`;possessedHostConnection=possessedPeer.connect(hostId,{reliable:true});possessedHostConnection.on("open",()=>{possessedHostConnection.send({type:"join",name});setPossessedOnlineStatus("Connecté. En attente de l’hôte…","Connected. Waiting for the host…")});possessedHostConnection.on("data",handlePossessedGuestData);possessedHostConnection.on("close",()=>{if(!possessedOnlineStarted)setPossessedOnlineStatus("L’hôte a quitté la room.","The host left the room.")});possessedHostConnection.on("error",()=>setPossessedOnlineStatus("Connexion à l’hôte impossible.","Unable to connect to the host."))});
-      possessedPeer.on("error",()=>setPossessedOnlineStatus("Room introuvable ou connexion impossible.","Room not found or unable to connect."))
+      plog("tentative de jointure, code =",code);cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
+      possessedPeer.on("open",id=>{const hostId=`phasmo-possessed-${code.toLowerCase()}`;plog("invité: peer ouvert",id,"→ connexion à",hostId);possessedHostConnection=possessedPeer.connect(hostId,{reliable:true});possessedHostConnection.on("open",()=>{plog("invité: connexion à l’hôte ouverte, envoi du join");possessedHostConnection.send({type:"join",name});setPossessedOnlineStatus("Connecté. En attente de l’hôte…","Connected. Waiting for the host…")});possessedHostConnection.on("data",handlePossessedGuestData);possessedHostConnection.on("close",()=>{plog("invité: connexion à l’hôte fermée");if(!possessedPeer)return;cleanupPossessedPeer(false);showPossessedOnlineSetup();setPossessedOnlineStatus("L’hôte a quitté la room.","The host left the room.")});possessedHostConnection.on("error",error=>{console.warn("[possessed] invité: erreur connexion hôte",error&&error.type,error);setPossessedOnlineStatus("Connexion à l’hôte impossible.","Unable to connect to the host.")})});
+      possessedPeer.on("disconnected",()=>console.warn("[possessed] invité: déconnecté du broker PeerJS"));
+      possessedPeer.on("error",error=>{console.warn("[possessed] invité: erreur peer",error&&error.type,error);setPossessedOnlineStatus("Room introuvable ou connexion impossible.","Room not found or unable to connect.")})
     }
     function startPossessedOnlineGame(){
       const count=possessedPlayers.length;if(!possessedIsHost||count<3||count>4)return;
@@ -2242,8 +2364,31 @@
       const value=possessedShareLink.value;if(!value)return;
       try{await navigator.clipboard.writeText(value);document.getElementById("possessed-copy-link").textContent=possessedText("Lien copié !","Link copied!")}catch(error){possessedShareLink.select();document.execCommand("copy")}
     }
+    function relocatePossessedPanel(){
+      const container=document.querySelector("#possessed-challenge-view .possessed-container");if(!container)return;
+      const panel=container.querySelector(".possessed-panel"),rules=container.querySelector(".fiche");
+      if(panel&&rules&&panel.compareDocumentPosition(rules)&Node.DOCUMENT_POSITION_PRECEDING)container.insertBefore(panel,rules);
+    }
+    function savePossessedName(name){try{if(name)localStorage.setItem("phasmo-possessed-name",name)}catch(error){}}
+    function loadPossessedName(){
+      let saved="";try{saved=localStorage.getItem("phasmo-possessed-name")||""}catch(error){}
+      if(saved)["possessed-host-name","possessed-join-name"].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=saved});
+    }
     function prefillPossessedRoomFromUrl(){
-      const code=normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom"));if(code){document.getElementById("possessed-join-code").value=code;setPossessedMode("online")}
+      const code=normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom"));
+      if(code){
+        document.getElementById("possessed-join-code").value=code;
+        setPossessedMode("online");
+        const createBox=document.getElementById("possessed-create-box");if(createBox)createBox.hidden=true;
+        possessedOnlineSetup.classList.add("join-only");
+        const nameInput=document.getElementById("possessed-join-name");if(nameInput){try{nameInput.focus({preventScroll:true})}catch(error){nameInput.focus()}}
+      }
+    }
+    function exitPossessedRoom(){
+      cleanupPossessedPeer(true);
+      const createBox=document.getElementById("possessed-create-box");if(createBox)createBox.hidden=false;
+      possessedOnlineSetup.classList.remove("join-only");
+      try{history.replaceState(null,"",location.pathname+"#le-possede")}catch(error){}
     }
     function refreshPossessedLanguage(){
       renderPossessedLocalNames();
@@ -2269,6 +2414,9 @@
     timerButton.addEventListener("click",toggleTimer);
     streamerMode.addEventListener("change",updateModeDisplay);
     languageInputs.forEach(input=>input.addEventListener("change",()=>setLanguage(input.checked?"en":"fr")));
+    document.querySelectorAll(".lang-btn").forEach(button=>button.addEventListener("click",()=>setLanguage(button.dataset.lang)));
+    document.getElementById("ph-home-btn").addEventListener("click",()=>showHub(true));
+    document.getElementById("ph-back-btn").addEventListener("click",goBack);
     document.getElementById("open-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-memo").addEventListener("click",()=>showMemo(true));
     document.getElementById("back-challenges-home").addEventListener("click",()=>showHub(true));
@@ -2291,10 +2439,12 @@
     possessedLocalNext.addEventListener("click",nextLocalPossessedPlayer);
     document.getElementById("possessed-create-room").addEventListener("click",createPossessedRoom);
     document.getElementById("possessed-join-room").addEventListener("click",joinPossessedRoom);
+    ["possessed-join-name","possessed-join-code"].forEach(id=>document.getElementById(id).addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();joinPossessedRoom()}}));
+    document.getElementById("possessed-host-name").addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();createPossessedRoom()}});
     document.getElementById("possessed-start-online").addEventListener("click",startPossessedOnlineGame);
     document.getElementById("possessed-redraw-online").addEventListener("click",startPossessedOnlineGame);
     document.getElementById("possessed-copy-link").addEventListener("click",copyPossessedInvite);
-    document.getElementById("possessed-leave-room").addEventListener("click",()=>cleanupPossessedPeer(true));
+    document.getElementById("possessed-leave-room").addEventListener("click",exitPossessedRoom);
     mediaUniqueButton.addEventListener("click",mediaAddUnique);
     mediaDuplicateButton.addEventListener("click",mediaAddDuplicate);
     document.getElementById("media-objective-btn").addEventListener("click",mediaCompleteObjective);
@@ -2317,7 +2467,7 @@
     challengePopup.addEventListener("click",event=>{if(event.target===challengePopup)closeChallengePopup()});
     document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;if(challengePopup.classList.contains("open"))closeChallengePopup();if(mediaPopup.classList.contains("open"))closeMediaPopup()});
 
-    window.addEventListener("beforeunload",()=>cleanupPossessedPeer(false));
+    window.addEventListener("beforeunload",()=>{plog("beforeunload → destruction du peer (la room meurt si tu étais l’hôte)");cleanupPossessedPeer(false)});
 
     function escapeHtml(value){return String(value).replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[char]))}
     function tierImage(obj){return obj.images[String(obj.tier)]}
@@ -2562,6 +2712,8 @@
     renderGhostMemo();
     renderMediaChallenge();
     renderPossessedLocalNames();
+    relocatePossessedPanel();
+    loadPossessedName();
     initializeLanguage();
     applyRoute();
   </script>
