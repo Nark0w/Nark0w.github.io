@@ -289,9 +289,9 @@
     .lost-list .object-item img{border-color:#c0392b;filter:grayscale(.55);opacity:.7}
 
     /* ----- media challenge ----- */
-    .media-container,.possessed-container{position:relative}
-    .media-panel,.possessed-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
-    .media-panel h2,.possessed-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
+    .media-container,.possessed-container,.wall-container{position:relative}
+    .media-panel,.possessed-panel,.wall-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
+    .media-panel h2,.possessed-panel h2,.wall-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
     .media-phase-badge{color:var(--green-bright)!important}
     .media-type-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:16px 0}
     .media-type-btn{font-family:var(--serif);background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--muted2);
@@ -315,6 +315,18 @@
     .media-object.locked img{border-color:var(--muted3);filter:grayscale(.6)}
     .media-object-badge{display:inline-block;margin-top:4px;padding:2px 7px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--muted)}
     .media-result-card{display:flex;align-items:center;gap:12px}
+    .wall-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:18px 0}
+    .wall-cell{min-height:116px;margin:0;padding:12px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+    .wall-cell:hover{border-color:var(--red);transform:translateY(-1px)}
+    .wall-cell.open{background:linear-gradient(180deg,#2b1714,#140d0b);border-color:var(--red-bright);color:#f6e7e1}
+    .wall-cell.locked{opacity:.55;cursor:not-allowed}
+    .wall-cell-index{font-family:var(--display);font-size:26px;color:var(--red-bright)}
+    .wall-cell-title{font-family:var(--serif);font-size:13px;letter-spacing:.06em;line-height:1.25;text-transform:none;color:#efeae0}
+    .wall-cell-desc{font-family:var(--mono);font-size:11px;letter-spacing:0;line-height:1.35;color:var(--muted)}
+    .wall-malus-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
+    .wall-malus-item{padding:12px;background:rgba(0,0,0,.32);border:1px solid var(--line);font-size:13px;line-height:1.45;color:#bcb4a9}
+    .wall-malus-item strong{display:block;color:#efeae0;margin-bottom:4px}
+    .wall-empty{padding:16px;border:1px dashed var(--line);color:var(--muted);text-align:center}
 
     /* ----- memo / ghost chart ----- */
     .memo-shell{position:relative}
@@ -507,10 +519,11 @@
       </div>
       <section class="credits-box" aria-labelledby="credits-title">
         <h2 id="credits-title">Sources et crédits</h2>
-        <p>Les défis Le Tarot Surprise et Média Surprise, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
+        <p>Les défis Le Tarot Surprise, Média Surprise et Le Mur de la mort, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
         <div class="credit-links">
           <a class="credit-link" href="https://mrtiboute.tv/defis/tarot-surprise" target="_blank" rel="noopener noreferrer">Source originale — Le Tarot Surprise</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Source originale — Média Surprise</a>
+          <a class="credit-link" href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Source originale — Le Mur de la mort</a>
           <a class="credit-link" href="https://mrtiboute.tv" target="_blank" rel="noopener noreferrer">Site officiel de MrTiboute</a>
         </div>
         <p>Les informations générales, noms d’objets et certaines images proviennent du wiki communautaire Phasmophobia / Fandom. Cette application est un projet non officiel et n’est affiliée ni à MrTiboute ni aux créateurs du jeu.</p>
@@ -571,6 +584,18 @@
             <p>De trois à quatre joueurs, les Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.</p>
             <div class="challenge-meta"><span>3-4 joueurs</span><span>Rôles secrets</span><span>Local ou en ligne</span></div>
             <button id="open-possessed-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">☠</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>Le Mur de la mort</h2>
+            <p>Ouvre 2 cases avant chaque partie, accumule des malus permanents et tente d'enchainer 5 contrats réussis en Professionnel.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>5 parties</span><span>Professionnel</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Défi original créé par MrTiboute.</a></p>
+            <button id="open-wall-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
       </div>
@@ -997,6 +1022,63 @@
         <p>Média Surprise et ses règles originales ont été créés par MrTiboute.</p>
         <p><a href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
         <p class="source">Images d’équipement : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour leur chargement.</p>
+      </div>
+    </div>
+  </main>
+
+  <main id="wall-challenge-view" class="app-view" hidden>
+    <div class="wall-container">
+      <div class="hub-topbar">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-toolbar"><button id="back-wall-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
+      <h1>Le Mur de la mort - Phasmophobia</h1>
+
+      <section class="fiche">
+        <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Objectif</div><div class="fiche-v">5 parties</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Professionnel</div></div></div>
+        <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enchainer 5 parties réussies en Professionnel et survivre au mur. Tous les objets doivent être débloqués au préalable, au Tier 1 ou plus.</p></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant chaque partie, ouvrez 2 cases du mur.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Les 2 cases révélées ajoutent 2 malus permanents, actifs jusqu'à la fin du défi.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>La partie est réussie si l'entité est correctement identifiée et qu'au moins un joueur quitte la partie en vie.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Si l'entité n'est pas correctement identifiée ou si tous les joueurs meurent, le défi est perdu.</p></div></div>
+        <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire après 5 parties réussies avec tous les malus révélés encore appliqués.</p></div>
+      </section>
+
+      <section class="wall-panel" aria-labelledby="wall-controls-title">
+        <h2 id="wall-controls-title">Suivi du mur</h2>
+        <div class="media-stats">
+          <div class="media-stat">Partie<strong id="wall-round">1 / 5</strong></div>
+          <div class="media-stat">Réussites<strong id="wall-win-count">0</strong></div>
+          <div class="media-stat">Cases ouvertes<strong id="wall-open-count">0</strong></div>
+          <div class="media-stat">À ouvrir<strong id="wall-needed-count">2</strong></div>
+        </div>
+        <div class="media-actions">
+          <button id="wall-open-random" class="warning-btn" type="button">Ouvrir une case aléatoire</button>
+          <button id="wall-win-round" class="good-btn" type="button">Partie réussie</button>
+          <button id="wall-lose-challenge" class="danger-btn" type="button">Défi perdu</button>
+          <button id="wall-reset" class="warning-btn" type="button">Reset du défi</button>
+        </div>
+        <p id="wall-status" class="media-progress-note">Ouvre 2 cases avant de lancer la première partie.</p>
+      </section>
+
+      <section class="wall-panel" aria-labelledby="wall-grid-title">
+        <h2 id="wall-grid-title">Mur des malus</h2>
+        <div id="wall-grid" class="wall-grid"></div>
+      </section>
+
+      <section class="wall-panel" aria-labelledby="wall-active-title">
+        <h2 id="wall-active-title">Malus permanents actifs</h2>
+        <div id="wall-active-list" class="wall-malus-list"></div>
+      </section>
+
+      <div class="credits-box">
+        <h3>Source du défi</h3>
+        <p>Le Mur de la mort et ses règles originales ont été créés par MrTiboute.</p>
+        <p><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
+        <p class="source">La page source décrit l'objectif, le démarrage et les conditions de réussite. La liste de malus utilisée ici est une proposition jouable pour rendre le mur interactif.</p>
       </div>
     </div>
   </main>
@@ -1534,11 +1616,35 @@
     let roundCount=1,winCount=0,lossCount=0,elapsedSeconds=0,timerInterval=null,nextTarotMultiplier=1,challengeOutcome=null;
     const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
+    const wallMaluses=[
+      {title:"Sans pilules",desc:"Aucune pilule de santé mentale ne peut être utilisée."},
+      {title:"Sans crucifix",desc:"N'achetez et n'utilisez aucun crucifix."},
+      {title:"Lumières limitées",desc:"Une seule lampe de poche forte autorisée pour l'équipe."},
+      {title:"Pas de sel",desc:"Le sel et ses traces ne peuvent pas être utilisés."},
+      {title:"Sans encens",desc:"Aucun encens pendant toute la partie."},
+      {title:"Photo obligatoire",desc:"Une photo du fantôme est obligatoire avant de partir."},
+      {title:"Objectifs obligatoires",desc:"Les trois objectifs secondaires doivent être terminés."},
+      {title:"Pas de cachette préparée",desc:"Interdit de bloquer ou préparer une cachette avec des objets."},
+      {title:"Radio muette",desc:"Le vocal radio est interdit, seules les communications de proximité sont autorisées."},
+      {title:"Thermo interdit",desc:"Aucun thermomètre pendant la partie."},
+      {title:"Camion limité",desc:"Après l'ouverture de la porte, chaque joueur ne peut retourner au camion qu'une seule fois."},
+      {title:"Preuve maudite",desc:"Si un objet maudit est trouvé, il doit être utilisé une fois."},
+      {title:"No sprint",desc:"Sprint interdit hors chasse."},
+      {title:"Starter imposé",desc:"Au moins un équipement Tier 1 doit être emporté volontairement."},
+      {title:"Chasse attendue",desc:"Une chasse doit être vécue avant de quitter la carte."},
+      {title:"Sans caméra vidéo",desc:"Aucune caméra vidéo ni trépied."},
+      {title:"Bougie en main",desc:"Un joueur doit garder une bougie ou un allumeur équipé pendant l'enquête."},
+      {title:"Silence en preuve",desc:"Pendant la collecte d'une preuve, personne ne parle pendant 30 secondes."},
+      {title:"Équipe séparée",desc:"Deux joueurs maximum dans la même pièce hors chasse."},
+      {title:"Départ groupé",desc:"Personne ne quitte la maison seul : sortie uniquement groupée."}
+    ];
+    let wallMalusOrder=wallMaluses.map((_,index)=>index),wallOpenedIndexes=[],wallRound=1,wallWins=0,wallOutcome=null,wallStatusText="Ouvre 2 cases avant de lancer la première partie.";
 
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
-    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
+    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
+    const wallRoundDisplay=document.getElementById("wall-round"),wallWinCountDisplay=document.getElementById("wall-win-count"),wallOpenCountDisplay=document.getElementById("wall-open-count"),wallNeededCountDisplay=document.getElementById("wall-needed-count"),wallOpenRandomButton=document.getElementById("wall-open-random"),wallWinRoundButton=document.getElementById("wall-win-round"),wallLoseButton=document.getElementById("wall-lose-challenge"),wallResetButton=document.getElementById("wall-reset"),wallStatus=document.getElementById("wall-status"),wallGrid=document.getElementById("wall-grid"),wallActiveList=document.getElementById("wall-active-list");
     const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),topRoomPlayers=document.getElementById("top-room-players"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
@@ -2035,18 +2141,19 @@
       let page="hub";
       if(!tarotChallengeView.hidden)page="tarot";
       else if(!mediaChallengeView.hidden)page="media";
+      else if(!wallChallengeView.hidden)page="wall";
       else if(!possessedChallengeView.hidden)page="possessed";
       else if(!funMemoView.hidden)page="funMemo";
       else if(!ghostMemoView.hidden)page="ghostMemo";
       else if(!memoView.hidden)page="memo";
       else if(!challengeSelectionView.hidden)page="challenges";
       const titles={
-        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Média Surprise - Phasmophobia",possessed:"Le Possédé - Phasmophobia"},
-        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Media Surprise - Phasmophobia",possessed:"The Possessed - Phasmophobia"}
+        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Média Surprise - Phasmophobia",wall:"Mur de la mort - Phasmophobia",possessed:"Le Possédé - Phasmophobia"},
+        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Media Surprise - Phasmophobia",wall:"Wall of Death - Phasmophobia",possessed:"The Possessed - Phasmophobia"}
       };
       document.title=titles[currentLanguage][page]
     }
-    function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
+    function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
     function hasPossessedInvite(){return normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom")).length===5}
     function allowChallengeOpen(){
       if(hasChallengeRoom())return true;
@@ -2083,6 +2190,11 @@
       if(!allowChallengeOpen())return;
       hideAllViews();mediaChallengeView.hidden=false;renderMediaChallenge();updateDocumentTitle();window.scrollTo(0,0)
     }
+    function openWallChallenge(updateHistory=true){
+      if(updateHistory&&location.hash!=="#mur-de-la-mort"){location.hash="mur-de-la-mort";return}
+      if(!allowChallengeOpen())return;
+      hideAllViews();wallChallengeView.hidden=false;renderWallChallenge();updateDocumentTitle();window.scrollTo(0,0)
+    }
     function openPossessedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#le-possede"){location.hash="le-possede";return}
       if(!allowChallengeOpen())return;
@@ -2091,6 +2203,7 @@
     function applyRoute(){
       if(location.hash==="#tarot-surprise")openTarotChallenge(false);
       else if(location.hash==="#media-surprise")openMediaChallenge(false);
+      else if(location.hash==="#mur-de-la-mort")openWallChallenge(false);
       else if(location.hash==="#le-possede")openPossessedChallenge(false);
       else if(location.hash==="#memo-ghosts")showGhostMemo(false);
       else if(location.hash==="#memo-fun")showFunMemo(false);
@@ -2104,7 +2217,7 @@
     }
     function goBack(){
       if(!ghostMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
-      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
+      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
       showHub(true)
     }
 
@@ -2285,6 +2398,49 @@
     }
     function closeMediaPopup(){mediaPopup.classList.remove("open","win","loss");mediaPopup.hidden=true;scheduleRoomChallengeSync("media")}
 
+    function wallCurrentRoundOpenCount(){return Math.max(0,wallOpenedIndexes.length-((wallRound-1)*2))}
+    function wallCanOpen(){return !wallOutcome&&wallRound<=5&&wallCurrentRoundOpenCount()<2&&wallOpenedIndexes.length<wallMalusOrder.length}
+    function wallMalusAt(index){return wallMaluses[wallMalusOrder[index]??index]||wallMaluses[index%wallMaluses.length]}
+    function wallSetStatus(message){wallStatusText=message;renderWallChallenge()}
+    function wallOpenCell(index){
+      if(!wallCanOpen()||wallOpenedIndexes.includes(index))return;
+      wallOpenedIndexes.push(index);
+      const malus=wallMalusAt(index),remaining=2-wallCurrentRoundOpenCount();
+      wallSetStatus(remaining>0?`Case ${index+1} ouverte : ${malus.title}. Ouvre encore ${remaining} case.`:`Case ${index+1} ouverte : ${malus.title}. Lance la partie ${wallRound} avec les malus actifs.`)
+    }
+    function wallOpenRandom(){
+      if(!wallCanOpen())return;
+      const closed=wallMalusOrder.map((_,index)=>index).filter(index=>!wallOpenedIndexes.includes(index));
+      if(!closed.length)return;
+      wallOpenCell(closed[Math.floor(Math.random()*closed.length)])
+    }
+    function wallWinRound(){
+      if(wallOutcome)return;
+      if(wallCurrentRoundOpenCount()<2){wallSetStatus("Ouvre les 2 cases de la partie avant de la valider.");return}
+      wallWins++;
+      if(wallWins>=5){wallOutcome="victory";wallSetStatus("Défi réussi : 5 parties validées en Professionnel avec au moins un survivant.");return}
+      wallRound=Math.min(5,wallRound+1);
+      wallSetStatus(`Partie ${wallWins} validée. Ouvre 2 nouvelles cases avant la partie ${wallRound}.`)
+    }
+    function wallLoseChallenge(){if(wallOutcome)return;wallOutcome="defeat";wallSetStatus("Défi perdu : entité mal identifiée ou aucun joueur survivant.")}
+    function resetWallChallenge(){
+      wallMalusOrder=secureShuffle(wallMaluses.map((_,index)=>index));wallOpenedIndexes=[];wallRound=1;wallWins=0;wallOutcome=null;wallStatusText="Ouvre 2 cases avant de lancer la première partie.";renderWallChallenge()
+    }
+    function renderWallChallenge(){
+      if(!wallChallengeView||!wallGrid)return;
+      const openedSet=new Set(wallOpenedIndexes),activeMaluses=wallOpenedIndexes.map(wallMalusAt);
+      wallRoundDisplay.textContent=`${Math.min(wallRound,5)} / 5`;wallWinCountDisplay.textContent=wallWins;wallOpenCountDisplay.textContent=wallOpenedIndexes.length;wallNeededCountDisplay.textContent=wallOutcome?"0":Math.max(0,2-wallCurrentRoundOpenCount());
+      wallStatus.textContent=wallStatusText;
+      wallOpenRandomButton.disabled=!wallCanOpen();wallWinRoundButton.disabled=!!wallOutcome||wallCurrentRoundOpenCount()<2;wallLoseButton.disabled=!!wallOutcome;
+      wallGrid.innerHTML=wallMalusOrder.map((_,index)=>{
+        const open=openedSet.has(index),malus=wallMalusAt(index),locked=!open&&!wallCanOpen();
+        return `<button class="wall-cell${open?" open":""}${locked?" locked":""}" type="button" data-index="${index}" ${locked?"disabled":""}><span class="wall-cell-index">${open?"Case "+(index+1):String(index+1).padStart(2,"0")}</span>${open?`<span class="wall-cell-title">${escapeHtml(malus.title)}</span><span class="wall-cell-desc">${escapeHtml(malus.desc)}</span>`:"<span class=\"wall-cell-title\">Case fermée</span>"}</button>`
+      }).join("");
+      wallGrid.querySelectorAll(".wall-cell:not(.open)").forEach(button=>button.addEventListener("click",()=>wallOpenCell(Number(button.dataset.index))));
+      wallActiveList.innerHTML=activeMaluses.length?activeMaluses.map(malus=>`<div class="wall-malus-item"><strong>${escapeHtml(malus.title)}</strong>${escapeHtml(malus.desc)}</div>`).join(""):`<div class="wall-empty">Aucun malus actif pour le moment.</div>`;
+      scheduleRoomChallengeSync("wall")
+    }
+
     const possessedLocalTab=document.getElementById("possessed-local-tab"),possessedOnlineTab=document.getElementById("possessed-online-tab"),possessedLocalPanel=document.getElementById("possessed-local-panel"),possessedOnlinePanel=document.getElementById("possessed-online-panel");
     const possessedLocalCount=document.getElementById("possessed-local-count"),possessedLocalNames=document.getElementById("possessed-local-names"),possessedLocalStage=document.getElementById("possessed-local-stage"),possessedLocalPlayerTitle=document.getElementById("possessed-local-player-title"),possessedLocalInstruction=document.getElementById("possessed-local-instruction"),possessedLocalReveal=document.getElementById("possessed-local-reveal"),possessedLocalRole=document.getElementById("possessed-local-role"),possessedLocalNext=document.getElementById("possessed-local-next");
     const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedRedrawOnline=document.getElementById("possessed-redraw-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
@@ -2315,7 +2471,7 @@
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
       else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
     }
-    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",possessed:"le-possede"}[challenge]||"challenges"}
+    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",possessed:"le-possede"}[challenge]||"challenges"}
     function updatePossessedInviteLink(challenge=currentRoomChallenge){
       if(!possessedRoomCode||!possessedShareLink)return;
       const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
@@ -2326,13 +2482,16 @@
       connection.send({type:"challenge-route",challenge:currentRoomChallenge});
       if(currentRoomChallenge!=="possessed")connection.send({type:"challenge-state",challenge:currentRoomChallenge,state:captureRoomChallengeState(currentRoomChallenge)})
     }
+    function pauseTarotIfLeavingChallenge(nextChallenge){if(currentRoomChallenge==="tarot"&&nextChallenge!=="tarot")pauseTimer()}
     function applyRoomChallengeRoute(challenge){
       if(challenge==="tarot")openTarotChallenge(true);
       else if(challenge==="media")openMediaChallenge(true);
+      else if(challenge==="wall")openWallChallenge(true);
       else if(challenge==="possessed")openPossessedChallenge(true)
     }
     function openRoomChallenge(challenge){
       if(!hasChallengeRoom()){setPlayMode("room");showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer un défi.","Create or join a room before starting a challenge.");return}
+      if(playMode==="room")pauseTarotIfLeavingChallenge(challenge);
       if(playMode==="room")rememberRoomChallenge(challenge);
       applyRoomChallengeRoute(challenge);
       if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge!=="possessed")sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
@@ -2363,10 +2522,18 @@
       renderMediaChallenge();if(mediaResult&&state.resultHtml)mediaResult.innerHTML=state.resultHtml;
       if(mediaOutcome&&state.popupOpen)showMediaOutcome(mediaOutcome);else closeMediaPopup()
     }
-    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():captureTarotRoomState()}
+    function captureWallRoomState(){return {order:[...wallMalusOrder],opened:[...wallOpenedIndexes],round:wallRound,wins:wallWins,outcome:wallOutcome,status:wallStatusText}}
+    function applyWallRoomState(state){
+      if(!state)return;
+      wallMalusOrder=Array.isArray(state.order)&&state.order.length?state.order.map(Number):wallMaluses.map((_,index)=>index);
+      wallOpenedIndexes=Array.isArray(state.opened)?state.opened.map(Number):[];
+      wallRound=Number(state.round)||1;wallWins=Number(state.wins)||0;wallOutcome=state.outcome||null;wallStatusText=state.status||"Ouvre 2 cases avant de lancer la partie.";
+      renderWallChallenge()
+    }
+    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():captureTarotRoomState())}
     function applyRoomChallengeState(message){
       applyingRoomState=true;
-      try{if(message.challenge==="media")applyMediaRoomState(message.state);else applyTarotRoomState(message.state)}
+      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else applyTarotRoomState(message.state)}
       finally{applyingRoomState=false}
     }
     function scheduleRoomChallengeSync(challenge){
@@ -2480,7 +2647,7 @@
       plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
         if(!data)return;
-        if(joined){if(data.type==="challenge-route"){rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer)}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}return}
+        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer)}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}return}
         if(data.type!=="join")return;
         if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
         joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
@@ -2502,7 +2669,7 @@
       plog("invité: message reçu de l’hôte →",data.type,data.type==="reject"?("raison="+data.reason):"");
       if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
       else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(data.role)}`;setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})}
-      else if(data.type==="challenge-route"){rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}
+      else if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}
       else if(data.type==="challenge-state")applyRoomChallengeState(data);
       else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
@@ -2586,6 +2753,8 @@
     document.getElementById("back-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-media-challenge").addEventListener("click",()=>openRoomChallenge("media"));
     document.getElementById("back-media-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
+    document.getElementById("open-wall-challenge").addEventListener("click",()=>openRoomChallenge("wall"));
+    document.getElementById("back-wall-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-possessed-challenge").addEventListener("click",()=>openRoomChallenge("possessed"));
     document.getElementById("back-possessed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     possessedLocalTab.addEventListener("click",()=>setPlayMode("local"));
@@ -2613,6 +2782,10 @@
     document.getElementById("media-win-btn").addEventListener("click",()=>showMediaOutcome("win"));
     document.getElementById("media-loss-btn").addEventListener("click",()=>showMediaOutcome("loss"));
     document.getElementById("media-reset-btn").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Reset the entire Media Surprise challenge? All unlocked items and media progress will be lost.":"Réinitialiser tout le défi Média Surprise ? Tous les objets débloqués et la progression des médias seront perdus."))resetMediaChallenge()});
+    wallOpenRandomButton.addEventListener("click",wallOpenRandom);
+    wallWinRoundButton.addEventListener("click",wallWinRound);
+    wallLoseButton.addEventListener("click",wallLoseChallenge);
+    wallResetButton.addEventListener("click",()=>{if(confirm("Réinitialiser le Mur de la mort ? Les cases ouvertes et la progression seront perdues."))resetWallChallenge()});
     document.getElementById("media-popup-close").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-x").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-reset").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Restart the Media Surprise challenge?":"Recommencer le défi Média Surprise ?"))resetMediaChallenge()});
@@ -2713,7 +2886,10 @@
     function drawRandomDecisions(count){
       if(!remainingObjects.length){showMessage("Le Fou","Il n’y a plus d’objet restant.");return}
       const choices=getRandomObjects(Math.min(count,remainingObjects.length));
-      showFoolDecision(choices,0)
+      choices.forEach(obj=>moveObject(obj,selectedObjects));
+      updateLists();
+      resultDiv.innerHTML=`<p><strong>Le Fou</strong></p><p class="selection-note">Objet${choices.length>1?"s":""} tiré${choices.length>1?"s":""} aléatoirement et pris automatiquement.</p><div class="choice-container">${choices.map(obj=>`<div class="choice-card">${card(obj)}</div>`).join("")}</div>`;
+      scheduleRoomChallengeSync("tarot")
     }
     function drawOne(){drawRandomDecisions(1)}
     function showFoolDecision(choices,index){
@@ -2815,7 +2991,7 @@
       const h=String(Math.floor(elapsedSeconds/3600)).padStart(2,"0"),m=String(Math.floor((elapsedSeconds%3600)/60)).padStart(2,"0"),s=String(elapsedSeconds%60).padStart(2,"0");
       return `${h}:${m}:${s}`
     }
-    function pauseTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;updateTimerButton()}}
+    function pauseTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;updateTimerButton();scheduleRoomChallengeSync("tarot")}}
     function showChallengePopup(type,message){
       if(challengeOutcome)return;
       challengeOutcome=type;pauseTimer();
@@ -2867,6 +3043,7 @@
       renderList(remainingList,remainingObjects,chooseRemainingObject);renderList(selectedList,selectedObjects,null);renderList(removedList,removedObjects,null);renderList(lostList,permanentlyLostObjects,null);scheduleRoomChallengeSync("tarot")
     }
     resetGame();
+    resetWallChallenge();
     renderGhostMemo();
     renderMediaChallenge();
     renderPossessedLocalNames();
