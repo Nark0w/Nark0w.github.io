@@ -319,18 +319,16 @@
     .media-object.locked img{border-color:var(--muted3);filter:grayscale(.6)}
     .media-object-badge{display:inline-block;margin-top:4px;padding:2px 7px;font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--muted)}
     .media-result-card{display:flex;align-items:center;gap:12px}
-    .wall-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:18px 0}
-    .wall-cell{min-height:116px;margin:0;padding:12px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+    .wall-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin:18px 0}
+    .wall-cell{aspect-ratio:1/1;min-height:0;margin:0;padding:10px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
     .wall-cell:hover{border-color:var(--red);transform:translateY(-1px)}
     .wall-cell.open{background:linear-gradient(180deg,#2b1714,#140d0b);border-color:var(--red-bright);color:#f6e7e1}
     .wall-cell.locked{opacity:.55;cursor:not-allowed}
-    .wall-cell-image{width:72px;height:72px;object-fit:cover;border:1px solid var(--line);box-shadow:0 4px 14px rgba(0,0,0,.35)}
     .wall-cell-index{font-family:var(--display);font-size:26px;color:var(--red-bright)}
-    .wall-cell-title{font-family:var(--serif);font-size:13px;letter-spacing:.06em;line-height:1.25;text-transform:none;color:#efeae0}
-    .wall-cell-desc{font-family:var(--mono);font-size:11px;letter-spacing:0;line-height:1.35;color:var(--muted)}
+    .wall-cell-title{font-family:var(--serif);font-size:13px;letter-spacing:.04em;line-height:1.2;text-transform:none;color:#efeae0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .wall-cell-desc{display:none}
     .wall-malus-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:14px}
-    .wall-malus-item{display:grid;grid-template-columns:58px minmax(0,1fr);gap:10px;align-items:center;padding:12px;background:rgba(0,0,0,.32);border:1px solid var(--line);font-size:13px;line-height:1.45;color:#bcb4a9}
-    .wall-malus-thumb{width:58px;height:58px;object-fit:cover;border:1px solid var(--line);background:#0e0b09}
+    .wall-malus-item{padding:12px;background:rgba(0,0,0,.32);border:1px solid var(--line);font-size:13px;line-height:1.45;color:#bcb4a9}
     .wall-malus-item strong{display:block;color:#efeae0;margin-bottom:4px}
     .wall-empty{padding:16px;border:1px dashed var(--line);color:var(--muted);text-align:center}
 
@@ -1622,44 +1620,40 @@
     let roundCount=1,winCount=0,lossCount=0,elapsedSeconds=0,timerInterval=null,nextTarotMultiplier=1,challengeOutcome=null;
     const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
-    function wallIcon(mark,bg,fg="#f6efe6"){
-      const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${bg}" offset="0"/><stop stop-color="#101010" offset="1"/></linearGradient></defs><rect width="120" height="120" rx="10" fill="url(#g)"/><rect x="8" y="8" width="104" height="104" rx="6" fill="rgba(0,0,0,.18)" stroke="rgba(255,255,255,.42)" stroke-width="2"/><text x="60" y="67" text-anchor="middle" dominant-baseline="middle" font-family="Arial Black,Arial,sans-serif" font-size="${mark.length>4?24:34}" font-weight="900" fill="${fg}">${mark}</text></svg>`;
-      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
-    }
     const wallMaluses=[
-      {title:"Pas de Talkie",desc:"Le talkie-walkie est interdit : communication de proximité uniquement.",image:wallIcon("RADIO","#58b986")},
-      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête.",image:wallIcon("-1","#d8428e")},
-      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête.",image:wallIcon("-1","#4f8dd7")},
-      {title:"La Chasse continue",desc:"Mourir augmente la chasse au maximum.",image:wallIcon("HUNT","#d5bc42")},
-      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi.",image:wallIcon("OBJ","#58b986")},
-      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible.",image:wallIcon("T-1","#d8428e")},
-      {title:"Sprint Off",desc:"Le sprint est interdit pendant la partie.",image:wallIcon("RUN","#4f8dd7")},
-      {title:"Photo du Fantôme",desc:"Une photo du fantôme est obligatoire avant de partir.",image:wallIcon("PHOTO","#d5bc42")},
-      {title:"Plus d'Encens",desc:"Les encens sont interdits.",image:wallIcon("INC","#58b986")},
-      {title:"Chaque Objet devient Unique",desc:"Chaque objet est limité à 1 exemplaire.",image:wallIcon("1x","#d8428e")},
-      {title:"25% Santé Mentale",desc:"Commencez ou jouez avec une santé mentale limitée à 25%.",image:wallIcon("25%","#4f8dd7")},
-      {title:"Pilules Interdites",desc:"Les pilules de santé mentale sont interdites.",image:wallIcon("PILL","#d5bc42")},
-      {title:"Os Obligatoire",desc:"L'os doit être trouvé et récupéré.",image:wallIcon("BONE","#58b986")},
-      {title:"1 Case en Plus par Round",desc:"Ouvrez 1 case supplémentaire avant chaque round.",image:wallIcon("+1","#d8428e")},
-      {title:"2/3 Objectifs",desc:"Au moins 2 objectifs secondaires sur 3 doivent être validés.",image:wallIcon("2/3","#4f8dd7")},
-      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête.",image:wallIcon("-1","#d5bc42")},
-      {title:"Random Map",desc:"La carte doit être choisie aléatoirement.",image:wallIcon("MAP","#58b986")},
-      {title:"Moniteur Santé Mentale Off",desc:"Le moniteur de santé mentale du camion est interdit.",image:wallIcon("SAN","#d8428e")},
-      {title:"Objets Électroniques Interdits",desc:"Les objets électroniques sont interdits.",image:wallIcon("ELEC","#4f8dd7")},
-      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres.",image:wallIcon("+25","#d5bc42")},
-      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi.",image:wallIcon("OBJ","#58b986")},
-      {title:"1 Round en plus",desc:"Le défi passe à 6 parties à valider.",image:wallIcon("+RD","#d8428e")},
-      {title:"-50% Santé Mentale",desc:"Retirez 50% de santé mentale à l'équipe.",image:wallIcon("-50","#4f8dd7")},
-      {title:"Sans Livre",desc:"Le livre est interdit pour cocher les preuves.",image:wallIcon("BOOK","#d5bc42")},
-      {title:"-25% Santé Mentale",desc:"Retirez 25% de santé mentale à l'équipe.",image:wallIcon("-25","#58b986")},
-      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres.",image:wallIcon("+25","#d8428e")},
-      {title:"Souffle moi le bout",desc:"Souffler une bougie est obligatoire.",image:wallIcon("FIRE","#4f8dd7")},
-      {title:"Plus de Période de Grace",desc:"La période de grâce doit être désactivée.",image:wallIcon("0s","#d5bc42")},
-      {title:"Moniteur Activité Off",desc:"Le moniteur d'activité du camion est interdit.",image:wallIcon("ACT","#58b986")},
-      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible.",image:wallIcon("T-1","#d8428e")},
-      {title:"Pas de Cachettes",desc:"Les cachettes sont interdites.",image:wallIcon("HIDE","#4f8dd7")},
-      {title:"Mange moi le Cruci",desc:"Un crucifix doit être consommé par l'entité.",image:wallIcon("CRUX","#d5bc42")},
-      {title:"Courant Cassé",desc:"Le courant doit rester coupé.",image:wallIcon("⚡","#58b986")}
+      {title:"Pas de Talkie",desc:"Le talkie-walkie est interdit : communication de proximité uniquement."},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête."},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête."},
+      {title:"La Chasse continue",desc:"Mourir augmente la chasse au maximum."},
+      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi."},
+      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible."},
+      {title:"Sprint Off",desc:"Le sprint est interdit pendant la partie."},
+      {title:"Photo du Fantôme",desc:"Une photo du fantôme est obligatoire avant de partir."},
+      {title:"Plus d'Encens",desc:"Les encens sont interdits."},
+      {title:"Chaque Objet devient Unique",desc:"Chaque objet est limité à 1 exemplaire."},
+      {title:"25% Santé Mentale",desc:"Commencez ou jouez avec une santé mentale limitée à 25%."},
+      {title:"Pilules Interdites",desc:"Les pilules de santé mentale sont interdites."},
+      {title:"Os Obligatoire",desc:"L'os doit être trouvé et récupéré."},
+      {title:"1 Case en Plus par Round",desc:"Ouvrez 1 case supplémentaire avant chaque round."},
+      {title:"2/3 Objectifs",desc:"Au moins 2 objectifs secondaires sur 3 doivent être validés."},
+      {title:"-1 Preuve",desc:"Retirez une preuve possible avant de conclure l'enquête."},
+      {title:"Random Map",desc:"La carte doit être choisie aléatoirement."},
+      {title:"Moniteur Santé Mentale Off",desc:"Le moniteur de santé mentale du camion est interdit."},
+      {title:"Objets Électroniques Interdits",desc:"Les objets électroniques sont interdits."},
+      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres."},
+      {title:"Perte 1 Objet Aléatoire",desc:"Perdez un objet tiré aléatoirement pour la suite du défi."},
+      {title:"1 Round en plus",desc:"Le défi passe à 6 parties à valider."},
+      {title:"-50% Santé Mentale",desc:"Retirez 50% de santé mentale à l'équipe."},
+      {title:"Sans Livre",desc:"Le livre est interdit pour cocher les preuves."},
+      {title:"-25% Santé Mentale",desc:"Retirez 25% de santé mentale à l'équipe."},
+      {title:"+25% Vitesse Entité",desc:"Augmentez la vitesse de l'entité de 25% dans les paramètres."},
+      {title:"Souffle moi le bout",desc:"Souffler une bougie est obligatoire."},
+      {title:"Plus de Période de Grace",desc:"La période de grâce doit être désactivée."},
+      {title:"Moniteur Activité Off",desc:"Le moniteur d'activité du camion est interdit."},
+      {title:"-1 Tier pour tous les Objets",desc:"Tous les objets baissent d'un tier si possible."},
+      {title:"Pas de Cachettes",desc:"Les cachettes sont interdites."},
+      {title:"Mange moi le Cruci",desc:"Un crucifix doit être consommé par l'entité."},
+      {title:"Courant Cassé",desc:"Le courant doit rester coupé."}
     ];
     let wallMalusOrder=wallMaluses.map((_,index)=>index),wallOpenedIndexes=[],wallRoundStartIndex=0,wallRound=1,wallWins=0,wallOutcome=null,wallStatusText="Ouvre 2 cases avant de lancer la première partie.";
 
@@ -2462,10 +2456,10 @@
       wallOpenRandomButton.disabled=!wallCanOpen();wallWinRoundButton.disabled=!!wallOutcome||wallRemainingOpenCount()>0;wallLoseButton.disabled=!!wallOutcome;
       wallGrid.innerHTML=wallMalusOrder.map((_,index)=>{
         const open=openedSet.has(index),malus=wallMalusAt(index),locked=!open&&!wallCanOpen();
-        return `<button class="wall-cell${open?" open":""}${locked?" locked":""}" type="button" data-index="${index}" ${locked?"disabled":""}>${open?`<img class="wall-cell-image" src="${malus.image}" alt="">`:""}<span class="wall-cell-index">${open?"Case "+(index+1):String(index+1).padStart(2,"0")}</span>${open?`<span class="wall-cell-title">${escapeHtml(malus.title)}</span><span class="wall-cell-desc">${escapeHtml(malus.desc)}</span>`:"<span class=\"wall-cell-title\">Case fermée</span>"}</button>`
+        return `<button class="wall-cell${open?" open":""}${locked?" locked":""}" type="button" data-index="${index}" ${locked?"disabled":""}><span class="wall-cell-index">${open?"Case "+(index+1):String(index+1).padStart(2,"0")}</span>${open?`<span class="wall-cell-title">${escapeHtml(malus.title)}</span><span class="wall-cell-desc">${escapeHtml(malus.desc)}</span>`:"<span class=\"wall-cell-title\">Case fermée</span>"}</button>`
       }).join("");
       wallGrid.querySelectorAll(".wall-cell:not(.open)").forEach(button=>button.addEventListener("click",()=>wallOpenCell(Number(button.dataset.index))));
-      wallActiveList.innerHTML=activeMaluses.length?activeMaluses.map(malus=>`<div class="wall-malus-item"><img class="wall-malus-thumb" src="${malus.image}" alt=""><div><strong>${escapeHtml(malus.title)}</strong>${escapeHtml(malus.desc)}</div></div>`).join(""):`<div class="wall-empty">Aucun malus actif pour le moment.</div>`;
+      wallActiveList.innerHTML=activeMaluses.length?activeMaluses.map(malus=>`<div class="wall-malus-item"><strong>${escapeHtml(malus.title)}</strong>${escapeHtml(malus.desc)}</div>`).join(""):`<div class="wall-empty">Aucun malus actif pour le moment.</div>`;
       scheduleRoomChallengeSync("wall")
     }
 
