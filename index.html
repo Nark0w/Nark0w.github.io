@@ -83,6 +83,21 @@
     /* barre supérieure globale (marque + retour + langue) sur toutes les pages */
     .ph-topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 28px;border-bottom:1px solid var(--line-soft);background:linear-gradient(180deg,rgba(8,6,5,.95),rgba(8,6,5,.6));backdrop-filter:blur(4px)}
     .ph-topbar-left{display:flex;align-items:center;gap:16px;min-width:0}
+    .ph-topbar-controls{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+    .top-play-mode{display:flex;align-items:center;gap:6px;padding:6px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+    .top-play-mode-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);margin:0 4px}
+    .topbar-mode-btn{margin:0;padding:7px 10px;background:transparent;border:1px solid transparent;color:var(--muted);box-shadow:none;font-family:var(--mono);font-size:11px;letter-spacing:.08em}
+    .topbar-mode-btn:hover{background:rgba(255,255,255,.05);border-color:var(--line);transform:none;color:var(--ink)}
+    .topbar-mode-btn.active{background:var(--red);border-color:var(--red-bright);color:#fff}
+    .top-room-menu{position:relative;min-width:220px}
+    .top-room-menu[hidden],.top-room-players:empty{display:none!important}
+    .top-room-menu summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--ink);cursor:pointer}
+    .top-room-menu summary::-webkit-details-marker{display:none}
+    .top-room-summary{color:var(--green-bright);font-size:11px}
+    .top-room-content{position:absolute;right:0;top:calc(100% + 8px);z-index:30;width:min(680px,calc(100vw - 32px));max-height:calc(100vh - 96px);overflow:auto;padding:12px;background:linear-gradient(180deg,#15110e,#0e0b09);border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.65)}
+    .top-room-content .possessed-mode-panel{margin:0}
+    .top-room-content .possessed-box{margin:0 0 10px}
+    .top-room-players{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:360px}
     .ph-brand{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;margin:0;padding:0;background:none;border:none;box-shadow:none}
     .ph-brand:hover{transform:none;background:none}
     .ph-brand-name{font-family:var(--display);font-weight:900;letter-spacing:.14em;color:#ece7dd;font-size:18px;text-shadow:0 0 14px rgba(178,59,46,.35);text-transform:none}
@@ -96,6 +111,7 @@
       font-family:var(--mono);font-size:12px;letter-spacing:.08em;padding:9px 15px;box-shadow:none}
     .back-challenges-btn:hover{background:rgba(20,17,14,.9);border-color:var(--red);color:var(--ink);transform:none}
     .mode-control{display:flex;align-items:center;gap:12px;padding:8px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line)}
+    .ph-topbar .mode-control{margin:0;padding:6px 10px}
     .mode-control>strong{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted2);font-weight:400}
     .mode-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted)}
     .mode-switch input{position:absolute;opacity:0;pointer-events:none}
@@ -395,12 +411,18 @@
       .tarot-grid{grid-template-columns:1fr}
       .tarot-card{grid-template-columns:100px minmax(0,1fr)}
       .media-lists{grid-template-columns:1fr}
+      .top-room-content{right:auto;left:0}
     }
     @media(max-width:640px){
       .app-view{padding:28px 16px 70px}
       .lists{grid-template-columns:1fr}
       .tarot-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
       .tarot-card{grid-template-columns:1fr;justify-items:center}
+      .ph-topbar-controls{width:100%;justify-content:flex-start}
+      .top-play-mode,.ph-topbar .mode-control,.top-room-menu{width:100%}
+      .topbar-mode-btn{flex:1}
+      .top-room-content{position:static;width:100%;max-height:none;margin-top:8px}
+      .top-room-players{justify-content:flex-start;max-width:none}
     }
   </style>
 </head>
@@ -417,11 +439,34 @@
       </button>
       <button type="button" id="ph-back-btn" class="ph-back" hidden>← Retour</button>
     </div>
-    <div class="lang-control">
-      <span class="lang-label">Langue</span>
-      <div class="lang-buttons">
-        <button type="button" class="lang-btn" data-lang="fr">FR</button>
-        <button type="button" class="lang-btn" data-lang="en">EN</button>
+    <div class="ph-topbar-controls">
+      <div class="top-play-mode" role="group" aria-label="Mode de jeu">
+        <span class="top-play-mode-label">Mode</span>
+        <button id="play-mode-solo" class="topbar-mode-btn active" type="button" data-play-mode="solo">Solo</button>
+        <button id="play-mode-local" class="topbar-mode-btn" type="button" data-play-mode="local">Multi local</button>
+        <button id="play-mode-room" class="topbar-mode-btn" type="button" data-play-mode="room">Room</button>
+      </div>
+      <div class="mode-control">
+        <strong>Streamer</strong>
+        <label class="mode-switch" for="streamer-mode">
+          <span>Off</span>
+          <input id="streamer-mode" type="checkbox" aria-describedby="mode-description">
+          <span class="switch-track" aria-hidden="true"></span>
+          <span>On</span>
+        </label>
+        <span id="mode-description" class="mode-label" hidden>Off</span>
+      </div>
+      <details id="top-room-menu" class="top-room-menu" hidden>
+        <summary>Room <span id="top-room-summary" class="top-room-summary">inactive</span></summary>
+        <div id="top-room-content" class="top-room-content"></div>
+      </details>
+      <div id="top-room-players" class="top-room-players" aria-live="polite"></div>
+      <div class="lang-control">
+        <span class="lang-label">Langue</span>
+        <div class="lang-buttons">
+          <button type="button" class="lang-btn" data-lang="fr">FR</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
       </div>
     </div>
   </header>
@@ -491,7 +536,7 @@
         <h1 id="challenges-title">Défis Phasmophobia</h1>
         <p>Crée ou rejoins une room, puis lance un défi. Les joueurs connectés peuvent agir sur le suivi du défi depuis leur propre écran.</p>
       </header>
-      <p id="challenge-room-note" class="room-sync-note">Une room active est nécessaire pour ouvrir un défi interactif.</p>
+      <p id="challenge-room-note" class="room-sync-note">Choisis un mode dans la barre du haut avant d’ouvrir un défi.</p>
       <div class="challenge-grid">
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
@@ -811,17 +856,6 @@
         <div class="stat">Objets T3<strong id="tier3-count">0</strong></div>
       </div>
       <div class="control-row">
-
-        <div class="mode-control">
-          <strong>Mode</strong>
-          <label class="mode-switch" for="streamer-mode">
-            <span>Local</span>
-            <input id="streamer-mode" type="checkbox" aria-describedby="mode-description">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span>Streamer</span>
-          </label>
-          <span id="mode-description" class="mode-label">Local</span>
-        </div>
         <button id="timer-btn" class="good-btn">Démarrer chrono</button>
         <button id="reset-round-btn" class="warning-btn">Reset manche</button>
         <button id="reset-game-btn" class="danger-btn">Reset défi entier</button>
@@ -989,10 +1023,10 @@
     </section>
 
       <section class="possessed-panel" aria-labelledby="possessed-room-title">
-        <h2 id="possessed-room-title">Room de défi</h2>
+        <h2 id="possessed-room-title">Distribution locale des rôles</h2>
         <div class="possessed-tabs" role="tablist">
-          <button id="possessed-local-tab" class="possessed-tab active" type="button" role="tab" aria-selected="true">Même appareil</button>
-          <button id="possessed-online-tab" class="possessed-tab" type="button" role="tab" aria-selected="false">Room en ligne (bêta)</button>
+          <button id="possessed-local-tab" class="possessed-tab active" type="button" role="tab" aria-selected="true">Multi local</button>
+          <button id="possessed-online-tab" class="possessed-tab" type="button" role="tab" aria-selected="false">Room</button>
         </div>
 
         <div id="possessed-local-panel" class="possessed-mode-panel">
@@ -1505,8 +1539,8 @@
 
     const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
-    const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note");
-    let currentLanguage="fr",isApplyingLanguage=false,languageObserver=null;
+    const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),topRoomPlayers=document.getElementById("top-room-players"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");
+    let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
     const englishTranslations={
@@ -1568,6 +1602,15 @@
       "Choisis un défi pour ouvrir sa propre vue. Ta progression est conservée lorsque tu reviens à cette page.":"Choose a challenge to open its dedicated view. Your progress is preserved when you return to this page.",
       "Crée ou rejoins une room, puis lance un défi. Les joueurs connectés peuvent agir sur le suivi du défi depuis leur propre écran.":"Create or join a room, then start a challenge. Connected players can use the challenge tracker from their own screen.",
       "Une room active est nécessaire pour ouvrir un défi interactif.":"An active room is required to open an interactive challenge.",
+      "Choisis un mode dans la barre du haut avant d’ouvrir un défi.":"Choose a mode in the top bar before opening a challenge.",
+      "Mode de jeu":"Game mode",
+      "Solo":"Solo",
+      "Multi local":"Local multi",
+      "Room":"Room",
+      "Streamer":"Streamer",
+      "Off":"Off",
+      "On":"On",
+      "inactive":"inactive",
       "Mémos Phasmophobia":"Phasmophobia Reference Guides",
       "Choisis un mémo pour ouvrir sa propre vue. Tu peux consulter des informations utiles ou juste quelque chose de plus léger.":"Choose a memo to open its dedicated view. You can check useful information or just something lighter.",
       "Entités":"Ghosts",
@@ -1639,6 +1682,7 @@
       "Le défi accepte 3 à 4 joueurs : un Possédé et tous les autres Enquêteurs.":"The challenge supports 3 to 4 players: one Possessed player and everyone else as Investigators.",
       "Choisir le mode de distribution":"Choose the distribution mode",
       "Room de défi":"Challenge room",
+      "Distribution locale des rôles":"Local role distribution",
       "Même appareil":"Same device",
       "Room en ligne (bêta)":"Online room (beta)",
       "Distribution locale":"Local distribution",
@@ -2009,7 +2053,7 @@
     }
     function showChallengeSelection(updateHistory=true){
       if(updateHistory&&location.hash!=="#challenges"){location.hash="challenges";return}
-      closeChallengePopup();hideAllViews();challengeSelectionView.hidden=false;relocatePossessedPanel("selection");prefillPossessedRoomFromUrl();updateDocumentTitle();window.scrollTo(0,0)
+      closeChallengePopup();hideAllViews();challengeSelectionView.hidden=false;relocateRoomControls();prefillPossessedRoomFromUrl();updateDocumentTitle();window.scrollTo(0,0)
     }
     function showMemo(updateHistory=true){
       if(updateHistory&&location.hash!=="#memo"){location.hash="memo";return}
@@ -2025,18 +2069,18 @@
     }
     function openTarotChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#tarot-surprise"){location.hash="tarot-surprise";return}
-      if(!hasChallengeRoom()){showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
+      if(!hasChallengeRoom()){showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
       hideAllViews();tarotChallengeView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
     }
     function openMediaChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#media-surprise"){location.hash="media-surprise";return}
-      if(!hasChallengeRoom()){showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
+      if(!hasChallengeRoom()){showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
       hideAllViews();mediaChallengeView.hidden=false;renderMediaChallenge();updateDocumentTitle();window.scrollTo(0,0)
     }
     function openPossessedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#le-possede"){location.hash="le-possede";return}
-      if(!hasChallengeRoom()){showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
-      hideAllViews();possessedChallengeView.hidden=false;relocatePossessedPanel("possessed");prefillPossessedRoomFromUrl();updateDocumentTitle();window.scrollTo(0,0)
+      if(!hasChallengeRoom()){showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
+      hideAllViews();possessedChallengeView.hidden=false;relocateRoomControls();prefillPossessedRoomFromUrl();updateLocalDistributionVisibility();updateDocumentTitle();window.scrollTo(0,0)
     }
     function applyRoute(){
       if(location.hash==="#tarot-surprise")openTarotChallenge(false);
@@ -2240,14 +2284,28 @@
     const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedRedrawOnline=document.getElementById("possessed-redraw-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
     let possessedLocalAssignments=[],possessedLocalIndex=0,possessedLocalRevealed=false;
     let applyingRoomState=false,roomSyncTimers={};
-    function hasChallengeRoom(){return !!possessedPeer&&possessedPlayers.length>0}
+    function isRoomConnected(){return !!possessedPeer&&possessedPlayers.length>0}
+    function hasChallengeRoom(){return playMode!=="room"||isRoomConnected()}
+    function shouldSyncRoom(){return playMode==="room"&&isRoomConnected()}
+    function renderTopRoomPlayers(){
+      if(!topRoomPlayers)return;
+      topRoomPlayers.innerHTML=playMode==="room"&&isRoomConnected()?possessedPlayers.map(player=>`<span class="possessed-player-chip${player.host?" host":""}">${escapeHtml(player.name)}</span>`).join(""):""
+    }
+    function updateLocalDistributionVisibility(){
+      if(possessedRolePanel)possessedRolePanel.hidden=playMode!=="local";
+      if(possessedLocalPanel)possessedLocalPanel.hidden=playMode!=="local"
+    }
     function renderChallengeRoomGate(){
-      const active=hasChallengeRoom(),message=active?possessedText(`${possessedPlayers.length} joueur(s) dans la room. Les défis sont synchronisés.`,`${possessedPlayers.length} player(s) in the room. Challenges are synced.`):possessedText("Crée ou rejoins une room avant d'ouvrir un défi interactif.","Create or join a room before opening an interactive challenge.");
+      const connected=isRoomConnected(),needsRoom=playMode==="room",active=!needsRoom||connected;
+      const message=needsRoom?(connected?possessedText(`${possessedPlayers.length} joueur(s) dans la room. Les défis sont synchronisés.`,`${possessedPlayers.length} player(s) in the room. Challenges are synced.`):possessedText("Crée ou rejoins une room avant d'ouvrir un défi interactif.","Create or join a room before opening an interactive challenge.")):(playMode==="local"?possessedText("Mode Multi local actif. Les défis utilisent cet écran.","Local multi mode is active. Challenges use this screen."):possessedText("Mode Solo actif. Les défis ne sont pas synchronisés.","Solo mode is active. Challenges are not synced."));
       challengeLaunchButtons.forEach(button=>{button.disabled=!active;button.title=message});
-      if(challengeRoomNote)challengeRoomNote.textContent=message
+      if(challengeRoomNote)challengeRoomNote.textContent=message;
+      if(topRoomMenu)topRoomMenu.hidden=!needsRoom;
+      if(topRoomSummary)topRoomSummary.textContent=connected?possessedText(`${possessedPlayers.length} joueur(s)`,`${possessedPlayers.length} player(s)`):possessedText("inactive","inactive");
+      renderTopRoomPlayers();updateLocalDistributionVisibility()
     }
     function sendRoomMessage(message,exceptPeer=null){
-      if(!message||!hasChallengeRoom())return;
+      if(!message||!shouldSyncRoom())return;
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
       else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
     }
@@ -2257,14 +2315,14 @@
       else if(challenge==="possessed")openPossessedChallenge(true)
     }
     function openRoomChallenge(challenge){
-      if(!hasChallengeRoom()){setPossessedMode("online");showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer un défi.","Create or join a room before starting a challenge.");return}
-      applyRoomChallengeRoute(challenge);sendRoomMessage({type:"challenge-route",challenge})
+      if(!hasChallengeRoom()){setPlayMode("room");showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer un défi.","Create or join a room before starting a challenge.");return}
+      applyRoomChallengeRoute(challenge);if(playMode==="room")sendRoomMessage({type:"challenge-route",challenge})
     }
     function objectByName(name){return allObjects.find(obj=>obj.name===name)||phasmophobiaObjects.find(obj=>obj.name===name)||null}
     function objectsFromNames(names){return (Array.isArray(names)?names:[]).map(objectByName).filter(Boolean)}
     function captureTarotRoomState(){
       const tiers={};allObjects.forEach(obj=>{tiers[obj.name]=obj.tier});
-      return {tiers,remainingNames:remainingObjects.map(obj=>obj.name),selectedNames:selectedObjects.map(obj=>obj.name),removedNames:removedObjects.map(obj=>obj.name),lostNames:permanentlyLostObjects.map(obj=>obj.name),permanentLostNames:[...permanentLostNames],singleCopyNames:[...singleCopyNames],roundEffects:[...roundEffects],roundCount,winCount,lossCount,elapsedSeconds,nextTarotMultiplier,challengeOutcome,resultHtml:resultDiv.innerHTML,popupOpen:challengePopup.classList.contains("open"),popupMessage:challengePopupMessage.textContent,timerRunning:!!timerInterval}
+      return {tiers,remainingNames:remainingObjects.map(obj=>obj.name),selectedNames:selectedObjects.map(obj=>obj.name),removedNames:removedObjects.map(obj=>obj.name),lostNames:permanentlyLostObjects.map(obj=>obj.name),permanentLostNames:[...permanentLostNames],singleCopyNames:[...singleCopyNames],roundEffects:[...roundEffects],roundCount,winCount,lossCount,elapsedSeconds,nextTarotMultiplier,streamerModeChecked:streamerMode.checked,challengeOutcome,resultHtml:resultDiv.innerHTML,popupOpen:challengePopup.classList.contains("open"),popupMessage:challengePopupMessage.textContent,timerRunning:!!timerInterval}
     }
     function applyTarotRoomState(state){
       if(!state)return;
@@ -2274,7 +2332,7 @@
       remainingObjects=objectsFromNames(state.remainingNames);selectedObjects=objectsFromNames(state.selectedNames);removedObjects=objectsFromNames(state.removedNames);permanentlyLostObjects=objectsFromNames(state.lostNames);
       roundCount=Number(state.roundCount)||1;winCount=Number(state.winCount)||0;lossCount=Number(state.lossCount)||0;elapsedSeconds=Number(state.elapsedSeconds)||0;nextTarotMultiplier=Number(state.nextTarotMultiplier)||1;
       const outcome=state.challengeOutcome||null;challengeOutcome=null;closeChallengePopup();
-      resultDiv.innerHTML=state.resultHtml||"";updateTimerButton();updateTimer();updateModeDisplay();updateTarotStatus();renderActiveEffects();updateLists();
+      streamerMode.checked=Boolean(state.streamerModeChecked);resultDiv.innerHTML=state.resultHtml||"";updateTimerButton();updateTimer();updateModeDisplay();updateTarotStatus();renderActiveEffects();updateLists();
       if(outcome&&state.popupOpen)showChallengePopup(outcome,state.popupMessage||"");else challengeOutcome=outcome;
       if(state.timerRunning){timerInterval=setInterval(()=>{elapsedSeconds++;updateTimer();checkChallengeState()},1000)}
       updateTimerButton()
@@ -2293,9 +2351,9 @@
       finally{applyingRoomState=false}
     }
     function scheduleRoomChallengeSync(challenge){
-      if(applyingRoomState||!hasChallengeRoom())return;
+      if(applyingRoomState||!shouldSyncRoom())return;
       clearTimeout(roomSyncTimers[challenge]);
-      roomSyncTimers[challenge]=setTimeout(()=>{if(!applyingRoomState&&hasChallengeRoom())sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})},0)
+      roomSyncTimers[challenge]=setTimeout(()=>{if(!applyingRoomState&&shouldSyncRoom())sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})},0)
     }
     let possessedPeer=null,possessedHostConnection=null,possessedConnections=new Map(),possessedPlayers=[],possessedIsHost=false,possessedRoomCode="",possessedOnlineStarted=false,possessedDistributionRound=0;
 
@@ -2350,6 +2408,17 @@
     function setPossessedMode(mode){
       const online=mode==="online";possessedLocalTab.classList.toggle("active",!online);possessedOnlineTab.classList.toggle("active",online);possessedLocalTab.setAttribute("aria-selected",String(!online));possessedOnlineTab.setAttribute("aria-selected",String(online));possessedLocalPanel.hidden=online;possessedOnlinePanel.hidden=!online
     }
+    function relocateRoomControls(){if(topRoomContent&&possessedOnlinePanel&&possessedOnlinePanel.parentElement!==topRoomContent)topRoomContent.appendChild(possessedOnlinePanel)}
+    function setPlayMode(mode){
+      playMode=["solo","local","room"].includes(mode)?mode:"solo";
+      playModeButtons.forEach(button=>button.classList.toggle("active",button.dataset.playMode===playMode));
+      try{localStorage.setItem("phasmo-play-mode",playMode)}catch(error){}
+      relocateRoomControls();
+      if(playMode==="room"){setPossessedMode("online");if(topRoomMenu)topRoomMenu.open=!isRoomConnected()}
+      else{if(possessedOnlinePanel)possessedOnlinePanel.hidden=true;if(playMode==="local")setPossessedMode("local")}
+      renderChallengeRoomGate()
+    }
+    function loadPlayMode(){let saved="solo";try{saved=localStorage.getItem("phasmo-play-mode")||"solo"}catch(error){}setPlayMode(saved)}
     function randomRoomCode(){
       const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",buffer=new Uint32Array(5);crypto.getRandomValues(buffer);return [...buffer].map(value=>alphabet[value%alphabet.length]).join("")
     }
@@ -2402,7 +2471,7 @@
     }
     function createPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
-      cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
+      setPlayMode("room");cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
       const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;plog("création room, peerId =",peerId);possessedPeer=new Peer(peerId);
       possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="challenges";possessedShareLink.value=url.toString();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
       possessedPeer.on("connection",setupHostConnection);
@@ -2422,7 +2491,7 @@
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
       const code=normalizeRoomCode(document.getElementById("possessed-join-code").value),nameRaw=document.getElementById("possessed-join-name").value.trim(),name=nameRaw||possessedText("Joueur","Player");savePossessedName(nameRaw);
       if(code.length!==5){setPossessedOnlineStatus("Entre un code de room valide à 5 caractères.","Enter a valid 5-character room code.");return}
-      plog("tentative de jointure, code =",code);cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
+      setPlayMode("room");plog("tentative de jointure, code =",code);cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
       possessedPeer.on("open",id=>{const hostId=`phasmo-possessed-${code.toLowerCase()}`;plog("invité: peer ouvert",id,"→ connexion à",hostId);possessedHostConnection=possessedPeer.connect(hostId,{reliable:true});possessedHostConnection.on("open",()=>{plog("invité: connexion à l’hôte ouverte, envoi du join");possessedHostConnection.send({type:"join",name});setPossessedOnlineStatus("Connecté. En attente de l’hôte…","Connected. Waiting for the host…")});possessedHostConnection.on("data",handlePossessedGuestData);possessedHostConnection.on("close",()=>{plog("invité: connexion à l’hôte fermée");if(!possessedPeer)return;cleanupPossessedPeer(false);showPossessedOnlineSetup();setPossessedOnlineStatus("L’hôte a quitté la room.","The host left the room.")});possessedHostConnection.on("error",error=>{console.warn("[possessed] invité: erreur connexion hôte",error&&error.type,error);setPossessedOnlineStatus("Connexion à l’hôte impossible.","Unable to connect to the host.")})});
       possessedPeer.on("disconnected",()=>console.warn("[possessed] invité: déconnecté du broker PeerJS"));
       possessedPeer.on("error",error=>{console.warn("[possessed] invité: erreur peer",error&&error.type,error);setPossessedOnlineStatus("Room introuvable ou connexion impossible.","Room not found or unable to connect.")})
@@ -2437,17 +2506,7 @@
       const value=possessedShareLink.value;if(!value)return;
       try{await navigator.clipboard.writeText(value);document.getElementById("possessed-copy-link").textContent=possessedText("Lien copié !","Link copied!")}catch(error){possessedShareLink.select();document.execCommand("copy")}
     }
-    function relocatePossessedPanel(target="selection"){
-      const panel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");if(!panel)return;
-      if(target==="possessed"){
-        const container=document.querySelector("#possessed-challenge-view .possessed-container"),rules=container?.querySelector(".fiche");
-        if(container&&rules&&panel.parentElement!==container)container.insertBefore(panel,rules);
-      }else{
-        const hub=document.querySelector("#challenge-selection-view .challenge-hub"),grid=hub?.querySelector(".challenge-grid");
-        if(hub&&grid&&panel.parentElement!==hub){hub.insertBefore(panel,grid);setPossessedMode("online")}
-      }
-      renderChallengeRoomGate()
-    }
+    function relocatePossessedPanel(){relocateRoomControls();renderChallengeRoomGate()}
     function savePossessedName(name){try{if(name)localStorage.setItem("phasmo-possessed-name",name)}catch(error){}}
     function loadPossessedName(){
       let saved="";try{saved=localStorage.getItem("phasmo-possessed-name")||""}catch(error){}
@@ -2457,7 +2516,7 @@
       const code=normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom"));
       if(code){
         document.getElementById("possessed-join-code").value=code;
-        setPossessedMode("online");
+        setPlayMode("room");
         const createBox=document.getElementById("possessed-create-box");if(createBox)createBox.hidden=true;
         possessedOnlineSetup.classList.add("join-only");
         const nameInput=document.getElementById("possessed-join-name");if(nameInput){try{nameInput.focus({preventScroll:true})}catch(error){nameInput.focus()}}
@@ -2467,7 +2526,7 @@
       cleanupPossessedPeer(true);
       const createBox=document.getElementById("possessed-create-box");if(createBox)createBox.hidden=false;
       possessedOnlineSetup.classList.remove("join-only");
-      try{history.replaceState(null,"",location.pathname+"#le-possede")}catch(error){}
+      try{history.replaceState(null,"",location.pathname+"#challenges")}catch(error){}
     }
     function refreshPossessedLanguage(){
       renderPossessedLocalNames();
@@ -2510,8 +2569,9 @@
     document.getElementById("back-media-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-possessed-challenge").addEventListener("click",()=>openRoomChallenge("possessed"));
     document.getElementById("back-possessed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
-    possessedLocalTab.addEventListener("click",()=>setPossessedMode("local"));
-    possessedOnlineTab.addEventListener("click",()=>setPossessedMode("online"));
+    possessedLocalTab.addEventListener("click",()=>setPlayMode("local"));
+    possessedOnlineTab.addEventListener("click",()=>setPlayMode("room"));
+    playModeButtons.forEach(button=>button.addEventListener("click",()=>setPlayMode(button.dataset.playMode)));
     possessedLocalCount.addEventListener("change",renderPossessedLocalNames);
     document.getElementById("possessed-local-prepare").addEventListener("click",prepareLocalPossessedRoles);
     possessedLocalReveal.addEventListener("click",revealLocalPossessedRole);
@@ -2561,7 +2621,7 @@
     function resetSelectionDisplay(){resultDiv.innerHTML="Aucun objet en cours de sélection.";scheduleRoomChallengeSync("tarot")}
     function showMessage(title,message){resultDiv.innerHTML=`<p><strong>${escapeHtml(title)}</strong></p><p class="selection-note">${message}</p>`;scheduleRoomChallengeSync("tarot")}
 
-    function updateModeDisplay(){modeDescription.textContent=streamerMode.checked?"Streamer":"Local"}
+    function updateModeDisplay(){modeDescription.textContent=streamerMode.checked?"On":"Off";scheduleRoomChallengeSync("tarot")}
     function updateTarotStatus(){
       if(nextTarotMultiplier>1){tarotStatus.classList.add("active");tarotStatus.textContent=`Haute-Prêtresse active : le prochain effet sera renforcé ×${nextTarotMultiplier}.`}
       else{tarotStatus.classList.remove("active");tarotStatus.textContent="Haute-Prêtresse : aucun renforcement en attente."}scheduleRoomChallengeSync("tarot")
@@ -2791,8 +2851,9 @@
     renderGhostMemo();
     renderMediaChallenge();
     renderPossessedLocalNames();
-    relocatePossessedPanel("selection");
+    relocateRoomControls();
     loadPossessedName();
+    loadPlayMode();
     initializeLanguage();
     applyRoute();
     renderChallengeRoomGate();
