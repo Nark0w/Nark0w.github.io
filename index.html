@@ -2047,6 +2047,12 @@
       document.title=titles[currentLanguage][page]
     }
     function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
+    function hasPossessedInvite(){return normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom")).length===5}
+    function allowChallengeOpen(){
+      if(hasChallengeRoom())return true;
+      if(hasPossessedInvite()){prefillPossessedRoomFromUrl();return true}
+      showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return false
+    }
     function showHub(updateHistory=true){
       if(updateHistory&&location.hash){location.hash="";return}
       closeChallengePopup();hideAllViews();hubView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
@@ -2069,17 +2075,17 @@
     }
     function openTarotChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#tarot-surprise"){location.hash="tarot-surprise";return}
-      if(!hasChallengeRoom()){showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
+      if(!allowChallengeOpen())return;
       hideAllViews();tarotChallengeView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
     }
     function openMediaChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#media-surprise"){location.hash="media-surprise";return}
-      if(!hasChallengeRoom()){showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
+      if(!allowChallengeOpen())return;
       hideAllViews();mediaChallengeView.hidden=false;renderMediaChallenge();updateDocumentTitle();window.scrollTo(0,0)
     }
     function openPossessedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#le-possede"){location.hash="le-possede";return}
-      if(!hasChallengeRoom()){showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return}
+      if(!allowChallengeOpen())return;
       hideAllViews();possessedChallengeView.hidden=false;relocateRoomControls();prefillPossessedRoomFromUrl();updateLocalDistributionVisibility();updateDocumentTitle();window.scrollTo(0,0)
     }
     function applyRoute(){
@@ -2283,7 +2289,7 @@
     const possessedLocalCount=document.getElementById("possessed-local-count"),possessedLocalNames=document.getElementById("possessed-local-names"),possessedLocalStage=document.getElementById("possessed-local-stage"),possessedLocalPlayerTitle=document.getElementById("possessed-local-player-title"),possessedLocalInstruction=document.getElementById("possessed-local-instruction"),possessedLocalReveal=document.getElementById("possessed-local-reveal"),possessedLocalRole=document.getElementById("possessed-local-role"),possessedLocalNext=document.getElementById("possessed-local-next");
     const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedRedrawOnline=document.getElementById("possessed-redraw-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
     let possessedLocalAssignments=[],possessedLocalIndex=0,possessedLocalRevealed=false;
-    let applyingRoomState=false,roomSyncTimers={};
+    let applyingRoomState=false,roomSyncTimers={},currentRoomChallenge=null;
     function isRoomConnected(){return !!possessedPeer&&possessedPlayers.length>0}
     function hasChallengeRoom(){return playMode!=="room"||isRoomConnected()}
     function shouldSyncRoom(){return playMode==="room"&&isRoomConnected()}
@@ -2309,6 +2315,17 @@
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
       else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
     }
+    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",possessed:"le-possede"}[challenge]||"challenges"}
+    function updatePossessedInviteLink(challenge=currentRoomChallenge){
+      if(!possessedRoomCode||!possessedShareLink)return;
+      const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
+    }
+    function rememberRoomChallenge(challenge){currentRoomChallenge=challenge||null;updatePossessedInviteLink(currentRoomChallenge)}
+    function sendCurrentChallengeTo(connection){
+      if(!currentRoomChallenge||!connection||!connection.open)return;
+      connection.send({type:"challenge-route",challenge:currentRoomChallenge});
+      if(currentRoomChallenge!=="possessed")connection.send({type:"challenge-state",challenge:currentRoomChallenge,state:captureRoomChallengeState(currentRoomChallenge)})
+    }
     function applyRoomChallengeRoute(challenge){
       if(challenge==="tarot")openTarotChallenge(true);
       else if(challenge==="media")openMediaChallenge(true);
@@ -2316,7 +2333,9 @@
     }
     function openRoomChallenge(challenge){
       if(!hasChallengeRoom()){setPlayMode("room");showChallengeSelection(true);setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer un défi.","Create or join a room before starting a challenge.");return}
-      applyRoomChallengeRoute(challenge);if(playMode==="room")sendRoomMessage({type:"challenge-route",challenge})
+      if(playMode==="room")rememberRoomChallenge(challenge);
+      applyRoomChallengeRoute(challenge);
+      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge!=="possessed")sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
     }
     function objectByName(name){return allObjects.find(obj=>obj.name===name)||phasmophobiaObjects.find(obj=>obj.name===name)||null}
     function objectsFromNames(names){return (Array.isArray(names)?names:[]).map(objectByName).filter(Boolean)}
@@ -2452,7 +2471,7 @@
       possessedConnections.forEach(connection=>{try{connection.close()}catch(error){}});possessedConnections.clear();
       if(possessedHostConnection){try{possessedHostConnection.close()}catch(error){}possessedHostConnection=null}
       if(possessedPeer){try{possessedPeer.destroy()}catch(error){}possessedPeer=null}
-      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;renderChallengeRoomGate();
+      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";currentRoomChallenge=null;possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;renderChallengeRoomGate();
       if(showSetup){showPossessedOnlineSetup();setPossessedOnlineStatus("En attente…","Waiting…")}
     }
     function plog(){console.log("[possessed]",...arguments)}
@@ -2461,10 +2480,10 @@
       plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
         if(!data)return;
-        if(joined){if(data.type==="challenge-route"){applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer)}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}return}
+        if(joined){if(data.type==="challenge-route"){rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer)}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}return}
         if(data.type!=="join")return;
         if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
-        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
+        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
       });
       connection.on("close",()=>{plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
       connection.on("error",error=>{console.warn("[possessed] hôte: erreur connexion",error&&error.type,error)})
@@ -2473,7 +2492,7 @@
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
       setPlayMode("room");cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
       const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;plog("création room, peerId =",peerId);possessedPeer=new Peer(peerId);
-      possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="challenges";possessedShareLink.value=url.toString();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
+      possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="challenges";possessedShareLink.value=url.toString();updatePossessedInviteLink();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
       possessedPeer.on("connection",setupHostConnection);
       possessedPeer.on("disconnected",()=>console.warn("[possessed] hôte: déconnecté du broker PeerJS"));
       possessedPeer.on("error",error=>{console.warn("[possessed] hôte: erreur peer",error&&error.type,error);setPossessedOnlineStatus(error&&error.type==="unavailable-id"?"Ce code est déjà utilisé. Réessaie.":"Connexion impossible. Réessaie ou utilise le mode local.",error&&error.type==="unavailable-id"?"This code is already in use. Try again.":"Unable to connect. Try again or use local mode.")})
@@ -2483,7 +2502,7 @@
       plog("invité: message reçu de l’hôte →",data.type,data.type==="reject"?("raison="+data.reason):"");
       if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
       else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=false;possessedOnlineRole.innerHTML=`<h3>${escapeHtml(possessedText("Ton rôle","Your role"))}</h3>${createRoleCard(data.role)}`;setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");possessedOnlineRole.scrollIntoView({behavior:"smooth",block:"center"})}
-      else if(data.type==="challenge-route")applyRoomChallengeRoute(data.challenge);
+      else if(data.type==="challenge-route"){rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}
       else if(data.type==="challenge-state")applyRoomChallengeState(data);
       else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
