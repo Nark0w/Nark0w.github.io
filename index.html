@@ -6,7 +6,7 @@
   <title>Compagnon Phasmophobia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=Special+Elite&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Cinzel+Decorative:wght@700;900&family=Roboto+Condensed:wght@400;500;700&family=Share+Tech+Mono&family=Special+Elite&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -38,6 +38,13 @@
           <span>On</span>
         </label>
         <span id="mode-description" class="mode-label" hidden>Off</span>
+      </div>
+      <div class="theme-control">
+        <label for="theme-select">Th&egrave;me</label>
+        <select id="theme-select" aria-label="Theme">
+          <option value="classic">Actuel</option>
+          <option value="evidence">Evidence</option>
+        </select>
       </div>
       <details id="top-room-menu" class="top-room-menu" hidden>
         <summary>Room <span id="top-room-summary" class="top-room-summary">inactive</span></summary>
@@ -689,6 +696,25 @@
         <div class="fiche-rules"><h3 class="fiche-rules-title">Matériel autorisé</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Dans le camion, seuls les objets de preuve, les crucifix et les lampes normales ou frontales sont autorisés.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Tous les objets secondaires sont strictement interdits : encens, lampe à huile, sel, briquet et autres objets hors preuve.</p></div></div>
         <div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>La partie se déroule comme une partie standard en Cauchemar.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Une partie est réussie si l’os est ramassé, que l’entité est correctement identifiée et qu’au moins un joueur quitte la partie en vie.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Si l’os n’a pas été ramassé, si l’entité n’est pas correctement identifiée ou si tous les joueurs meurent, le défi est perdu.</p></div></div>
         <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si toutes les maps sont enchaînées sans erreur, avec l’os récupéré, le fantôme correctement identifié et au moins un survivant à chaque partie.</p></div>
+      </section>
+
+      <section class="cursed-panel" aria-labelledby="cursed-map-title">
+        <div class="cursed-panel-head">
+          <div>
+            <h2 id="cursed-map-title">Validation des maps</h2>
+            <p>Valide chaque map uniquement si l'os a été ramassé, l'entité correctement identifiée et au moins un joueur est sorti vivant.</p>
+          </div>
+          <div class="cursed-progress">
+            <span id="cursed-progress-count">0 / 14</span>
+            <strong id="cursed-progress-label">maps validées</strong>
+          </div>
+        </div>
+        <div class="cursed-meter" aria-hidden="true"><span id="cursed-progress-bar"></span></div>
+        <div class="cursed-actions">
+          <button id="cursed-reset" class="danger-btn" type="button">Reset Cursed Run</button>
+        </div>
+        <div id="cursed-map-grid" class="cursed-map-grid"></div>
+        <p class="source">Liste et images des maps : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.</p>
       </section>
 
       <div class="credits-box">
