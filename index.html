@@ -409,6 +409,30 @@
     .possessed-player-chip.host{border-color:var(--red);color:var(--red-bright)}
     .possessed-card-symbol{margin:0}
     .possessed-role-actions{max-width:720px;margin-left:auto;margin-right:auto;text-align:center}
+    .possessed-game-grid{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,1.25fr);gap:16px;align-items:start}
+    .possessed-round-head{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 14px}
+    .possessed-round-pill{min-width:130px;padding:10px 12px;background:rgba(0,0,0,.42);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:#cfc7bc;text-align:center}
+    .possessed-round-pill strong{display:block;font-family:var(--display);font-size:24px;color:#efeae0;margin-top:4px}
+    .possessed-scoreboard,.possessed-vote-grid{display:flex;flex-direction:column;gap:8px}
+    .possessed-score-row,.possessed-vote-row{padding:10px;background:rgba(0,0,0,.32);border:1px solid var(--line)}
+    .possessed-score-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .possessed-score-name{font-family:var(--mono);font-size:13px;color:#efeae0}
+    .possessed-score-value{font-family:var(--display);font-size:24px;color:var(--red-bright)}
+    .possessed-score-row.winner{border-color:var(--green);box-shadow:0 0 18px rgba(111,174,126,.18)}
+    .possessed-vote-title{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;font-family:var(--mono);font-size:12px;color:#cfc7bc}
+    .possessed-vote-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px}
+    .possessed-vote-btn{width:100%;margin:0;padding:9px 8px;border-color:var(--line);background:rgba(0,0,0,.35);font-size:12px;letter-spacing:.04em;box-shadow:none}
+    .possessed-vote-btn.selected{border-color:var(--red);background:rgba(178,59,46,.22);color:#fff}
+    .possessed-vote-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+    .possessed-round-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin:14px 0}
+    .possessed-round-options label{display:flex;align-items:flex-start;gap:8px;padding:10px;background:rgba(0,0,0,.32);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:#cfc7bc;text-align:left}
+    .possessed-round-options input{margin-top:2px;accent-color:var(--red)}
+    .possessed-round-limit{max-width:280px;margin:0 auto 14px;display:flex;flex-direction:column;gap:6px;text-align:left}
+    .possessed-round-limit label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
+    .possessed-round-limit input{background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:14px;padding:10px 12px;outline:none}
+    .possessed-round-limit input:focus{border-color:var(--red)}
+    .possessed-round-result{margin-top:14px;padding:12px;background:rgba(0,0,0,.36);border:1px solid var(--line);color:#cfc7bc;line-height:1.5;text-align:left}
+    .possessed-round-result strong{color:#efeae0}
     .possessed-role-popup .challenge-popup-card{border-color:var(--line)}
     .possessed-role-popup .possessed-role-card{margin:0 auto 18px}
 
@@ -433,6 +457,7 @@
     @media(max-width:1050px){
       .lists{grid-template-columns:repeat(2,minmax(0,1fr))}
       .tarot-action-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .possessed-game-grid{grid-template-columns:1fr}
       .tarot-grid{grid-template-columns:1fr}
       .tarot-card{grid-template-columns:100px minmax(0,1fr)}
       .media-lists{grid-template-columns:1fr}
@@ -1183,6 +1208,44 @@
         <div class="media-actions">
           <button id="possessed-start-online" class="good-btn" type="button" hidden>Distribuer les rôles</button>
           <button id="possessed-redraw-online" class="warning-btn" type="button" hidden>Redistribuer les rôles</button>
+        </div>
+      </section>
+      <section id="possessed-private-role-panel" class="possessed-panel possessed-role-actions" aria-labelledby="possessed-private-role-title" hidden>
+        <h2 id="possessed-private-role-title">Ton rôle</h2>
+        <p class="possessed-note">Cette carte est privée. Garde-la pour toi jusqu'au vote final.</p>
+        <div id="possessed-private-role"></div>
+      </section>
+      <section id="possessed-game-panel" class="possessed-panel" aria-labelledby="possessed-game-title">
+        <h2 id="possessed-game-title">Manches, votes et score</h2>
+        <div class="possessed-round-head">
+          <div class="possessed-round-pill">Manche<strong id="possessed-round-number">1</strong></div>
+          <div class="possessed-round-pill">Votes<strong id="possessed-vote-count">0/4</strong></div>
+          <div class="possessed-round-pill">Leader<strong id="possessed-leader-name">-</strong></div>
+        </div>
+        <div class="possessed-round-limit">
+          <label for="possessed-round-limit">Limite de manches</label>
+          <input id="possessed-round-limit" type="number" min="1" max="20" step="1" value="5">
+        </div>
+        <div class="possessed-game-grid">
+          <div class="possessed-box">
+            <h3>Score cumulé</h3>
+            <div id="possessed-scoreboard" class="possessed-scoreboard"></div>
+          </div>
+          <div class="possessed-box">
+            <h3>Vote de fin de manche</h3>
+            <p id="possessed-vote-note" class="possessed-note">Distribue les rôles pour ouvrir le vote.</p>
+            <div id="possessed-vote-grid" class="possessed-vote-grid"></div>
+            <div class="possessed-round-options">
+              <label><input id="possessed-ghost-correct" type="checkbox"> Fantôme correctement identifié par l'équipe</label>
+              <label><input id="possessed-died-early" type="checkbox"> Possédé mort avant ses deux corruptions</label>
+            </div>
+            <div class="media-actions">
+              <button id="possessed-score-round" class="good-btn" type="button">Calculer la manche</button>
+              <button id="possessed-next-round" class="warning-btn" type="button">Nouvelle manche</button>
+              <button id="possessed-reset-scores" class="danger-btn" type="button">Reset scores</button>
+            </div>
+            <div id="possessed-round-result" class="possessed-round-result" hidden></div>
+          </div>
         </div>
       </section>
     </div>
@@ -2231,8 +2294,21 @@
       document.title=titles[currentLanguage][page]
     }
     function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
-    function hasPossessedInvite(){return normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom")).length===5}
+    function currentRouteHash(){
+      const hash=decodeURIComponent(location.hash||"").replace(/^#/,"");
+      const lastHash=hash.split("#").filter(Boolean).pop()||hash;
+      const route=(lastHash.split("?")[0]||"").replace(/^#/,"");
+      return route
+    }
+    function possessedInviteCodeFromUrl(){
+      const url=new URL(location.href),fromSearch=normalizeRoomCode(url.searchParams.get("possessedRoom"));
+      if(fromSearch.length===5)return fromSearch;
+      const match=decodeURIComponent(location.hash||"").match(/[?&]possessedRoom=([^&#]+)/i);
+      return normalizeRoomCode(match&&match[1])
+    }
+    function hasPossessedInvite(){return possessedInviteCodeFromUrl().length===5}
     function allowChallengeOpen(){
+      if(hasPossessedInvite()&&!isRoomConnected()){prefillPossessedRoomFromUrl();return true}
       if(hasChallengeRoom())return true;
       if(hasPossessedInvite()){prefillPossessedRoomFromUrl();return true}
       showChallengeSelection(true);setPlayMode("room");setPossessedOnlineStatus("Crée ou rejoins une room avant de lancer ce défi.","Create or join a room before starting this challenge.");return false
@@ -2278,14 +2354,16 @@
       hideAllViews();possessedChallengeView.hidden=false;relocateRoomControls();prefillPossessedRoomFromUrl();updateLocalDistributionVisibility();updateDocumentTitle();window.scrollTo(0,0)
     }
     function applyRoute(){
-      if(location.hash==="#tarot-surprise")openTarotChallenge(false);
-      else if(location.hash==="#media-surprise")openMediaChallenge(false);
-      else if(location.hash==="#mur-de-la-mort")openWallChallenge(false);
-      else if(location.hash==="#le-possede")openPossessedChallenge(false);
-      else if(location.hash==="#memo-ghosts")showGhostMemo(false);
-      else if(location.hash==="#memo-fun")showFunMemo(false);
-      else if(location.hash==="#challenges")showChallengeSelection(false);
-      else if(location.hash==="#memo")showMemo(false);
+      const route=currentRouteHash();
+      if(route==="tarot-surprise")openTarotChallenge(false);
+      else if(route==="media-surprise")openMediaChallenge(false);
+      else if(route==="mur-de-la-mort")openWallChallenge(false);
+      else if(route==="le-possede")openPossessedChallenge(false);
+      else if(route==="memo-ghosts")showGhostMemo(false);
+      else if(route==="memo-fun")showFunMemo(false);
+      else if(route==="challenges")showChallengeSelection(false);
+      else if(route==="memo")showMemo(false);
+      else if(hasPossessedInvite())showChallengeSelection(false);
       else showHub(false);
       updateTopbar()
     }
@@ -2529,6 +2607,8 @@
     const possessedLocalTab=document.getElementById("possessed-local-tab"),possessedOnlineTab=document.getElementById("possessed-online-tab"),possessedLocalPanel=document.getElementById("possessed-local-panel"),possessedOnlinePanel=document.getElementById("possessed-online-panel"),possessedRoleActions=document.getElementById("possessed-role-actions");
     const possessedLocalCount=document.getElementById("possessed-local-count"),possessedLocalNames=document.getElementById("possessed-local-names"),possessedLocalStage=document.getElementById("possessed-local-stage"),possessedLocalPlayerTitle=document.getElementById("possessed-local-player-title"),possessedLocalInstruction=document.getElementById("possessed-local-instruction"),possessedLocalReveal=document.getElementById("possessed-local-reveal"),possessedLocalRole=document.getElementById("possessed-local-role"),possessedLocalNext=document.getElementById("possessed-local-next"),possessedRolePopup=document.getElementById("possessed-role-popup"),possessedRolePopupBody=document.getElementById("possessed-role-popup-body"),possessedRolePopupTitle=document.getElementById("possessed-role-popup-title");
     const possessedOnlineSetup=document.getElementById("possessed-online-setup"),possessedOnlineLobby=document.getElementById("possessed-online-lobby"),possessedOnlineStatus=document.getElementById("possessed-online-status"),possessedHostRoomInfo=document.getElementById("possessed-host-room-info"),possessedRoomCodeDisplay=document.getElementById("possessed-room-code"),possessedShareLink=document.getElementById("possessed-share-link"),possessedLobbyList=document.getElementById("possessed-lobby-list"),possessedStartOnline=document.getElementById("possessed-start-online"),possessedRedrawOnline=document.getElementById("possessed-redraw-online"),possessedOnlineRole=document.getElementById("possessed-online-role");
+    const possessedPrivateRolePanel=document.getElementById("possessed-private-role-panel"),possessedPrivateRole=document.getElementById("possessed-private-role");
+    const possessedRoundNumber=document.getElementById("possessed-round-number"),possessedVoteCount=document.getElementById("possessed-vote-count"),possessedLeaderName=document.getElementById("possessed-leader-name"),possessedRoundLimitInput=document.getElementById("possessed-round-limit"),possessedScoreboard=document.getElementById("possessed-scoreboard"),possessedVoteNote=document.getElementById("possessed-vote-note"),possessedVoteGrid=document.getElementById("possessed-vote-grid"),possessedGhostCorrect=document.getElementById("possessed-ghost-correct"),possessedDiedEarly=document.getElementById("possessed-died-early"),possessedScoreRound=document.getElementById("possessed-score-round"),possessedNextRound=document.getElementById("possessed-next-round"),possessedResetScores=document.getElementById("possessed-reset-scores"),possessedRoundResult=document.getElementById("possessed-round-result");
     let possessedLocalAssignments=[],possessedLocalIndex=0,possessedLocalRevealed=false,possessedGuestRoomPanelClosed=false;
     let applyingRoomState=false,roomSyncTimers={},currentRoomChallenge=null;
     function isRoomConnected(){return !!possessedPeer&&possessedPlayers.length>0}
@@ -2549,7 +2629,7 @@
       if(challengeRoomNote)challengeRoomNote.textContent=message;
       if(topRoomMenu)topRoomMenu.hidden=!needsRoom;
       if(topRoomSummary)topRoomSummary.textContent=connected?possessedText(`${possessedPlayers.length} joueur(s)`,`${possessedPlayers.length} player(s)`):possessedText("inactive","inactive");
-      renderTopRoomPlayers();updateLocalDistributionVisibility()
+      renderTopRoomPlayers();updateLocalDistributionVisibility();if(typeof renderPossessedPrivateRole==="function")renderPossessedPrivateRole()
     }
     function sendRoomMessage(message,exceptPeer=null){
       if(!message||!shouldSyncRoom())return;
@@ -2565,7 +2645,8 @@
     function sendCurrentChallengeTo(connection){
       if(!currentRoomChallenge||!connection||!connection.open)return;
       connection.send({type:"challenge-route",challenge:currentRoomChallenge});
-      if(currentRoomChallenge!=="possessed")connection.send({type:"challenge-state",challenge:currentRoomChallenge,state:captureRoomChallengeState(currentRoomChallenge)})
+      if(currentRoomChallenge==="possessed")connection.send({type:"possessed-state",state:capturePossessedPublicState()});
+      else connection.send({type:"challenge-state",challenge:currentRoomChallenge,state:captureRoomChallengeState(currentRoomChallenge)})
     }
     function pauseTarotIfLeavingChallenge(nextChallenge){if(currentRoomChallenge==="tarot"&&nextChallenge!=="tarot")pauseTimer()}
     function applyRoomChallengeRoute(challenge){
@@ -2579,7 +2660,7 @@
       if(playMode==="room")pauseTarotIfLeavingChallenge(challenge);
       if(playMode==="room")rememberRoomChallenge(challenge);
       applyRoomChallengeRoute(challenge);
-      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge!=="possessed")sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
+      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge==="possessed")broadcastPossessedPublicState();else sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
     }
     function objectByName(name){return allObjects.find(obj=>obj.name===name)||phasmophobiaObjects.find(obj=>obj.name===name)||null}
     function objectsFromNames(names){return (Array.isArray(names)?names:[]).map(objectByName).filter(Boolean)}
@@ -2627,12 +2708,146 @@
       roomSyncTimers[challenge]=setTimeout(()=>{if(!applyingRoomState&&shouldSyncRoom())sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})},0)
     }
     let possessedPeer=null,possessedHostConnection=null,possessedConnections=new Map(),possessedPlayers=[],possessedIsHost=false,possessedRoomCode="",possessedOnlineStarted=false,possessedDistributionRound=0;
+    let possessedGameRound=1,possessedRoundLimit=5,possessedScores={},possessedVotes={},possessedRoundResolved=false,possessedCurrentRoles={},possessedCurrentPossessedId=null,possessedRoundSummary="";
+    let possessedOwnRole=null,possessedOwnRoleName="";
 
     function possessedText(fr,en){return currentLanguage==="en"?en:fr}
     function secureShuffle(values){
       const copy=[...values];
       for(let i=copy.length-1;i>0;i--){const range=0x100000000-(0x100000000%(i+1));let random;do{const buffer=new Uint32Array(1);crypto.getRandomValues(buffer);random=buffer[0]}while(random>=range);const j=random%(i+1);[copy[i],copy[j]]=[copy[j],copy[i]]}
       return copy
+    }
+    function possessedRoundPlayers(){
+      if(playMode==="room"&&possessedPlayers.length)return possessedPlayers.map(player=>({id:player.id,name:player.name,host:player.host}));
+      return possessedLocalAssignments.map((assignment,index)=>({id:`local-${index}`,name:assignment.name,host:index===0}))
+    }
+    function possessedLocalPlayerId(){return playMode==="room"?(possessedIsHost?"host":(possessedPeer&&possessedPeer.id)||""):""}
+    function possessedPlayerName(id,players=possessedRoundPlayers()){const player=players.find(candidate=>candidate.id===id);return player?player.name:"-"}
+    function possessedClampRoundLimit(value){return Math.max(possessedGameRound,Math.min(20,Math.max(1,Number(value)||5)))}
+    function possessedScoreLeaders(players=possessedRoundPlayers()){
+      const scores=players.map(player=>({player,score:Number(possessedScores[player.id])||0}));
+      const maxScore=scores.length?Math.max(...scores.map(item=>item.score)):0;
+      return {scores,maxScore,winners:scores.filter(item=>item.score===maxScore&&maxScore>0).map(item=>item.player.name)}
+    }
+    function possessedGameFinished(){return possessedRoundResolved&&possessedGameRound>=possessedRoundLimit}
+    function ensurePossessedScores(players=possessedRoundPlayers()){
+      if(!players.length)return;
+      const next={};
+      players.forEach(player=>{next[player.id]=Number(possessedScores[player.id])||0});
+      possessedScores=next
+    }
+    function resetPossessedRoundProgress(clearRoles=false){
+      possessedVotes={};possessedRoundResolved=false;possessedRoundSummary="";
+      if(clearRoles){possessedCurrentRoles={};possessedCurrentPossessedId=null}
+      if(possessedGhostCorrect)possessedGhostCorrect.checked=false;
+      if(possessedDiedEarly)possessedDiedEarly.checked=false
+    }
+    function capturePossessedPublicState(){
+      return {round:possessedGameRound,roundLimit:possessedRoundLimit,scores:{...possessedScores},votes:{...possessedVotes},resolved:possessedRoundResolved,ghostCorrect:!!(possessedGhostCorrect&&possessedGhostCorrect.checked),diedEarly:!!(possessedDiedEarly&&possessedDiedEarly.checked),summary:possessedRoundSummary,started:possessedOnlineStarted,distributionRound:possessedDistributionRound}
+    }
+    function applyPossessedPublicState(state){
+      if(!state)return;
+      possessedGameRound=Number(state.round)||possessedGameRound;
+      possessedRoundLimit=Math.max(possessedGameRound,Math.min(20,Math.max(1,Number(state.roundLimit)||possessedRoundLimit)));
+      possessedScores=state.scores&&typeof state.scores==="object"?{...state.scores}:possessedScores;
+      possessedVotes=state.votes&&typeof state.votes==="object"?{...state.votes}:{};
+      possessedRoundResolved=Boolean(state.resolved);possessedRoundSummary=state.summary||"";
+      possessedOnlineStarted=Boolean(state.started)||possessedOnlineStarted;possessedDistributionRound=Number(state.distributionRound)||possessedDistributionRound;
+      if(possessedGhostCorrect)possessedGhostCorrect.checked=Boolean(state.ghostCorrect);
+      if(possessedDiedEarly)possessedDiedEarly.checked=Boolean(state.diedEarly);
+      renderPossessedGamePanel()
+    }
+    function broadcastPossessedPublicState(){
+      if(playMode==="room"&&possessedIsHost)sendRoomMessage({type:"possessed-state",state:capturePossessedPublicState()})
+    }
+    function renderPossessedGamePanel(){
+      const players=possessedRoundPlayers();ensurePossessedScores(players);
+      const voted=players.filter(player=>possessedVotes[player.id]).length,total=players.length||4;
+      possessedRoundNumber.textContent=`${possessedGameRound}/${possessedRoundLimit}`;
+      possessedVoteCount.textContent=`${voted}/${total}`;
+      const {scores,winners}=possessedScoreLeaders(players);
+      possessedLeaderName.textContent=winners.length?winners.join(", "):"-";
+      possessedScoreboard.innerHTML=scores.length?scores.map(item=>`<div class="possessed-score-row${winners.includes(item.player.name)?" winner":""}"><span class="possessed-score-name">${escapeHtml(item.player.name)}</span><span class="possessed-score-value">${item.score}</span></div>`).join(""):`<div class="wall-empty">Aucun joueur pour le moment.</div>`;
+      const localId=possessedLocalPlayerId(),canManage=playMode!=="room"||possessedIsHost,votingOpen=players.length&&(!possessedRoundResolved)&&(playMode==="room"?possessedOnlineStarted:!!possessedCurrentPossessedId);
+      if(possessedRoundLimitInput){possessedRoundLimitInput.value=String(possessedRoundLimit);possessedRoundLimitInput.disabled=!canManage||possessedGameRound>1||possessedOnlineStarted}
+      possessedVoteNote.textContent=!players.length?possessedText("Distribue les rôles pour ouvrir le vote.","Assign roles to unlock voting."):possessedGameFinished()?possessedText("Partie terminée. Le gagnant est affiché dans le score cumulé.","Game over. The winner is shown in the scoreboard."):possessedRoundResolved?possessedText("Manche calculée. Lance une nouvelle manche pour revoter.","Round scored. Start a new round to vote again."):votingOpen?possessedText("Chaque joueur vote pour la personne qu'il pense Possédée.","Each player votes for who they think is Possessed."):possessedText("En attente de la distribution des rôles.","Waiting for role assignment.");
+      possessedVoteGrid.innerHTML=players.length?players.map(voter=>{
+        const currentVote=possessedVotes[voter.id],canVote=votingOpen&&(playMode!=="room"||voter.id===localId);
+        const revealVote=playMode!=="room"||possessedRoundResolved||possessedIsHost||voter.id===localId;
+        const status=currentVote?(revealVote?possessedText(`vote: ${possessedPlayerName(currentVote,players)}`,`vote: ${possessedPlayerName(currentVote,players)}`):possessedText("a voté","voted")):possessedText("en attente","waiting");
+        return `<div class="possessed-vote-row"><div class="possessed-vote-title"><span>${escapeHtml(voter.name)}</span><span>${escapeHtml(status)}</span></div><div class="possessed-vote-options">${players.map(target=>`<button class="possessed-vote-btn${currentVote===target.id&&revealVote?" selected":""}" type="button" data-voter="${escapeHtml(voter.id)}" data-target="${escapeHtml(target.id)}" ${canVote?"":"disabled"}>${escapeHtml(target.name)}</button>`).join("")}</div></div>`
+      }).join(""):`<div class="wall-empty">Le vote apparaitra après la distribution.</div>`;
+      possessedVoteGrid.querySelectorAll(".possessed-vote-btn:not(:disabled)").forEach(button=>button.addEventListener("click",()=>submitPossessedVote(button.dataset.voter,button.dataset.target)));
+      possessedGhostCorrect.disabled=!canManage||possessedRoundResolved;possessedDiedEarly.disabled=!canManage||possessedRoundResolved;
+      possessedScoreRound.disabled=!canManage||possessedRoundResolved||!players.length||(playMode==="room"?!possessedCurrentPossessedId:!possessedCurrentPossessedId);
+      possessedNextRound.disabled=!canManage||possessedGameRound>=possessedRoundLimit;
+      possessedNextRound.textContent=possessedGameRound>=possessedRoundLimit?possessedText("Limite atteinte","Limit reached"):possessedText("Nouvelle manche","Next round");
+      possessedResetScores.disabled=!canManage;
+      possessedRoundResult.hidden=!possessedRoundSummary;
+      possessedRoundResult.innerHTML=possessedRoundSummary
+    }
+    function submitPossessedVote(voterId,targetId){
+      const players=possessedRoundPlayers();
+      if(possessedRoundResolved||!players.some(player=>player.id===voterId)||!players.some(player=>player.id===targetId))return;
+      if(playMode==="room"&&!possessedIsHost){
+        const ownId=possessedLocalPlayerId();if(voterId!==ownId)return;
+        possessedVotes[ownId]=targetId;renderPossessedGamePanel();sendRoomMessage({type:"possessed-vote",voterId:ownId,targetId});return
+      }
+      possessedVotes[voterId]=targetId;renderPossessedGamePanel();broadcastPossessedPublicState()
+    }
+    function handlePossessedVote(data,peerId){
+      if(!possessedIsHost||possessedRoundResolved)return;
+      const voterId=peerId||data.voterId,targetId=data.targetId,players=possessedRoundPlayers();
+      if(!players.some(player=>player.id===voterId)||!players.some(player=>player.id===targetId))return;
+      possessedVotes[voterId]=targetId;renderPossessedGamePanel();broadcastPossessedPublicState()
+    }
+    function beginPossessedRoundRoles(players,roleById){
+      resetPossessedRoundProgress(false);possessedCurrentRoles={};possessedCurrentPossessedId=null;
+      players.forEach(player=>{const role=roleById[player.id]||"investigator";possessedCurrentRoles[player.id]=role;if(role==="possessed")possessedCurrentPossessedId=player.id});
+      ensurePossessedScores(players);renderPossessedGamePanel();broadcastPossessedPublicState()
+    }
+    function scorePossessedRound(){
+      const players=possessedRoundPlayers();if(!players.length||!possessedCurrentPossessedId)return;
+      ensurePossessedScores(players);
+      const counts={};Object.values(possessedVotes).forEach(targetId=>{if(players.some(player=>player.id===targetId))counts[targetId]=(counts[targetId]||0)+1});
+      const maxVotes=Math.max(0,...Object.values(counts)),topIds=Object.keys(counts).filter(id=>counts[id]===maxVotes&&maxVotes>0),accusedId=topIds.length===1?topIds[0]:null;
+      const discovered=accusedId===possessedCurrentPossessedId,ghostOk=!!possessedGhostCorrect.checked,diedEarly=!!possessedDiedEarly.checked,deltas={};
+      players.forEach(player=>{deltas[player.id]=ghostOk?1:0});
+      if(discovered)players.filter(player=>player.id!==possessedCurrentPossessedId).forEach(player=>{deltas[player.id]+=2});
+      else if(!diedEarly)deltas[possessedCurrentPossessedId]+=3;
+      if(diedEarly)deltas[possessedCurrentPossessedId]=0;
+      players.forEach(player=>{possessedScores[player.id]=(Number(possessedScores[player.id])||0)+deltas[player.id]});
+      const accusedText=accusedId?possessedPlayerName(accusedId,players):(topIds.length>1?possessedText("égalité","tie"):possessedText("aucun vote","no vote"));
+      const possessedName=possessedPlayerName(possessedCurrentPossessedId,players);
+      const deltaText=players.map(player=>`${escapeHtml(player.name)} ${deltas[player.id]>=0?"+":""}${deltas[player.id]}`).join(" / ");
+      const outcomeLines=[];
+      outcomeLines.push(discovered?possessedText("Le Possédé est découvert : +2 pour chaque Enquêteur.","The Possessed was found: +2 for each Investigator."):possessedText("Le Possédé n'est pas découvert.","The Possessed was not found."));
+      if(!discovered&&!diedEarly)outcomeLines.push(possessedText("Possédé non découvert : +3 pour lui.","Undiscovered Possessed: +3 for them."));
+      if(diedEarly)outcomeLines.push(possessedText("Le Possédé est mort avant ses deux corruptions : il marque 0 point sur cette manche.","The Possessed died before two corruptions: they score 0 for this round."));
+      if(ghostOk)outcomeLines.push(possessedText("Fantôme correct : +1 pour tous.","Correct ghost: +1 for everyone."));
+      if(possessedGameRound>=possessedRoundLimit){const leaders=possessedScoreLeaders(players).winners;outcomeLines.push(possessedText(`Partie terminée après ${possessedRoundLimit} manche(s). Gagnant : ${leaders.length?leaders.join(", "):"aucun"}.`,`Game over after ${possessedRoundLimit} round(s). Winner: ${leaders.length?leaders.join(", "):"none"}.`))}
+      possessedRoundSummary=`<strong>Manche ${possessedGameRound}</strong><br>Vote final : ${escapeHtml(accusedText)}. Le Possédé était ${escapeHtml(possessedName)}.<br>${outcomeLines.join("<br>")}<br><strong>Points :</strong> ${deltaText}`;
+      possessedRoundResolved=true;renderPossessedGamePanel();broadcastPossessedPublicState()
+    }
+    function nextPossessedRound(){
+      if(playMode==="room"&&!possessedIsHost)return;
+      if(possessedGameRound>=possessedRoundLimit)return;
+      possessedGameRound++;resetPossessedRoundProgress(true);
+      if(playMode==="room"){possessedOnlineStarted=false;possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";clearPossessedOwnRole();broadcastPossessedLobby();broadcastPossessedPublicState()}
+      else{possessedLocalStage.hidden=true}
+      renderPossessedGamePanel()
+    }
+    function resetPossessedScores(){
+      if(playMode==="room"&&!possessedIsHost)return;
+      possessedGameRound=1;possessedScores={};resetPossessedRoundProgress(true);
+      if(playMode==="room"){possessedOnlineStarted=false;possessedDistributionRound=0;clearPossessedOwnRole();broadcastPossessedLobby();broadcastPossessedPublicState()}
+      else{possessedLocalAssignments=[];possessedLocalStage.hidden=true}
+      renderPossessedGamePanel()
+    }
+    function updatePossessedRoundLimit(){
+      if(playMode==="room"&&!possessedIsHost)return;
+      possessedRoundLimit=possessedClampRoundLimit(possessedRoundLimitInput.value);
+      renderPossessedGamePanel();broadcastPossessedPublicState()
     }
     function renderPossessedLocalNames(){
       const count=Number(possessedLocalCount.value)||4,previous=[...possessedLocalNames.querySelectorAll("input")].map(input=>input.value);
@@ -2650,6 +2865,18 @@
       const description=isPossessed?possessedText("Garde ton rôle secret. Aide l’équipe à identifier le fantôme tout en réalisant discrètement deux corruptions différentes.","Keep your role secret. Help the team identify the ghost while secretly completing two different corruptions."):possessedText("Tu n’es pas le Possédé. Identifie le fantôme, observe les comportements suspects et désigne le Possédé à la fin.","You are not the Possessed. Identify the ghost, watch for suspicious behavior and name the Possessed at the end.");
       return `<div class="possessed-role-card ${isPossessed?"possessed":"investigator"}"><div class="possessed-role-icon" aria-hidden="true">${isPossessed?"😈":"🔦"}</div><p class="possessed-role-title">${escapeHtml(title)}</p><p class="possessed-role-text">${escapeHtml(description)}</p></div>`
     }
+    function renderPossessedPrivateRole(){
+      const visible=playMode==="room"&&possessedOwnRole;
+      possessedPrivateRolePanel.hidden=!visible;
+      possessedPrivateRole.innerHTML=visible?createRoleCard(possessedOwnRole):""
+    }
+    function setPossessedOwnRole(role,name=""){
+      possessedOwnRole=role;possessedOwnRoleName=name||"";
+      renderPossessedPrivateRole();showPossessedRolePopup(role,name)
+    }
+    function clearPossessedOwnRole(){
+      possessedOwnRole=null;possessedOwnRoleName="";renderPossessedPrivateRole()
+    }
     function showPossessedRolePopup(role,name=""){
       possessedRolePopupTitle.textContent=name?possessedText(`Rôle de ${name}`,`${name}'s role`):possessedText("Ton rôle","Your role");
       possessedRolePopupBody.innerHTML=createRoleCard(role);
@@ -2660,7 +2887,9 @@
       const names=[...possessedLocalNames.querySelectorAll("input")].map((input,index)=>input.value.trim()||possessedText(`Joueur ${index+1}`,`Player ${index+1}`));
       if(names.length!==4)return;
       const roles=secureShuffle(["possessed",...Array(names.length-1).fill("investigator")]);
-      possessedLocalAssignments=names.map((name,index)=>({name,role:roles[index]}));possessedLocalIndex=0;possessedLocalRevealed=false;possessedLocalStage.hidden=false;renderLocalPossessedStage();possessedLocalStage.scrollIntoView({behavior:"smooth",block:"center"})
+      possessedLocalAssignments=names.map((name,index)=>({name,role:roles[index]}));possessedLocalIndex=0;possessedLocalRevealed=false;possessedLocalStage.hidden=false;
+      beginPossessedRoundRoles(possessedLocalAssignments.map((assignment,index)=>({id:`local-${index}`,name:assignment.name,host:index===0})),Object.fromEntries(possessedLocalAssignments.map((assignment,index)=>[`local-${index}`,assignment.role])));
+      renderLocalPossessedStage();possessedLocalStage.scrollIntoView({behavior:"smooth",block:"center"})
     }
     function renderLocalPossessedStage(){
       if(!possessedLocalAssignments.length)return;
@@ -2717,9 +2946,9 @@
         possessedRedrawOnline.hidden=!possessedOnlineStarted;
         possessedRedrawOnline.disabled=!validCount;
         possessedRedrawOnline.textContent=possessedText(`Redistribuer les rôles aux ${count} joueurs`,`Reassign roles for all ${count} players`);
-        renderChallengeRoomGate()
+        renderChallengeRoomGate();renderPossessedGamePanel()
       }else{
-        possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;possessedHostRoomInfo.hidden=true;renderChallengeRoomGate()
+        possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;possessedHostRoomInfo.hidden=true;renderChallengeRoomGate();renderPossessedGamePanel()
       }
     }
     function broadcastPossessedLobby(){
@@ -2731,7 +2960,7 @@
       possessedConnections.forEach(connection=>{try{connection.close()}catch(error){}});possessedConnections.clear();
       if(possessedHostConnection){try{possessedHostConnection.close()}catch(error){}possessedHostConnection=null}
       if(possessedPeer){try{possessedPeer.destroy()}catch(error){}possessedPeer=null}
-      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";currentRoomChallenge=null;possessedGuestRoomPanelClosed=false;possessedOnlineStarted=false;possessedDistributionRound=0;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;closePossessedRolePopup();renderChallengeRoomGate();
+      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";currentRoomChallenge=null;possessedGuestRoomPanelClosed=false;possessedOnlineStarted=false;possessedDistributionRound=0;resetPossessedRoundProgress(true);possessedScores={};possessedGameRound=1;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;clearPossessedOwnRole();closePossessedRolePopup();renderChallengeRoomGate();renderPossessedGamePanel();
       if(showSetup){showPossessedOnlineSetup();setPossessedOnlineStatus("En attente…","Waiting…")}
     }
     function plog(){console.log("[possessed]",...arguments)}
@@ -2740,12 +2969,12 @@
       plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
         if(!data)return;
-        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer)}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}return}
+        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer);if(data.challenge==="possessed")broadcastPossessedPublicState()}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}else if(data.type==="possessed-vote")handlePossessedVote(data,connection.peer);return}
         if(data.type!=="join")return;
         if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
         joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
       });
-      connection.on("close",()=>{plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);broadcastPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
+      connection.on("close",()=>{plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);delete possessedVotes[connection.peer];delete possessedScores[connection.peer];broadcastPossessedLobby();broadcastPossessedPublicState();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
       connection.on("error",error=>{console.warn("[possessed] hôte: erreur connexion",error&&error.type,error)})
     }
     function createPossessedRoom(){
@@ -2761,9 +2990,10 @@
       if(!data)return;
       plog("invité: message reçu de l’hôte →",data.type,data.type==="reject"?("raison="+data.reason):"");
       if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;if(!possessedIsHost&&!possessedGuestRoomPanelClosed&&possessedPlayers.length){if(topRoomMenu)topRoomMenu.open=false;possessedGuestRoomPanelClosed=true}renderPossessedLobby();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`)}
-      else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";showPossessedRolePopup(data.role);setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.")}
+      else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";setPossessedOwnRole(data.role);renderPossessedGamePanel();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.")}
       else if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}
       else if(data.type==="challenge-state")applyRoomChallengeState(data);
+      else if(data.type==="possessed-state")applyPossessedPublicState(data.state);
       else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
     function joinPossessedRoom(){
@@ -2778,7 +3008,10 @@
     function startPossessedOnlineGame(){
       const count=possessedPlayers.length;if(!possessedIsHost||count!==4)return;
       possessedOnlineStarted=true;possessedDistributionRound++;const shuffled=secureShuffle(possessedPlayers.map(player=>player.id)),possessedId=shuffled[0];
-      possessedPlayers.forEach(player=>{const role=player.id===possessedId?"possessed":"investigator";if(player.host){possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";showPossessedRolePopup(role,player.name)}else{const connection=possessedConnections.get(player.id);if(connection&&connection.open)connection.send({type:"role",role,round:possessedDistributionRound})}});
+      const roleById={};
+      possessedPlayers.forEach(player=>{const role=player.id===possessedId?"possessed":"investigator";if(player.host){possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";setPossessedOwnRole(role,player.name)}else{const connection=possessedConnections.get(player.id);if(connection&&connection.open)connection.send({type:"role",role,round:possessedDistributionRound})}});
+      possessedPlayers.forEach(player=>{roleById[player.id]=player.id===possessedId?"possessed":"investigator"});
+      beginPossessedRoundRoles(possessedPlayers,roleById);
       broadcastPossessedLobby();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.");renderPossessedLobby()
     }
     async function copyPossessedInvite(){
@@ -2792,7 +3025,7 @@
       if(saved)["possessed-host-name","possessed-join-name"].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=saved});
     }
     function prefillPossessedRoomFromUrl(){
-      const code=normalizeRoomCode(new URL(location.href).searchParams.get("possessedRoom"));
+      const code=possessedInviteCodeFromUrl();
       if(code){
         document.getElementById("possessed-join-code").value=code;
         setPlayMode("room");
@@ -2863,6 +3096,12 @@
     document.getElementById("possessed-host-name").addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();createPossessedRoom()}});
     document.getElementById("possessed-start-online").addEventListener("click",startPossessedOnlineGame);
     document.getElementById("possessed-redraw-online").addEventListener("click",startPossessedOnlineGame);
+    possessedGhostCorrect.addEventListener("change",()=>{renderPossessedGamePanel();broadcastPossessedPublicState()});
+    possessedDiedEarly.addEventListener("change",()=>{renderPossessedGamePanel();broadcastPossessedPublicState()});
+    possessedRoundLimitInput.addEventListener("change",updatePossessedRoundLimit);
+    possessedScoreRound.addEventListener("click",scorePossessedRound);
+    possessedNextRound.addEventListener("click",nextPossessedRound);
+    possessedResetScores.addEventListener("click",()=>{if(confirm("Réinitialiser les scores du Possédé ?"))resetPossessedScores()});
     document.getElementById("possessed-role-popup-close").addEventListener("click",closePossessedRolePopup);
     document.getElementById("possessed-role-popup-x").addEventListener("click",closePossessedRolePopup);
     possessedRolePopup.addEventListener("click",event=>{if(event.target===possessedRolePopup)closePossessedRolePopup()});
@@ -3144,6 +3383,7 @@
     renderGhostMemo();
     renderMediaChallenge();
     renderPossessedLocalNames();
+    renderPossessedGamePanel();
     relocateRoomControls();
     loadPossessedName();
     loadPlayMode();
