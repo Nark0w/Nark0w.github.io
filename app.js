@@ -487,11 +487,30 @@ const phasmophobiaObjects=[
     ];
     let wallMalusOrder=wallMaluses.map((_,index)=>index),wallOpenedIndexes=[],wallRoundStartIndex=0,wallRound=1,wallWins=0,wallOutcome=null,wallStatusText="Ouvre 2 cases avant de lancer la première partie.";
 
+    const cursedMaps=[
+      {id:"tanglewood",name:"6 Tanglewood Drive",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/a/a4/Tanglewood_Front.png/revision/latest/scale-to-width-down/640?cb=20260303141434"},
+      {id:"edgefield",name:"42 Edgefield Road",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/8/80/Edgefield_first_floor_hallway.png/revision/latest/scale-to-width-down/640?cb=20240112130531"},
+      {id:"ridgeview",name:"10 Ridgeview Court",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/1/1e/Ridgeview_living_room.png/revision/latest/scale-to-width-down/640?cb=20240112130102"},
+      {id:"nells-diner",name:"Nell's Diner",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/b/bc/Nell%27s_Diner.png/revision/latest/scale-to-width-down/640?cb=20251111161803"},
+      {id:"grafton",name:"Grafton Farmhouse",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/1/1c/Grafton_farmhouse_entrance_brightened.webp/revision/latest/scale-to-width-down/640?cb=20250812232937"},
+      {id:"willow",name:"13 Willow Street",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/0/0c/Willow_new.png/revision/latest/scale-to-width-down/640?cb=20240112130341"},
+      {id:"camp-woodwind",name:"Camp Woodwind",size:"small",image:"https://static.wikia.nocookie.net/phasmophobia/images/7/7b/Camp_woodwind.png/revision/latest/scale-to-width-down/640?cb=20240112131010"},
+      {id:"point-hope",name:"Point Hope",size:"medium",image:"https://static.wikia.nocookie.net/phasmophobia/images/0/05/Phope_sunrise.jpg/revision/latest/scale-to-width-down/640?cb=20240625133229"},
+      {id:"bleasdale",name:"Bleasdale Farmhouse",size:"medium",image:"https://static.wikia.nocookie.net/phasmophobia/images/a/a6/Bleasdalereworked.png/revision/latest/scale-to-width-down/640?cb=20250313110653"},
+      {id:"sunny-restricted",name:"Sunny Meadows Restricted",size:"medium",image:"https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752"},
+      {id:"prison",name:"Prison",size:"medium",image:"https://static.wikia.nocookie.net/phasmophobia/images/8/87/Prison_entrance.png/revision/latest/scale-to-width-down/640?cb=20240112131231"},
+      {id:"maple-lodge",name:"Maple Lodge Campsite",size:"medium",image:"https://static.wikia.nocookie.net/phasmophobia/images/9/9f/Maple-rework-main-shot.png/revision/latest/scale-to-width-down/640?cb=20240112125636"},
+      {id:"brownstone",name:"Brownstone High School",size:"large",image:"https://static.wikia.nocookie.net/phasmophobia/images/a/a5/High_school_updated2.png/revision/latest/scale-to-width-down/640?cb=20240112131538"},
+      {id:"sunny-meadows",name:"Sunny Meadows",size:"large",image:"https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752"}
+    ];
+    let cursedValidatedMaps=new Set();
+
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
     const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
     const wallRoundDisplay=document.getElementById("wall-round"),wallWinCountDisplay=document.getElementById("wall-win-count"),wallOpenCountDisplay=document.getElementById("wall-open-count"),wallNeededCountDisplay=document.getElementById("wall-needed-count"),wallOpenRandomButton=document.getElementById("wall-open-random"),wallWinRoundButton=document.getElementById("wall-win-round"),wallLoseButton=document.getElementById("wall-lose-challenge"),wallResetButton=document.getElementById("wall-reset"),wallOpenAllDebugButton=document.getElementById("wall-open-all-debug"),wallStatus=document.getElementById("wall-status"),wallGrid=document.getElementById("wall-grid"),wallActiveList=document.getElementById("wall-active-list");
+    const themeSelect=document.getElementById("theme-select"),cursedMapGrid=document.getElementById("cursed-map-grid"),cursedProgressCount=document.getElementById("cursed-progress-count"),cursedProgressLabel=document.getElementById("cursed-progress-label"),cursedProgressBar=document.getElementById("cursed-progress-bar"),cursedResetButton=document.getElementById("cursed-reset");
     const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),topRoomPlayers=document.getElementById("top-room-players"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
@@ -504,6 +523,13 @@ const phasmophobiaObjects=[
       "Règles":"Rules",
       "Conditions de victoire":"Win conditions",
       "Thème":"Theme",
+      "Actuel":"Current",
+      "Evidence":"Evidence",
+      "Validation des maps":"Map validation",
+      "maps validees":"maps validated",
+      "maps validées":"maps validated",
+      "Liste et images des maps : Phasmophobia Wiki / Fandom. Une connexion Internet est necessaire pour afficher les images.":"Map list and images: Phasmophobia Wiki / Fandom. An Internet connection is required to display images.",
+      "Liste et images des maps : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.":"Map list and images: Phasmophobia Wiki / Fandom. An Internet connection is required to display images.",
       "Médias":"Media",
       "1 partie":"1 run",
       "Rôles":"Roles",
@@ -955,6 +981,7 @@ const phasmophobiaObjects=[
       applyLanguage();
       renderGhostMemo();
       renderMediaChallenge();
+      renderCursedRun();
       refreshMediaResultLanguage();
       refreshPossessedLanguage();
       if(mediaPopup.classList.contains("open")&&mediaOutcome)showMediaOutcome(mediaOutcome)
@@ -983,6 +1010,16 @@ const phasmophobiaObjects=[
         observeLanguageChanges()
       });
       observeLanguageChanges()
+    }
+    function setTheme(theme){
+      const value=theme==="evidence"?"evidence":"classic";
+      document.body.dataset.theme=value;
+      if(themeSelect)themeSelect.value=value;
+      try{localStorage.setItem("phasmo-theme",value)}catch(error){}
+    }
+    function initializeTheme(){
+      let saved="classic";try{saved=localStorage.getItem("phasmo-theme")||"classic"}catch(error){}
+      setTheme(saved)
     }
     function updateDocumentTitle(){
       let page="hub";
@@ -1059,7 +1096,7 @@ const phasmophobiaObjects=[
     function openCursedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#cursed-run"){location.hash="cursed-run";return}
       if(!allowChallengeOpen())return;
-      hideAllViews();cursedChallengeView.hidden=false;updateDocumentTitle();window.scrollTo(0,0)
+      hideAllViews();cursedChallengeView.hidden=false;renderCursedRun();updateDocumentTitle();window.scrollTo(0,0)
     }
     function openPossessedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#le-possede"){location.hash="le-possede";return}
@@ -1267,6 +1304,56 @@ const phasmophobiaObjects=[
     }
     function closeMediaPopup(){mediaPopup.classList.remove("open","win","loss");mediaPopup.hidden=true;scheduleRoomChallengeSync("media")}
 
+    function cursedSizeLabel(size){
+      const labels={fr:{small:"Petite",medium:"Moyenne",large:"Grande"},en:{small:"Small",medium:"Medium",large:"Large"}};
+      return labels[currentLanguage][size]||size
+    }
+    function saveCursedProgress(){try{localStorage.setItem("phasmo-cursed-maps",JSON.stringify([...cursedValidatedMaps]))}catch(error){}}
+    function loadCursedProgress(){
+      try{
+        const saved=JSON.parse(localStorage.getItem("phasmo-cursed-maps")||"[]");
+        cursedValidatedMaps=new Set(Array.isArray(saved)?saved.filter(id=>cursedMaps.some(map=>map.id===id)):[])
+      }catch(error){cursedValidatedMaps=new Set()}
+    }
+    function setCursedProgress(ids,save=true){
+      cursedValidatedMaps=new Set((Array.isArray(ids)?ids:[]).filter(id=>cursedMaps.some(map=>map.id===id)));
+      if(save)saveCursedProgress();
+      renderCursedRun()
+    }
+    function toggleCursedMap(id){
+      if(cursedValidatedMaps.has(id))cursedValidatedMaps.delete(id);
+      else cursedValidatedMaps.add(id);
+      saveCursedProgress();renderCursedRun();scheduleRoomChallengeSync("cursed")
+    }
+    function resetCursedRun(){
+      cursedValidatedMaps.clear();saveCursedProgress();renderCursedRun();scheduleRoomChallengeSync("cursed")
+    }
+    function renderCursedRun(){
+      if(!cursedMapGrid)return;
+      const count=cursedValidatedMaps.size,total=cursedMaps.length,complete=count===total;
+      if(cursedProgressCount)cursedProgressCount.textContent=`${count} / ${total}`;
+      if(cursedProgressLabel)cursedProgressLabel.textContent=currentLanguage==="en"?(complete?"run complete":"maps validated"):(complete?"défi validé":"maps validées");
+      if(cursedProgressBar)cursedProgressBar.style.width=`${total?count/total*100:0}%`;
+      cursedMapGrid.innerHTML=cursedMaps.map(map=>{
+        const validated=cursedValidatedMaps.has(map.id),action=currentLanguage==="en"?(validated?"Undo validation":"Validate map"):(validated?"Annuler validation":"Valider la map");
+        const alt=currentLanguage==="en"?`${map.name} map image`:`Image de la map ${map.name}`;
+        const note=currentLanguage==="en"?"Bone, correct ghost and survivor confirmed.":"Os, entité correcte et survivant confirmés.";
+        return `<article class="cursed-map-card${validated?" validated":""}">
+          <div class="cursed-map-image">
+            <img src="${map.image}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)">
+            <span class="cursed-map-size">${escapeHtml(cursedSizeLabel(map.size))}</span>
+            <span class="cursed-map-check" aria-hidden="true">${validated?"✓":"-"}</span>
+          </div>
+          <div class="cursed-map-body">
+            <h3>${escapeHtml(map.name)}</h3>
+            <p>${escapeHtml(note)}</p>
+            <button class="cursed-map-action ${validated?"good-btn":"warning-btn"}" type="button" data-cursed-map="${escapeHtml(map.id)}">${escapeHtml(action)}</button>
+          </div>
+        </article>`
+      }).join("");
+      cursedMapGrid.querySelectorAll("[data-cursed-map]").forEach(button=>button.addEventListener("click",()=>toggleCursedMap(button.dataset.cursedMap)))
+    }
+
     function wallMalusAt(index){return wallMaluses[wallMalusOrder[index]??index]||wallMaluses[index%wallMaluses.length]}
     function wallHasActiveMalus(title){return wallOpenedIndexes.some(index=>wallMalusAt(index).title===title)}
     function wallTargetWins(){return wallHasActiveMalus("1 Round en plus")?6:5}
@@ -1360,7 +1447,6 @@ const phasmophobiaObjects=[
       if(!currentRoomChallenge||!connection||!connection.open)return;
       connection.send({type:"challenge-route",challenge:currentRoomChallenge});
       if(currentRoomChallenge==="possessed")connection.send({type:"possessed-state",state:capturePossessedPublicState()});
-      else if(currentRoomChallenge==="cursed")return;
       else connection.send({type:"challenge-state",challenge:currentRoomChallenge,state:captureRoomChallengeState(currentRoomChallenge)})
     }
     function pauseTarotIfLeavingChallenge(nextChallenge){if(currentRoomChallenge==="tarot"&&nextChallenge!=="tarot")pauseTimer()}
@@ -1376,7 +1462,7 @@ const phasmophobiaObjects=[
       if(playMode==="room")pauseTarotIfLeavingChallenge(challenge);
       if(playMode==="room")rememberRoomChallenge(challenge);
       applyRoomChallengeRoute(challenge);
-      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge==="possessed")broadcastPossessedPublicState();else if(challenge!=="cursed")sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
+      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge==="possessed")broadcastPossessedPublicState();else sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
     }
     function objectByName(name){return allObjects.find(obj=>obj.name===name)||phasmophobiaObjects.find(obj=>obj.name===name)||null}
     function objectsFromNames(names){return (Array.isArray(names)?names:[]).map(objectByName).filter(Boolean)}
@@ -1412,10 +1498,12 @@ const phasmophobiaObjects=[
       wallRound=Number(state.round)||1;wallWins=Number(state.wins)||0;wallRoundStartIndex=Number.isFinite(Number(state.roundStart))?Number(state.roundStart):Math.max(0,(wallRound-1)*2);wallOutcome=state.outcome||null;wallStatusText=state.status||"Ouvre 2 cases avant de lancer la partie.";
       renderWallChallenge()
     }
-    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():captureTarotRoomState())}
+    function captureCursedRoomState(){return {validated:[...cursedValidatedMaps]}}
+    function applyCursedRoomState(state){if(!state)return;setCursedProgress(state.validated||[],true)}
+    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():captureTarotRoomState()))}
     function applyRoomChallengeState(message){
       applyingRoomState=true;
-      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else applyTarotRoomState(message.state)}
+      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else applyTarotRoomState(message.state)}
       finally{applyingRoomState=false}
     }
     function scheduleRoomChallengeSync(challenge){
@@ -1781,6 +1869,7 @@ const phasmophobiaObjects=[
     streamerMode.addEventListener("change",updateModeDisplay);
     languageInputs.forEach(input=>input.addEventListener("change",()=>setLanguage(input.checked?"en":"fr")));
     document.querySelectorAll(".lang-btn").forEach(button=>button.addEventListener("click",()=>setLanguage(button.dataset.lang)));
+    if(themeSelect)themeSelect.addEventListener("change",()=>setTheme(themeSelect.value));
     document.getElementById("ph-home-btn").addEventListener("click",()=>showHub(true));
     document.getElementById("ph-back-btn").addEventListener("click",goBack);
     document.getElementById("open-challenges").addEventListener("click",()=>showChallengeSelection(true));
@@ -1840,6 +1929,7 @@ const phasmophobiaObjects=[
     wallLoseButton.addEventListener("click",wallLoseChallenge);
     wallResetButton.addEventListener("click",()=>{if(confirm("Réinitialiser le Mur de la mort ? Les cases ouvertes et la progression seront perdues."))resetWallChallenge()});
     wallOpenAllDebugButton.addEventListener("click",wallOpenAllDebug);
+    if(cursedResetButton)cursedResetButton.addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Reset the Cursed Run map progress?":"Réinitialiser la progression des maps Cursed Run ?"))resetCursedRun()});
     document.getElementById("media-popup-close").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-x").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-reset").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Restart the Media Surprise challenge?":"Recommencer le défi Média Surprise ?"))resetMediaChallenge()});
@@ -2098,13 +2188,16 @@ const phasmophobiaObjects=[
     }
     resetGame();
     resetWallChallenge();
+    loadCursedProgress();
     renderGhostMemo();
     renderMediaChallenge();
+    renderCursedRun();
     renderPossessedLocalNames();
     renderPossessedGamePanel();
     relocateRoomControls();
     loadPossessedName();
     loadPlayMode();
+    initializeTheme();
     initializeLanguage();
     applyRoute();
     renderChallengeRoomGate();
