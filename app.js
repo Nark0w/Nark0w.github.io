@@ -504,13 +504,22 @@ const phasmophobiaObjects=[
       {id:"sunny-meadows",name:"Sunny Meadows",size:"large",image:"https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752"}
     ];
     let cursedValidatedMaps=new Set();
+    const hunterDifficultySettings={
+      noob:{fr:"Noob",en:"Noob",protection:300,hunts:5},
+      easy:{fr:"Facile",en:"Easy",protection:240,hunts:4},
+      normal:{fr:"Normal",en:"Normal",protection:180,hunts:3},
+      hard:{fr:"Difficile",en:"Hard",protection:120,hunts:2},
+      pro:{fr:"Pro",en:"Pro",protection:60,hunts:1}
+    };
+    let hunterState={teamA:"Équipe A",teamB:"Équipe B",roundLimit:4,difficulty:"normal",round:1,scores:{A:0,B:0},history:[],outcome:null,status:"Prêt à lancer la manche.",investigatorChoice:"",hunterChoice:"",actualGhost:"",investigatorLocked:false,hunterLocked:false,evidenceAnnounced:false,itemsRemoved:false,huntsCompleted:false,roundScored:false,lastRoundResult:"En attente des votes verrouillés."};
 
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
-    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
+    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),hunterChallengeView=document.getElementById("hunter-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
     const wallRoundDisplay=document.getElementById("wall-round"),wallWinCountDisplay=document.getElementById("wall-win-count"),wallOpenCountDisplay=document.getElementById("wall-open-count"),wallNeededCountDisplay=document.getElementById("wall-needed-count"),wallOpenRandomButton=document.getElementById("wall-open-random"),wallWinRoundButton=document.getElementById("wall-win-round"),wallLoseButton=document.getElementById("wall-lose-challenge"),wallResetButton=document.getElementById("wall-reset"),wallOpenAllDebugButton=document.getElementById("wall-open-all-debug"),wallStatus=document.getElementById("wall-status"),wallGrid=document.getElementById("wall-grid"),wallActiveList=document.getElementById("wall-active-list");
     const themeSelect=document.getElementById("theme-select"),cursedMapGrid=document.getElementById("cursed-map-grid"),cursedProgressCount=document.getElementById("cursed-progress-count"),cursedProgressLabel=document.getElementById("cursed-progress-label"),cursedProgressBar=document.getElementById("cursed-progress-bar"),cursedResetButton=document.getElementById("cursed-reset");
+    const hunterTeamAInput=document.getElementById("hunter-team-a"),hunterTeamBInput=document.getElementById("hunter-team-b"),hunterRoundLimitSelect=document.getElementById("hunter-round-limit"),hunterDifficultySelect=document.getElementById("hunter-difficulty"),hunterRoundDisplay=document.getElementById("hunter-round-display"),hunterProtectionTime=document.getElementById("hunter-protection-time"),hunterHuntCount=document.getElementById("hunter-hunt-count"),hunterRoleSummary=document.getElementById("hunter-role-summary"),hunterTeamALabel=document.getElementById("hunter-team-a-label"),hunterTeamBLabel=document.getElementById("hunter-team-b-label"),hunterScoreA=document.getElementById("hunter-score-a"),hunterScoreB=document.getElementById("hunter-score-b"),hunterStatus=document.getElementById("hunter-status"),hunterLog=document.getElementById("hunter-log"),hunterEvidenceAnnounced=document.getElementById("hunter-evidence-announced"),hunterItemsRemoved=document.getElementById("hunter-items-removed"),hunterHuntsCompleted=document.getElementById("hunter-hunts-completed"),hunterInvestigatorChoice=document.getElementById("hunter-investigator-choice"),hunterHunterChoice=document.getElementById("hunter-hunter-choice"),hunterActualGhost=document.getElementById("hunter-actual-ghost"),hunterLockInvestigator=document.getElementById("hunter-lock-investigator"),hunterLockHunter=document.getElementById("hunter-lock-hunter"),hunterInvestigatorLock=document.getElementById("hunter-investigator-lock"),hunterHunterLock=document.getElementById("hunter-hunter-lock"),hunterScoreRound=document.getElementById("hunter-score-round"),hunterRoundResult=document.getElementById("hunter-round-result"),hunterNextRound=document.getElementById("hunter-next-round"),hunterAddOvertime=document.getElementById("hunter-add-overtime"),hunterUndo=document.getElementById("hunter-undo"),hunterReset=document.getElementById("hunter-reset");
     const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),topRoomPlayers=document.getElementById("top-room-players"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
@@ -523,7 +532,7 @@ const phasmophobiaObjects=[
       "Règles":"Rules",
       "Conditions de victoire":"Win conditions",
       "Thème":"Theme",
-      "Actuel":"Current",
+      "Default":"Default",
       "Evidence":"Evidence",
       "Validation des maps":"Map validation",
       "maps validees":"maps validated",
@@ -556,7 +565,7 @@ const phasmophobiaObjects=[
       "Victoire des Enquêteurs si l’identification est correcte. Victoire du Possédé si elle est fausse, ou si l’équipe échoue à conclure.":"Investigators win on a correct ID. The Possessed wins on a wrong ID, or if the team fails to conclude.",
       "Langue":"Language",
       "Dossier d’enquête — non officiel":"Case file — unofficial",
-      "Compagnon d’enquête":"Investigation companion",
+      "Challenge":"Challenge",
       "← Retour":"← Back",
       "Compagnon Phasmophobia":"Phasmophobia Companion",
       "Choisis une rubrique. Les défis, les mémos et toute la progression sont réunis dans un seul fichier HTML.":"Choose a section. Challenges, reference guides and all progress are contained in a single HTML file.",
@@ -982,6 +991,7 @@ const phasmophobiaObjects=[
       renderGhostMemo();
       renderMediaChallenge();
       renderCursedRun();
+      renderHunterChallenge();
       refreshMediaResultLanguage();
       refreshPossessedLanguage();
       if(mediaPopup.classList.contains("open")&&mediaOutcome)showMediaOutcome(mediaOutcome)
@@ -1027,6 +1037,7 @@ const phasmophobiaObjects=[
       else if(!mediaChallengeView.hidden)page="media";
       else if(!wallChallengeView.hidden)page="wall";
       else if(!cursedChallengeView.hidden)page="cursed";
+      else if(!hunterChallengeView.hidden)page="hunter";
       else if(!possessedChallengeView.hidden)page="possessed";
       else if(!funMemoView.hidden)page="funMemo";
       else if(!ghostMemoView.hidden)page="ghostMemo";
@@ -1036,9 +1047,11 @@ const phasmophobiaObjects=[
         fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Média Surprise - Phasmophobia",wall:"Mur de la mort - Phasmophobia",cursed:"Cursed Run - Phasmophobia",possessed:"Le Possédé - Phasmophobia"},
         en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Media Surprise - Phasmophobia",wall:"Wall of Death - Phasmophobia",cursed:"Cursed Run - Phasmophobia",possessed:"The Possessed - Phasmophobia"}
       };
+      titles.fr.hunter="Chasseur et enquêteur - Phasmophobia";
+      titles.en.hunter="Hunter and Investigator - Phasmophobia";
       document.title=titles[currentLanguage][page]
     }
-    function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
+    function hideAllViews(){[hubView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,hunterChallengeView,possessedChallengeView].forEach(view=>{view.hidden=true})}
     function currentRouteHash(){
       const hash=decodeURIComponent(location.hash||"").replace(/^#/,"");
       const lastHash=hash.split("#").filter(Boolean).pop()||hash;
@@ -1098,6 +1111,11 @@ const phasmophobiaObjects=[
       if(!allowChallengeOpen())return;
       hideAllViews();cursedChallengeView.hidden=false;renderCursedRun();updateDocumentTitle();window.scrollTo(0,0)
     }
+    function openHunterChallenge(updateHistory=true){
+      if(updateHistory&&location.hash!=="#chasseur-enqueteur"){location.hash="chasseur-enqueteur";return}
+      if(!allowChallengeOpen())return;
+      hideAllViews();hunterChallengeView.hidden=false;renderHunterChallenge();updateDocumentTitle();window.scrollTo(0,0)
+    }
     function openPossessedChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#le-possede"){location.hash="le-possede";return}
       if(!allowChallengeOpen())return;
@@ -1109,6 +1127,7 @@ const phasmophobiaObjects=[
       else if(route==="media-surprise")openMediaChallenge(false);
       else if(route==="mur-de-la-mort")openWallChallenge(false);
       else if(route==="cursed-run")openCursedChallenge(false);
+      else if(route==="chasseur-enqueteur")openHunterChallenge(false);
       else if(route==="le-possede")openPossessedChallenge(false);
       else if(route==="memo-ghosts")showGhostMemo(false);
       else if(route==="memo-fun")showFunMemo(false);
@@ -1123,7 +1142,7 @@ const phasmophobiaObjects=[
     }
     function goBack(){
       if(!ghostMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
-      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
+      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!hunterChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
       showHub(true)
     }
 
@@ -1354,6 +1373,157 @@ const phasmophobiaObjects=[
       cursedMapGrid.querySelectorAll("[data-cursed-map]").forEach(button=>button.addEventListener("click",()=>toggleCursedMap(button.dataset.cursedMap)))
     }
 
+    function hunterText(fr,en){return currentLanguage==="en"?en:fr}
+    function hunterDifficulty(){return hunterDifficultySettings[hunterState.difficulty]||hunterDifficultySettings.normal}
+    function hunterFormatTime(seconds){const minutes=Math.floor(seconds/60),rest=seconds%60;return rest?`${minutes}:${String(rest).padStart(2,"0")}`:`${minutes} min`}
+    function hunterTeamName(team){return team==="A"?(hunterState.teamA||"Équipe A"):(hunterState.teamB||"Équipe B")}
+    function hunterInvestigatorTeam(){return hunterState.round%2===1?"A":"B"}
+    function hunterHunterTeam(){return hunterInvestigatorTeam()==="A"?"B":"A"}
+    function hunterGhostOptions(){return ghostHuntThresholds.map(ghost=>({value:ghost.fr,label:currentLanguage==="en"?ghost.en:ghost.fr}))}
+    function hunterGhostLabel(value){const ghost=ghostHuntThresholds.find(item=>item.fr===value||item.en===value);return ghost?(currentLanguage==="en"?ghost.en:ghost.fr):value}
+    function hunterSave(){try{localStorage.setItem("phasmo-hunter-state",JSON.stringify(hunterState))}catch(error){}}
+    function hunterNormalizeState(){
+      hunterState.roundLimit=Math.max(2,Math.min(20,Number(hunterState.roundLimit)||4));if(hunterState.roundLimit%2)hunterState.roundLimit++;
+      hunterState.round=Math.max(1,Math.min(hunterState.roundLimit,Number(hunterState.round)||1));
+      if(!hunterDifficultySettings[hunterState.difficulty])hunterState.difficulty="normal";
+      hunterState.scores={A:Number(hunterState.scores?.A)||0,B:Number(hunterState.scores?.B)||0};
+      hunterState.history=Array.isArray(hunterState.history)?hunterState.history:[];
+      ["investigatorChoice","hunterChoice","actualGhost","status","lastRoundResult"].forEach(key=>{hunterState[key]=hunterState[key]||""});
+      ["investigatorChoice","hunterChoice","actualGhost"].forEach(key=>{const ghost=ghostHuntThresholds.find(item=>item.fr===hunterState[key]||item.en===hunterState[key]);if(ghost)hunterState[key]=ghost.fr});
+      ["investigatorLocked","hunterLocked","evidenceAnnounced","itemsRemoved","huntsCompleted","roundScored"].forEach(key=>{hunterState[key]=Boolean(hunterState[key])})
+    }
+    function hunterLoad(){
+      try{
+        const saved=JSON.parse(localStorage.getItem("phasmo-hunter-state")||"null");
+        if(saved&&typeof saved==="object")hunterState={...hunterState,...saved}
+      }catch(error){}
+      hunterNormalizeState()
+    }
+    function hunterSync(){hunterSave();scheduleRoomChallengeSync("hunter")}
+    function hunterApplySetup(){
+      hunterState.teamA=(hunterTeamAInput?.value||"Équipe A").trim()||"Équipe A";
+      hunterState.teamB=(hunterTeamBInput?.value||"Équipe B").trim()||"Équipe B";
+      hunterState.roundLimit=Math.max(2,Number(hunterRoundLimitSelect?.value)||4);
+      if(hunterState.roundLimit%2)hunterState.roundLimit++;
+      hunterState.round=Math.min(hunterState.round,hunterState.roundLimit);
+      hunterState.difficulty=hunterDifficultySettings[hunterDifficultySelect?.value]?hunterDifficultySelect.value:"normal";
+      hunterState.outcome=null;hunterState.status=hunterText("Configuration mise à jour.","Setup updated.");
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterCurrentRoleLabel(team){return team===hunterInvestigatorTeam()?hunterText("Enquêteurs","Investigators"):hunterText("Chasseurs","Hunters")}
+    function hunterResetRoundInputs(){
+      hunterState.investigatorChoice="";hunterState.hunterChoice="";hunterState.actualGhost="";
+      hunterState.investigatorLocked=false;hunterState.hunterLocked=false;hunterState.evidenceAnnounced=false;hunterState.itemsRemoved=false;hunterState.huntsCompleted=false;hunterState.roundScored=false;
+      hunterState.lastRoundResult=hunterText("En attente des votes verrouillés.","Waiting for locked votes.")
+    }
+    function hunterLockInvestigatorChoice(){
+      if(hunterState.outcome||hunterState.roundScored)return;
+      if(!hunterState.evidenceAnnounced){alert(hunterText("Les enquêteurs doivent annoncer 2 preuves avant de verrouiller.","Investigators must announce 2 pieces of evidence before locking."));return}
+      if(!hunterState.investigatorChoice){alert(hunterText("Choisis une entité pour les enquêteurs.","Choose a ghost for the investigators."));return}
+      hunterState.investigatorLocked=true;hunterState.status=hunterText("Choix des enquêteurs verrouillé. L'autre équipe peut confirmer l'indicateur.","Investigator choice locked. The other team can confirm the indicator.");
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterLockHunterChoice(){
+      if(hunterState.outcome||hunterState.roundScored)return;
+      if(!hunterState.investigatorLocked){alert(hunterText("Verrouille d'abord le choix des enquêteurs.","Lock the investigator choice first."));return}
+      if(!hunterState.huntsCompleted){alert(hunterText("Confirme que les chasses sont terminées avant le vote des chasseurs.","Confirm hunts are complete before the hunter vote."));return}
+      if(!hunterState.hunterChoice){alert(hunterText("Choisis une entité pour les chasseurs.","Choose a ghost for the hunters."));return}
+      hunterState.hunterLocked=true;hunterState.status=hunterText("Choix des chasseurs verrouillé. Vous pouvez compter les points.","Hunter choice locked. You can score the round.");
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterScoreCurrentRound(){
+      if(hunterState.outcome||hunterState.roundScored)return;
+      if(!hunterState.investigatorLocked||!hunterState.hunterLocked){alert(hunterText("Les deux équipes doivent verrouiller leur choix.","Both teams must lock their choice."));return}
+      if(!hunterState.actualGhost){alert(hunterText("Sélectionne l'entité réelle.","Select the real ghost."));return}
+      const investigators=hunterInvestigatorTeam(),hunters=hunterHunterTeam();
+      let investigatorPoints=0,hunterPoints=0;
+      if(hunterState.investigatorChoice===hunterState.actualGhost)investigatorPoints+=3;
+      if(hunterState.hunterChoice===hunterState.actualGhost)hunterPoints+=3;
+      if(hunterState.evidenceAnnounced)investigatorPoints+=1;
+      if(hunterState.huntsCompleted)hunterPoints+=1;
+      hunterState.scores[investigators]+=investigatorPoints;
+      hunterState.scores[hunters]+=hunterPoints;
+      hunterState.roundScored=true;
+      const result=`${hunterText("Résultat","Result")} M${hunterState.round} - ${hunterTeamName(investigators)} +${investigatorPoints}, ${hunterTeamName(hunters)} +${hunterPoints}. ${hunterText("Entité réelle","Real ghost")} : ${hunterGhostLabel(hunterState.actualGhost)}.`;
+      hunterState.lastRoundResult=result;hunterState.status=result;
+      hunterState.history.unshift({round:hunterState.round,investigators,hunters,investigatorPoints,hunterPoints,actualGhost:hunterState.actualGhost,message:result});
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterUndoScore(){
+      if(!hunterState.history.length||hunterState.outcome)return;
+      const last=hunterState.history.shift();
+      if(last){hunterState.scores[last.investigators]=Math.max(0,hunterState.scores[last.investigators]-Number(last.investigatorPoints||0));hunterState.scores[last.hunters]=Math.max(0,hunterState.scores[last.hunters]-Number(last.hunterPoints||0))}
+      hunterState.roundScored=false;hunterState.status=hunterText("Score de manche annulé.","Round score undone.");hunterState.lastRoundResult=hunterText("Score annulé, vous pouvez recompter la manche.","Score undone; you can score the round again.");
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterFinishRound(){
+      if(hunterState.outcome)return;
+      if(!hunterState.roundScored){alert(hunterText("Compte les points avant de finir la manche.","Score the round before ending it."));return}
+      if(hunterState.round>=hunterState.roundLimit){
+        if(hunterState.scores.A>hunterState.scores.B){hunterState.outcome="A";hunterState.status=hunterText(`${hunterTeamName("A")} gagne le duel.`,`${hunterTeamName("A")} wins the duel.`)}
+        else if(hunterState.scores.B>hunterState.scores.A){hunterState.outcome="B";hunterState.status=hunterText(`${hunterTeamName("B")} gagne le duel.`,`${hunterTeamName("B")} wins the duel.`)}
+        else{hunterState.outcome="draw";hunterState.status=hunterText("Égalité : ajoutez deux manches ou jouez une mort subite.","Draw: add two rounds or play sudden death.")}
+      }else{
+        hunterState.round++;hunterResetRoundInputs();
+        hunterState.status=hunterText(`Manche ${hunterState.round} prête : les rôles sont inversés.`,`Round ${hunterState.round} ready: roles are swapped.`)
+      }
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterAddTwoRounds(){
+      if(hunterState.outcome!=="draw")return;
+      hunterState.roundLimit+=2;hunterState.outcome=null;hunterState.round++;hunterResetRoundInputs();
+      hunterState.status=hunterText("Deux manches ajoutées. Les rôles continuent d'alterner.","Two rounds added. Roles keep alternating.");
+      renderHunterChallenge();hunterSync()
+    }
+    function hunterResetChallenge(){
+      hunterState={teamA:hunterState.teamA||"Équipe A",teamB:hunterState.teamB||"Équipe B",roundLimit:Number(hunterRoundLimitSelect?.value)||4,difficulty:hunterState.difficulty||"normal",round:1,scores:{A:0,B:0},history:[],outcome:null,status:hunterText("Duel réinitialisé.","Duel reset."),investigatorChoice:"",hunterChoice:"",actualGhost:"",investigatorLocked:false,hunterLocked:false,evidenceAnnounced:false,itemsRemoved:false,huntsCompleted:false,roundScored:false,lastRoundResult:hunterText("En attente des votes verrouillés.","Waiting for locked votes.")};
+      hunterNormalizeState();renderHunterChallenge();hunterSync()
+    }
+    function hunterRenderGhostSelect(select,value){
+      if(!select)return;
+      const current=value||select.value||"",placeholder=hunterText("Choisir une entité","Choose a ghost");
+      const options=hunterGhostOptions();
+      select.innerHTML=`<option value="">${escapeHtml(placeholder)}</option>`+options.map(ghost=>`<option value="${escapeHtml(ghost.value)}">${escapeHtml(ghost.label)}</option>`).join("");
+      select.value=options.some(ghost=>ghost.value===current)?current:""
+    }
+    function renderHunterChallenge(){
+      if(!hunterChallengeView||!hunterRoundDisplay)return;
+      const difficulty=hunterDifficulty(),investigators=hunterInvestigatorTeam(),hunters=hunterHunterTeam(),complete=!!hunterState.outcome;
+      if(hunterTeamAInput&&document.activeElement!==hunterTeamAInput)hunterTeamAInput.value=hunterState.teamA;
+      if(hunterTeamBInput&&document.activeElement!==hunterTeamBInput)hunterTeamBInput.value=hunterState.teamB;
+      if(hunterRoundLimitSelect)hunterRoundLimitSelect.value=String(hunterState.roundLimit);
+      if(hunterDifficultySelect)hunterDifficultySelect.value=hunterState.difficulty;
+      hunterRenderGhostSelect(hunterInvestigatorChoice,hunterState.investigatorChoice);hunterRenderGhostSelect(hunterHunterChoice,hunterState.hunterChoice);hunterRenderGhostSelect(hunterActualGhost,hunterState.actualGhost);
+      hunterRoundDisplay.textContent=`${hunterState.round} / ${hunterState.roundLimit}`;
+      hunterProtectionTime.textContent=hunterFormatTime(difficulty.protection);
+      hunterHuntCount.textContent=String(difficulty.hunts);
+      hunterTeamALabel.textContent=`${hunterTeamName("A")} - ${hunterCurrentRoleLabel("A")}`;
+      hunterTeamBLabel.textContent=`${hunterTeamName("B")} - ${hunterCurrentRoleLabel("B")}`;
+      hunterScoreA.textContent=hunterState.scores.A;hunterScoreB.textContent=hunterState.scores.B;
+      if(hunterEvidenceAnnounced)hunterEvidenceAnnounced.checked=hunterState.evidenceAnnounced;
+      if(hunterItemsRemoved)hunterItemsRemoved.checked=hunterState.itemsRemoved;
+      if(hunterHuntsCompleted)hunterHuntsCompleted.checked=hunterState.huntsCompleted;
+      hunterRoleSummary.innerHTML=`<div class="hunter-role-card investigator"><span>${hunterText("Équipe d'enquêteurs","Investigator team")}</span><strong>${escapeHtml(hunterTeamName(investigators))}</strong><p>${hunterText(`Temps imparti : ${hunterFormatTime(difficulty.protection)} pour trouver l'entité, annoncer 2 preuves et verrouiller le vote.`,`Time limit: ${hunterFormatTime(difficulty.protection)} to find the ghost, announce 2 evidence and lock the vote.`)}</p></div><div class="hunter-role-card hunter"><span>${hunterText("Équipe de chasseurs","Hunter team")}</span><strong>${escapeHtml(hunterTeamName(hunters))}</strong><p>${hunterText(`${difficulty.hunts} chasse(s) pour identifier l'entité après le retrait des objets de preuve.`,`${difficulty.hunts} hunt(s) to identify the ghost after evidence items are removed.`)}</p></div>`;
+      hunterInvestigatorLock.textContent=hunterState.investigatorLocked?hunterText("Choix des enquêteurs verrouillé ✓","Investigator choice locked ✓"):hunterText("Choix non verrouillé","Choice not locked");
+      hunterHunterLock.textContent=hunterState.hunterLocked?hunterText("Choix des chasseurs verrouillé ✓","Hunter choice locked ✓"):hunterText("Choix non verrouillé","Choice not locked");
+      hunterInvestigatorLock.classList.toggle("locked",hunterState.investigatorLocked);hunterHunterLock.classList.toggle("locked",hunterState.hunterLocked);
+      hunterRoundResult.textContent=hunterState.lastRoundResult||hunterText("En attente des votes verrouillés.","Waiting for locked votes.");
+      hunterStatus.classList.toggle("complete",hunterState.outcome&&hunterState.outcome!=="draw");hunterStatus.classList.toggle("draw",hunterState.outcome==="draw");hunterStatus.textContent=hunterState.status;
+      [hunterEvidenceAnnounced,hunterItemsRemoved,hunterInvestigatorChoice,hunterLockInvestigator,hunterHuntsCompleted,hunterHunterChoice,hunterLockHunter,hunterActualGhost,hunterScoreRound,hunterNextRound].forEach(control=>{if(control)control.disabled=complete});
+      if(hunterInvestigatorChoice)hunterInvestigatorChoice.disabled=complete||hunterState.investigatorLocked;
+      if(hunterEvidenceAnnounced)hunterEvidenceAnnounced.disabled=complete||hunterState.investigatorLocked;
+      if(hunterItemsRemoved)hunterItemsRemoved.disabled=complete||hunterState.investigatorLocked;
+      if(hunterLockInvestigator)hunterLockInvestigator.disabled=complete||hunterState.investigatorLocked;
+      if(hunterHunterChoice)hunterHunterChoice.disabled=complete||hunterState.hunterLocked;
+      if(hunterHuntsCompleted)hunterHuntsCompleted.disabled=complete||hunterState.hunterLocked;
+      if(hunterLockHunter)hunterLockHunter.disabled=complete||hunterState.hunterLocked;
+      if(hunterScoreRound)hunterScoreRound.disabled=complete||hunterState.roundScored||!hunterState.investigatorLocked||!hunterState.hunterLocked;
+      if(hunterNextRound)hunterNextRound.disabled=complete||!hunterState.roundScored;
+      if(hunterUndo)hunterUndo.disabled=complete||!hunterState.history.length;
+      if(hunterAddOvertime)hunterAddOvertime.hidden=hunterState.outcome!=="draw";
+      hunterLog.innerHTML=hunterState.history.length?hunterState.history.slice(0,8).map(item=>`<div class="hunter-log-item">${escapeHtml(item.message)}</div>`).join(""):`<div class="hunter-log-empty">${hunterText("Aucun score enregistré.","No score recorded.")}</div>`
+    }
+
     function wallMalusAt(index){return wallMaluses[wallMalusOrder[index]??index]||wallMaluses[index%wallMaluses.length]}
     function wallHasActiveMalus(title){return wallOpenedIndexes.some(index=>wallMalusAt(index).title===title)}
     function wallTargetWins(){return wallHasActiveMalus("1 Round en plus")?6:5}
@@ -1437,7 +1607,7 @@ const phasmophobiaObjects=[
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
       else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
     }
-    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",cursed:"cursed-run",possessed:"le-possede"}[challenge]||"challenges"}
+    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",cursed:"cursed-run",hunter:"chasseur-enqueteur",possessed:"le-possede"}[challenge]||"challenges"}
     function updatePossessedInviteLink(challenge=currentRoomChallenge){
       if(!possessedRoomCode||!possessedShareLink)return;
       const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
@@ -1455,6 +1625,7 @@ const phasmophobiaObjects=[
       else if(challenge==="media")openMediaChallenge(true);
       else if(challenge==="wall")openWallChallenge(true);
       else if(challenge==="cursed")openCursedChallenge(true);
+      else if(challenge==="hunter")openHunterChallenge(true);
       else if(challenge==="possessed")openPossessedChallenge(true)
     }
     function openRoomChallenge(challenge){
@@ -1500,10 +1671,12 @@ const phasmophobiaObjects=[
     }
     function captureCursedRoomState(){return {validated:[...cursedValidatedMaps]}}
     function applyCursedRoomState(state){if(!state)return;setCursedProgress(state.validated||[],true)}
-    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():captureTarotRoomState()))}
+    function captureHunterRoomState(){return structuredClone(hunterState)}
+    function applyHunterRoomState(state){if(!state)return;hunterState={...hunterState,...state,scores:{A:Number(state.scores?.A)||0,B:Number(state.scores?.B)||0},history:Array.isArray(state.history)?state.history:[]};hunterSave();renderHunterChallenge()}
+    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState())))}
     function applyRoomChallengeState(message){
       applyingRoomState=true;
-      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else applyTarotRoomState(message.state)}
+      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)}
       finally{applyingRoomState=false}
     }
     function scheduleRoomChallengeSync(challenge){
@@ -1888,6 +2061,8 @@ const phasmophobiaObjects=[
     document.getElementById("back-wall-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-cursed-challenge").addEventListener("click",()=>openRoomChallenge("cursed"));
     document.getElementById("back-cursed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
+    document.getElementById("open-hunter-challenge").addEventListener("click",()=>openRoomChallenge("hunter"));
+    document.getElementById("back-hunter-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-possessed-challenge").addEventListener("click",()=>openRoomChallenge("possessed"));
     document.getElementById("back-possessed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     possessedLocalTab.addEventListener("click",()=>setPlayMode("local"));
@@ -1930,6 +2105,22 @@ const phasmophobiaObjects=[
     wallResetButton.addEventListener("click",()=>{if(confirm("Réinitialiser le Mur de la mort ? Les cases ouvertes et la progression seront perdues."))resetWallChallenge()});
     wallOpenAllDebugButton.addEventListener("click",wallOpenAllDebug);
     if(cursedResetButton)cursedResetButton.addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Reset the Cursed Run map progress?":"Réinitialiser la progression des maps Cursed Run ?"))resetCursedRun()});
+    [hunterTeamAInput,hunterTeamBInput,hunterRoundLimitSelect,hunterDifficultySelect].forEach(input=>input&&input.addEventListener("change",hunterApplySetup));
+    if(hunterTeamAInput)hunterTeamAInput.addEventListener("input",()=>{hunterState.teamA=hunterTeamAInput.value.trim()||"Équipe A";renderHunterChallenge();hunterSync()});
+    if(hunterTeamBInput)hunterTeamBInput.addEventListener("input",()=>{hunterState.teamB=hunterTeamBInput.value.trim()||"Équipe B";renderHunterChallenge();hunterSync()});
+    if(hunterEvidenceAnnounced)hunterEvidenceAnnounced.addEventListener("change",()=>{hunterState.evidenceAnnounced=hunterEvidenceAnnounced.checked;renderHunterChallenge();hunterSync()});
+    if(hunterItemsRemoved)hunterItemsRemoved.addEventListener("change",()=>{hunterState.itemsRemoved=hunterItemsRemoved.checked;renderHunterChallenge();hunterSync()});
+    if(hunterHuntsCompleted)hunterHuntsCompleted.addEventListener("change",()=>{hunterState.huntsCompleted=hunterHuntsCompleted.checked;renderHunterChallenge();hunterSync()});
+    if(hunterInvestigatorChoice)hunterInvestigatorChoice.addEventListener("change",()=>{hunterState.investigatorChoice=hunterInvestigatorChoice.value;renderHunterChallenge();hunterSync()});
+    if(hunterHunterChoice)hunterHunterChoice.addEventListener("change",()=>{hunterState.hunterChoice=hunterHunterChoice.value;renderHunterChallenge();hunterSync()});
+    if(hunterActualGhost)hunterActualGhost.addEventListener("change",()=>{hunterState.actualGhost=hunterActualGhost.value;renderHunterChallenge();hunterSync()});
+    if(hunterLockInvestigator)hunterLockInvestigator.addEventListener("click",hunterLockInvestigatorChoice);
+    if(hunterLockHunter)hunterLockHunter.addEventListener("click",hunterLockHunterChoice);
+    if(hunterScoreRound)hunterScoreRound.addEventListener("click",hunterScoreCurrentRound);
+    if(hunterNextRound)hunterNextRound.addEventListener("click",hunterFinishRound);
+    if(hunterAddOvertime)hunterAddOvertime.addEventListener("click",hunterAddTwoRounds);
+    if(hunterUndo)hunterUndo.addEventListener("click",hunterUndoScore);
+    if(hunterReset)hunterReset.addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Reset the Hunter and Investigator duel?":"Réinitialiser le duel Chasseur et enquêteur ?"))hunterResetChallenge()});
     document.getElementById("media-popup-close").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-x").addEventListener("click",closeMediaPopup);
     document.getElementById("media-popup-reset").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Restart the Media Surprise challenge?":"Recommencer le défi Média Surprise ?"))resetMediaChallenge()});
@@ -2189,9 +2380,11 @@ const phasmophobiaObjects=[
     resetGame();
     resetWallChallenge();
     loadCursedProgress();
+    hunterLoad();
     renderGhostMemo();
     renderMediaChallenge();
     renderCursedRun();
+    renderHunterChallenge();
     renderPossessedLocalNames();
     renderPossessedGamePanel();
     relocateRoomControls();
