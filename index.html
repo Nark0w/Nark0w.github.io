@@ -18,7 +18,7 @@
     <div class="ph-topbar-left">
       <button type="button" id="ph-home-btn" class="ph-brand">
         <span class="ph-brand-name">PHASMOPHOBIA</span>
-        <span class="ph-brand-sub">Compagnon d’enquête</span>
+        <span class="ph-brand-sub">Challenge</span>
       </button>
       <button type="button" id="ph-back-btn" class="ph-back" hidden>← Retour</button>
     </div>
@@ -42,7 +42,7 @@
       <div class="theme-control">
         <label for="theme-select">Th&egrave;me</label>
         <select id="theme-select" aria-label="Theme">
-          <option value="classic">Actuel</option>
+          <option value="classic">Default</option>
           <option value="evidence">Evidence</option>
         </select>
       </div>
@@ -74,7 +74,7 @@
       <header class="hub-header hero">
         <div class="hero-kicker">Dossier d’enquête — non officiel</div>
         <h1 id="main-hub-title" class="hero-title">PHASMOPHOBIA</h1>
-        <div class="hero-sub">Compagnon d’enquête</div>
+        <div class="hero-sub">Challenge</div>
         <p>Choisis une rubrique. Les défis, les mémos et toute la progression sont réunis dans un seul fichier HTML.</p>
       </header>
       <div class="portal-grid">
@@ -163,6 +163,17 @@
             <div class="challenge-meta"><span>1-4 joueurs</span><span>Toutes les maps</span><span>Cauchemar extrême</span></div>
             <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Défi créé par Maman0vitch, dit "Le Fougueux".</a></p>
             <button id="open-cursed-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">⚔</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>Chasseur et enquêteur</h2>
+            <p>Deux équipes s'affrontent en alternant les rôles : une équipe enquête pendant le temps de protection, l'autre intervient ensuite pendant les chasses.</p>
+            <div class="challenge-meta"><span>1v1 à 2v2</span><span>Manches paires</span><span>Versus</span></div>
+            <button id="open-hunter-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
         <article class="challenge-select-card">
@@ -722,6 +733,81 @@
         <p>Cursed Run a été créé par Maman0vitch, dit "Le Fougueux".</p>
         <p><a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
       </div>
+    </div>
+  </main>
+
+  <main id="hunter-challenge-view" class="app-view" hidden>
+    <div class="hunter-container">
+      <div class="hub-topbar">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-toolbar"><button id="back-hunter-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
+      <h1>Chasseur et enquêteur - Phasmophobia</h1>
+
+      <section class="fiche">
+        <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">2-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">1v1, 1v2, 1v3 ou 2v2</div></div><div class="fiche-cell"><div class="fiche-k">Rôles</div><div class="fiche-v">Alternés</div></div></div>
+        <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Deux équipes jouent l'une contre l'autre pour trouver l'entité. Les enquêteurs utilisent les objets de preuve pendant le temps imparti ; les chasseurs doivent identifier l'entité uniquement grâce aux chasses.</p></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Choisissez deux équipes : Équipe A et Équipe B. Le format peut être 1v1, 1v2, 1v3 ou 2v2.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Au début d'une manche, l'équipe d'enquêteurs entre avec les objets de preuve et cherche l'entité pendant le temps de protection.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Avant la fin de la protection, les enquêteurs peuvent retirer tous les objets de preuve de la maison pour ne pas aider les chasseurs.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Les enquêteurs annoncent 2 preuves sur 3 qu'ils disent avoir trouvées, puis sélectionnent et verrouillent l'entité sur le site. Le bluff est autorisé.</p></div><div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Quand le choix des enquêteurs est verrouillé, l'autre équipe voit uniquement un indicateur de validation, pas le nom choisi. Les chasseurs jouent ensuite leurs chasses et verrouillent leur propre vote.</p></div><div class="fiche-rule"><span class="fiche-rule-n">06</span><p>Les rôles changent à chaque nouvelle manche. Le nombre de manches doit rester pair pour que chaque équipe joue autant de fois dans chaque rôle.</p></div></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Points</h3><div class="fiche-rule"><span class="fiche-rule-n">+3</span><p>Chaque équipe marque 3 points si son entité verrouillée correspond à l'entité réelle.</p></div><div class="fiche-rule"><span class="fiche-rule-n">+1</span><p>Les enquêteurs marquent 1 point bonus si leurs 2 preuves ont bien été annoncées avant le verrouillage du choix.</p></div><div class="fiche-rule"><span class="fiche-rule-n">+1</span><p>Les chasseurs marquent 1 point bonus si leur vote est verrouillé après avoir utilisé toutes les chasses prévues par la difficulté.</p></div></div>
+        <div class="fiche-block win"><div class="fiche-block-label">Victoire / défaite</div><p>Après la dernière manche paire, l'équipe avec le plus de points gagne. En cas d'égalité, ajoutez deux manches ou jouez une mort subite. Une équipe perd immédiatement si elle regarde le choix verrouillé adverse, donne des informations hors rôle, ou refuse l'alternance des rôles.</p></div>
+      </section>
+
+      <section class="hunter-panel" aria-labelledby="hunter-controls-title">
+        <h2 id="hunter-controls-title">Suivi du duel</h2>
+        <div class="hunter-setup-grid">
+          <div class="hunter-field"><label for="hunter-team-a">Équipe A</label><input id="hunter-team-a" type="text" value="Équipe A"></div>
+          <div class="hunter-field"><label for="hunter-team-b">Équipe B</label><input id="hunter-team-b" type="text" value="Équipe B"></div>
+          <div class="hunter-field"><label for="hunter-round-limit">Manches</label><select id="hunter-round-limit"><option value="2">2</option><option value="4" selected>4</option><option value="6">6</option><option value="8">8</option><option value="10">10</option></select></div>
+          <div class="hunter-field"><label for="hunter-difficulty">Difficulté</label><select id="hunter-difficulty"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select></div>
+        </div>
+        <div class="hunter-stats">
+          <div class="hunter-stat">Manche<strong id="hunter-round-display">1 / 4</strong></div>
+          <div class="hunter-stat">Protection<strong id="hunter-protection-time">3 min</strong></div>
+          <div class="hunter-stat">Chasses<strong id="hunter-hunt-count">3</strong></div>
+        </div>
+        <div id="hunter-role-summary" class="hunter-role-summary"></div>
+        <div class="hunter-scoreboard">
+          <div class="hunter-score"><span id="hunter-team-a-label">Équipe A</span><strong id="hunter-score-a">0</strong></div>
+          <div class="hunter-score"><span id="hunter-team-b-label">Équipe B</span><strong id="hunter-score-b">0</strong></div>
+        </div>
+        <div class="hunter-vote-grid">
+          <div class="hunter-vote-card">
+            <h3>Vote des enquêteurs</h3>
+            <label class="hunter-check"><input id="hunter-evidence-announced" type="checkbox"> 2 preuves annoncées</label>
+            <label class="hunter-check"><input id="hunter-items-removed" type="checkbox"> Objets de preuve retirés</label>
+            <div class="hunter-field"><label for="hunter-investigator-choice">Entité choisie</label><select id="hunter-investigator-choice"></select></div>
+            <button id="hunter-lock-investigator" class="good-btn" type="button">Verrouiller le choix</button>
+            <div id="hunter-investigator-lock" class="hunter-lock-indicator">Choix non verrouillé</div>
+          </div>
+          <div class="hunter-vote-card">
+            <h3>Vote des chasseurs</h3>
+            <label class="hunter-check"><input id="hunter-hunts-completed" type="checkbox"> Chasses terminées</label>
+            <div class="hunter-field"><label for="hunter-hunter-choice">Entité choisie</label><select id="hunter-hunter-choice"></select></div>
+            <button id="hunter-lock-hunter" class="danger-btn" type="button">Verrouiller le choix</button>
+            <div id="hunter-hunter-lock" class="hunter-lock-indicator">Choix non verrouillé</div>
+          </div>
+          <div class="hunter-vote-card">
+            <h3>Résultat</h3>
+            <div class="hunter-field"><label for="hunter-actual-ghost">Entité réelle</label><select id="hunter-actual-ghost"></select></div>
+            <button id="hunter-score-round" class="warning-btn" type="button">Compter les points</button>
+            <div id="hunter-round-result" class="hunter-round-result">En attente des votes verrouillés.</div>
+          </div>
+        </div>
+        <div class="hunter-round-actions">
+          <button id="hunter-next-round" class="warning-btn" type="button">Fin de manche</button>
+          <button id="hunter-add-overtime" class="good-btn" type="button" hidden>Ajouter 2 manches</button>
+          <button id="hunter-undo" class="back-challenges-btn" type="button">Annuler le dernier score</button>
+          <button id="hunter-reset" class="danger-btn" type="button">Reset duel</button>
+        </div>
+        <div id="hunter-status" class="hunter-status">Prêt à lancer la manche.</div>
+        <div id="hunter-log" class="hunter-log"></div>
+      </section>
     </div>
   </main>
 
