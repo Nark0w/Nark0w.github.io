@@ -78,20 +78,18 @@
         <p>Choisis une rubrique. Les défis, les mémos et toute la progression sont réunis dans un seul fichier HTML.</p>
       </header>
       <div class="portal-grid">
-        <article class="portal-card">
+        <article class="portal-card clickable-card" tabindex="0" data-card-target="open-challenges" aria-label="Voir les défis">
           <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🎯</span></div>
           <div class="portal-card-body">
             <h2>Défis</h2>
             <p>Accède aux défis interactifs, à leurs règles et au suivi de progression.</p>
-            <button id="open-challenges" class="portal-launch-btn" type="button">Voir les défis</button>
           </div>
         </article>
-        <article class="portal-card memo">
+        <article class="portal-card memo clickable-card" tabindex="0" data-card-target="open-memo" aria-label="Ouvrir le mémo">
           <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">📖</span></div>
           <div class="portal-card-body">
             <h2>Mémo</h2>
             <p>Consulte rapidement les informations utiles sur les entités de Phasmophobia.</p>
-            <button id="open-memo" class="portal-launch-btn" type="button">Ouvrir le mémo</button>
           </div>
         </article>
       </div>
@@ -106,6 +104,26 @@
         </div>
         <p>Les informations générales, noms d’objets et certaines images proviennent du wiki communautaire Phasmophobia / Fandom. Cette application est un projet non officiel et n’est affiliée ni à MrTiboute ni aux créateurs du jeu.</p>
       </section>
+    </section>
+  </main>
+
+  <main id="invite-room-view" class="app-view invite-room-view" hidden>
+    <section class="invite-room-panel" aria-labelledby="invite-room-title">
+      <p class="invite-room-kicker">Invitation room</p>
+      <h1 id="invite-room-title">Rejoindre la room</h1>
+      <div id="invite-join-panel" class="invite-room-card">
+        <div class="possessed-field">
+          <label for="invite-join-name">Ton pseudo</label>
+          <input id="invite-join-name" type="text" maxlength="24" placeholder="Joueur" autocomplete="nickname">
+        </div>
+        <button id="invite-join-room" class="good-btn" type="button">Valider</button>
+      </div>
+      <div id="invite-waiting-panel" class="invite-room-card" hidden>
+        <h2>Salle d&rsquo;attente</h2>
+        <p id="invite-waiting-status" class="possessed-online-status">En attente que l&rsquo;h&ocirc;te lance un d&eacute;fi...</p>
+        <div id="invite-lobby-list" class="possessed-lobby-list"></div>
+        <button id="invite-leave-room" class="danger-btn" type="button">Quitter la room</button>
+      </div>
     </section>
   </main>
 
@@ -223,20 +241,18 @@
         <p>Choisis un mémo pour ouvrir sa propre vue. Tu peux consulter des informations utiles ou juste quelque chose de plus léger.</p>
       </header>
       <div class="portal-grid">
-        <article class="portal-card memo">
+        <article class="portal-card memo clickable-card" tabindex="0" data-card-target="open-ghost-memo" aria-label="Ouvrir le mémo des entités">
           <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">👻</span></div>
           <div class="portal-card-body">
             <h2>Entités</h2>
             <p>Retrouve le pourcentage de début de chasse de toutes les entités avec un graphique à barres horizontal.</p>
-            <button id="open-ghost-memo" class="portal-launch-btn" type="button">Ouvrir le mémo des entités</button>
           </div>
         </article>
-        <article class="portal-card memo">
+        <article class="portal-card memo clickable-card" tabindex="0" data-card-target="open-fun-memo" aria-label="Ouvrir l'aide visuelle">
           <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">😄</span></div>
           <div class="portal-card-body">
             <h2>Aide visuelle</h2>
             <p>Une comparaison visuelle simple pour distinguer l’investigateur, qui est de votre côté, de l’entité, qui ne l’est clairement pas.</p>
-            <button id="open-fun-memo" class="portal-launch-btn" type="button">Ouvrir l’aide visuelle</button>
           </div>
         </article>
       </div>
@@ -267,12 +283,6 @@
       <div class="memo-controls">
         <input id="ghost-search" class="memo-search" type="search" placeholder="Rechercher une entité…" aria-label="Rechercher une entité">
         <span id="ghost-visible-count" class="ghost-count">29 entités</span>
-      </div>
-      <div class="ghost-scale" aria-hidden="true">
-        <div class="ghost-scale-spacer">Pourcentage de santé mentale</div>
-        <div class="ghost-scale-bar">
-          <div class="ghost-scale-labels"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
-        </div>
       </div>
       <div id="ghost-memo-list" class="ghost-chart" aria-live="polite"></div>
       <p class="memo-source">Données de chasse régulière vérifiées le 30 juin 2026. Les valeurs conditionnelles sont précisées sur chaque ligne.</p>
@@ -661,7 +671,7 @@
           <button id="wall-win-round" class="good-btn" type="button">Partie réussie</button>
           <button id="wall-lose-challenge" class="danger-btn" type="button">Défi perdu</button>
           <button id="wall-reset" class="warning-btn" type="button">Reset du défi</button>
-          <button id="wall-open-all-debug" class="media-secondary-btn" type="button">Debug : ouvrir tout</button>
+          <button id="wall-open-all-debug" class="media-secondary-btn" type="button" disabled>Debug : ouvrir tout</button>
         </div>
         <p id="wall-status" class="media-progress-note">Ouvre 2 cases avant de lancer la première partie.</p>
       </section>
