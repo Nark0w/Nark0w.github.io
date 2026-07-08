@@ -23,39 +23,43 @@
       <button type="button" id="ph-back-btn" class="ph-back" hidden>← Retour</button>
     </div>
     <div class="ph-topbar-controls">
-      <div class="top-play-mode" role="group" aria-label="Mode de jeu">
-        <span class="top-play-mode-label">Mode</span>
-        <button id="play-mode-solo" class="topbar-mode-btn active" type="button" data-play-mode="solo">Solo</button>
-        <button id="play-mode-local" class="topbar-mode-btn" type="button" data-play-mode="local">Multi local</button>
-        <button id="play-mode-room" class="topbar-mode-btn" type="button" data-play-mode="room">Room</button>
+      <div class="ph-topbar-center">
+        <div class="top-play-mode" role="group" aria-label="Mode de jeu">
+          <span class="top-play-mode-label">Mode</span>
+          <button id="play-mode-solo" class="topbar-mode-btn active" type="button" data-play-mode="solo">Solo</button>
+          <button id="play-mode-local" class="topbar-mode-btn" type="button" data-play-mode="local">Multi local</button>
+          <button id="play-mode-room" class="topbar-mode-btn" type="button" data-play-mode="room">Room</button>
+        </div>
+        <div class="mode-control">
+          <strong>Streamer</strong>
+          <label class="mode-switch" for="streamer-mode">
+            <span>Off</span>
+            <input id="streamer-mode" type="checkbox" aria-describedby="mode-description">
+            <span class="switch-track" aria-hidden="true"></span>
+            <span>On</span>
+          </label>
+          <span id="mode-description" class="mode-label" hidden>Off</span>
+        </div>
+        <div class="theme-control">
+          <label for="theme-select">Th&egrave;me</label>
+          <select id="theme-select" aria-label="Theme">
+            <option value="classic">Default</option>
+            <option value="evidence">Evidence</option>
+          </select>
+        </div>
+        <a id="top-current-challenge" class="top-current-challenge" href="#challenges" hidden>D&eacute;fi en cours : aucun</a>
+        <details id="top-room-menu" class="top-room-menu" hidden>
+          <summary><span id="top-room-summary" class="top-room-summary">Room - inactive</span></summary>
+          <div id="top-room-content" class="top-room-content"></div>
+        </details>
       </div>
-      <div class="mode-control">
-        <strong>Streamer</strong>
-        <label class="mode-switch" for="streamer-mode">
-          <span>Off</span>
-          <input id="streamer-mode" type="checkbox" aria-describedby="mode-description">
-          <span class="switch-track" aria-hidden="true"></span>
-          <span>On</span>
-        </label>
-        <span id="mode-description" class="mode-label" hidden>Off</span>
-      </div>
-      <div class="theme-control">
-        <label for="theme-select">Th&egrave;me</label>
-        <select id="theme-select" aria-label="Theme">
-          <option value="classic">Default</option>
-          <option value="evidence">Evidence</option>
-        </select>
-      </div>
-      <details id="top-room-menu" class="top-room-menu" hidden>
-        <summary>Room <span id="top-room-summary" class="top-room-summary">inactive</span></summary>
-        <div id="top-room-content" class="top-room-content"></div>
-      </details>
-      <div id="top-room-players" class="top-room-players" aria-live="polite"></div>
-      <div class="lang-control">
-        <span class="lang-label">Langue</span>
-        <div class="lang-buttons">
-          <button type="button" class="lang-btn" data-lang="fr">FR</button>
-          <button type="button" class="lang-btn" data-lang="en">EN</button>
+      <div class="ph-topbar-right">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
         </div>
       </div>
     </div>
@@ -77,6 +81,9 @@
         <div class="hero-sub">Challenge</div>
         <p>Choisis une rubrique. Les défis, les mémos et toute la progression sont réunis dans un seul fichier HTML.</p>
       </header>
+      <div class="screamer-zone">
+        <button id="screamer-button" class="screamer-button" type="button">NE PAS CLIQUER</button>
+      </div>
       <div class="portal-grid">
         <article class="portal-card clickable-card" tabindex="0" data-card-target="open-challenges" aria-label="Voir les défis">
           <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🎯</span></div>
@@ -99,6 +106,7 @@
         <div class="credit-links">
           <a class="credit-link" href="https://mrtiboute.tv/defis/tarot-surprise" target="_blank" rel="noopener noreferrer">Source originale — Le Tarot Surprise</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Source originale — Média Surprise</a>
+          <a class="credit-link" href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Source originale — Cursed Run</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Source originale — Le Mur de la mort</a>
           <a class="credit-link" href="https://mrtiboute.tv" target="_blank" rel="noopener noreferrer">Site officiel de MrTiboute</a>
         </div>
@@ -145,6 +153,34 @@
         <h1 id="challenges-title">Défis Phasmophobia</h1>
         <p>Crée ou rejoins une room, puis lance un défi. Les joueurs connectés peuvent agir sur le suivi du défi depuis leur propre écran.</p>
       </header>
+      <section class="challenge-mode-guide" aria-label="Explication des modes de défi">
+        <article class="challenge-mode-block game-modes">
+          <div class="challenge-mode-copy">
+            <strong>Mode de jeu</strong>
+            <p><b>Solo</b> : progression sur cet écran uniquement, avec le défi en cours affiché dans la topbar.</p>
+            <p><b>Multi local</b> : plusieurs joueurs utilisent le même appareil pour les rôles et validations.</p>
+            <p><b>Room</b> : synchronise les joueurs et la progression entre plusieurs appareils.</p>
+          </div>
+          <div class="challenge-page-mode-control" role="group" aria-label="Mode de jeu sur la page défis">
+            <span class="top-play-mode-label">Mode</span>
+            <button class="topbar-mode-btn active" type="button" data-page-play-mode="solo">Solo</button>
+            <button class="topbar-mode-btn" type="button" data-page-play-mode="local">Multi local</button>
+            <button class="topbar-mode-btn" type="button" data-page-play-mode="room">Room</button>
+          </div>
+        </article>
+        <article class="challenge-mode-block streamer-mode">
+          <div class="challenge-mode-copy">
+            <strong>Mode streamer</strong>
+            <p>Active les variantes prévues pour le stream, comme les choix du tchat sur certains effets.</p>
+          </div>
+          <label class="mode-switch challenge-page-streamer" for="challenge-page-streamer-mode">
+            <span>Off</span>
+            <input id="challenge-page-streamer-mode" type="checkbox" data-page-streamer-mode>
+            <span class="switch-track" aria-hidden="true"></span>
+            <span>On</span>
+          </label>
+        </article>
+      </section>
       <p id="challenge-room-note" class="room-sync-note">Choisis un mode dans la barre du haut avant d’ouvrir un défi.</p>
       <div class="challenge-grid">
         <article class="challenge-select-card">
@@ -179,7 +215,7 @@
             <h2>Cursed Run</h2>
             <p>Enchaîne toutes les maps en conditions extrêmes : 0% de santé mentale, entité très rapide, joueur ralenti et aucun objet secondaire.</p>
             <div class="challenge-meta"><span>1-4 joueurs</span><span>Toutes les maps</span><span>Cauchemar extrême</span></div>
-            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Défi créé par Maman0vitch, dit "Le Fougueux".</a></p>
+            <p class="challenge-credit">Source : <a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">https://mrtiboute.tv/defis/cursed-run</a></p>
             <button id="open-cursed-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
@@ -255,6 +291,13 @@
             <p>Une comparaison visuelle simple pour distinguer l’investigateur, qui est de votre côté, de l’entité, qui ne l’est clairement pas.</p>
           </div>
         </article>
+        <article class="portal-card memo clickable-card" tabindex="0" data-card-target="open-map-memo" aria-label="Ouvrir les plans des pièces">
+          <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🗺️</span></div>
+          <div class="portal-card-body">
+            <h2>Plans des pièces</h2>
+            <p>Consulte le découpage des pièces de chaque map pour préparer les objectifs, les fuites et les vérifications rapides.</p>
+          </div>
+        </article>
       </div>
     </section>
   </main>
@@ -284,8 +327,47 @@
         <input id="ghost-search" class="memo-search" type="search" placeholder="Rechercher une entité…" aria-label="Rechercher une entité">
         <span id="ghost-visible-count" class="ghost-count">29 entités</span>
       </div>
+      <div class="ghost-book">
+        <aside class="ghost-book-left">
+          <div id="ghost-evidence-board" class="ghost-evidence-board" aria-label="Preuves sélectionnées"></div>
+        </aside>
+        <section class="ghost-book-right" aria-label="Entités à comparer">
+          <div class="ghost-book-heading">Entités</div>
+          <div id="ghost-filter-grid" class="ghost-filter-grid" aria-label="Sélection des entités à comparer"></div>
+        </section>
+      </div>
+      <div id="ghost-info-toggles" class="ghost-info-toggles" aria-label="Informations affichées">
+        <button class="ghost-info-toggle active" type="button" data-ghost-info-toggle="behavior">Caractéristiques</button>
+        <button class="ghost-info-toggle active" type="button" data-ghost-info-toggle="walk">Bruits de pas</button>
+        <button class="ghost-info-toggle active" type="button" data-ghost-info-toggle="hunt">Pourcentage de chasse</button>
+        <button class="ghost-info-toggle active" type="button" data-ghost-info-toggle="speed">Vitesse</button>
+        <div id="ghost-walk-global-scale" class="ghost-walk-global-scale" aria-label="Vitesse des sons"></div>
+      </div>
       <div id="ghost-memo-list" class="ghost-chart" aria-live="polite"></div>
       <p class="memo-source">Données de chasse régulière vérifiées le 30 juin 2026. Les valeurs conditionnelles sont précisées sur chaque ligne.</p>
+    </section>
+  </main>
+
+  <main id="map-memo-view" class="app-view challenge-select-view" hidden>
+    <section class="memo-shell" aria-labelledby="map-memo-title">
+      <div class="section-topbar">
+        <button id="back-map-memo" class="back-challenges-btn" type="button">← Retour au mémo</button>
+        <div class="hub-topbar">
+          <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+        </div>
+      </div>
+      <header class="memo-header">
+        <h1 id="map-memo-title">Plans des pièces</h1>
+        <p>Découpage officiel des pièces pour chaque map, utile pour comparer les noms de zones et les endroits possibles de l’entité.</p>
+      </header>
+      <div id="map-memo-list" class="map-memo-list" aria-live="polite"></div>
+      <p class="memo-source">Images des plans : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.</p>
     </section>
   </main>
 
@@ -340,7 +422,7 @@
         </div>
     </div>
     <div class="challenge-toolbar"><button id="back-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
-    <h1>Tarot Surprise - Phasmophobia</h1>
+    <h1>Tarot Surprise</h1>
     <section class="fiche">
       <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Durée</div><div class="fiche-v">~2 heures</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Cauchemar</div></div></div>
       <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Faire monter TOUS les équipements achetables au Tier 3 avant la fin des deux heures, en n’améliorant que ce que les cartes de tarot vous autorisent.</p></div>
@@ -481,6 +563,14 @@
       </div>
       <p class="tarot-source">Images et noms anglais des cartes : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.</p>
     </section>
+    <section class="challenge-session-control" data-challenge-session="tarot">
+      <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+      <div class="challenge-session-actions">
+        <button class="good-btn" type="button" data-challenge-start="tarot">Démarrer le défi</button>
+        <button class="danger-btn" type="button" data-challenge-stop="tarot" hidden>Stopper le défi</button>
+      </div>
+    </section>
+    <div class="challenge-live-area" data-challenge-live="tarot" hidden>
     <div class="game-panel">
       <div class="stats">
         <div class="stat">Temps<strong id="timer">00:00:00</strong></div>
@@ -558,6 +648,7 @@
       <div class="list-box removed-list"><h2>Objets retirés : <span id="removed-count">0</span></h2><div id="removed-list" class="items"></div></div>
       <div class="list-box lost-list"><h2>Perdus pour la run : <span id="lost-count">0</span></h2><div id="lost-list" class="items"></div></div>
     </div>
+    </div>
     <div class="credits-box">
       <h3>Source du défi</h3>
       <p>Le Tarot Surprise et ses règles originales ont été créés par MrTiboute.</p>
@@ -579,7 +670,7 @@
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-media-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
-      <h1>Média Surprise - Phasmophobia</h1>
+      <h1>Média Surprise</h1>
 
       <section class="fiche">
       <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">1 partie</div></div><div class="fiche-cell"><div class="fiche-k">Thème</div><div class="fiche-v">Médias</div></div></div>
@@ -588,6 +679,14 @@
       <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si vous identifiez correctement le fantôme avec l’équipement débloqué au cours de la partie.</p></div>
     </section>
 
+      <section class="challenge-session-control" data-challenge-session="media">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="media">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="media" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="media" hidden>
       <section class="media-panel" aria-labelledby="media-controls-title">
         <h2 id="media-controls-title">Suivi du défi</h2>
         <div class="media-stats">
@@ -628,6 +727,7 @@
           <div id="media-locked-list" class="media-items"></div>
         </section>
       </div>
+      </div>
       <div class="credits-box">
         <h3>Source du défi</h3>
         <p>Média Surprise et ses règles originales ont été créés par MrTiboute.</p>
@@ -649,7 +749,7 @@
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-wall-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
-      <h1>Le Mur de la mort - Phasmophobia</h1>
+      <h1>Le Mur de la mort</h1>
 
       <section class="fiche">
         <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Objectif</div><div class="fiche-v">5 parties</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Professionnel</div></div></div>
@@ -658,6 +758,14 @@
         <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire après 5 parties réussies avec tous les malus révélés encore appliqués.</p></div>
       </section>
 
+      <section class="challenge-session-control" data-challenge-session="wall">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="wall">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="wall" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="wall" hidden>
       <section class="wall-panel" aria-labelledby="wall-controls-title">
         <h2 id="wall-controls-title">Suivi du mur</h2>
         <div class="media-stats">
@@ -685,6 +793,7 @@
         <h2 id="wall-active-title">Malus permanents actifs</h2>
         <div id="wall-active-list" class="wall-malus-list"></div>
       </section>
+      </div>
 
       <div class="credits-box">
         <h3>Source du défi</h3>
@@ -707,7 +816,7 @@
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-cursed-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
-      <h1>Cursed Run - Phasmophobia</h1>
+      <h1>Cursed Run</h1>
 
       <section class="fiche">
         <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Objectif</div><div class="fiche-v">Toutes les maps</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Cauchemar extrême</div></div></div>
@@ -719,6 +828,14 @@
         <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si toutes les maps sont enchaînées sans erreur, avec l’os récupéré, le fantôme correctement identifié et au moins un survivant à chaque partie.</p></div>
       </section>
 
+      <section class="challenge-session-control" data-challenge-session="cursed">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="cursed">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="cursed" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="cursed" hidden>
       <section class="cursed-panel" aria-labelledby="cursed-map-title">
         <div class="cursed-panel-head">
           <div>
@@ -737,11 +854,12 @@
         <div id="cursed-map-grid" class="cursed-map-grid"></div>
         <p class="source">Liste et images des maps : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.</p>
       </section>
+      </div>
 
       <div class="credits-box">
         <h3>Source du défi</h3>
         <p>Cursed Run a été créé par Maman0vitch, dit "Le Fougueux".</p>
-        <p><a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
+        <p><a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/cursed-run</a></p>
       </div>
     </div>
   </main>
@@ -758,7 +876,7 @@
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-hunter-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
-      <h1>Chasseur et enquêteur - Phasmophobia</h1>
+      <h1>Chasseur et enquêteur</h1>
 
       <section class="fiche">
         <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">2-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">1v1, 1v2, 1v3 ou 2v2</div></div><div class="fiche-cell"><div class="fiche-k">Rôles</div><div class="fiche-v">Alternés</div></div></div>
@@ -768,6 +886,14 @@
         <div class="fiche-block win"><div class="fiche-block-label">Victoire / défaite</div><p>Après la dernière manche paire, l'équipe avec le plus de points gagne. En cas d'égalité, ajoutez deux manches ou jouez une mort subite. Une équipe perd immédiatement si elle regarde le choix verrouillé adverse, donne des informations hors rôle, ou refuse l'alternance des rôles.</p></div>
       </section>
 
+      <section class="challenge-session-control" data-challenge-session="hunter">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="hunter">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="hunter" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="hunter" hidden>
       <section class="hunter-panel" aria-labelledby="hunter-controls-title">
         <h2 id="hunter-controls-title">Suivi du duel</h2>
         <div class="hunter-setup-grid">
@@ -818,6 +944,7 @@
         <div id="hunter-status" class="hunter-status">Prêt à lancer la manche.</div>
         <div id="hunter-log" class="hunter-log"></div>
       </section>
+      </div>
     </div>
   </main>
 
@@ -833,7 +960,7 @@
         </div>
       </div>
       <div class="challenge-toolbar"><button id="back-possessed-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
-      <h1>Le Possédé - Phasmophobia</h1>
+      <h1>Le Possédé</h1>
 
       <section class="fiche">
       <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">4</div></div><div class="fiche-cell"><div class="fiche-k">Rôles</div><div class="fiche-v">3 + 1</div></div><div class="fiche-cell"><div class="fiche-k">Score</div><div class="fiche-v">Votes finaux</div></div></div>
@@ -842,6 +969,14 @@
       <div class="fiche-block win"><div class="fiche-block-label">Points</div><p>Fantôme correct : 1 point pour tous. Possédé découvert : 2 points pour chaque Enquêteur. Possédé non découvert : 3 points pour lui. Possédé mort avant ses deux corruptions : 0 point.</p></div>
     </section>
 
+      <section class="challenge-session-control" data-challenge-session="possessed">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="possessed">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="possessed" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="possessed" hidden>
       <section class="possessed-panel" aria-labelledby="possessed-room-title">
         <h2 id="possessed-room-title">Distribution locale des rôles</h2>
         <div class="possessed-tabs" role="tablist">
@@ -947,6 +1082,7 @@
           </div>
         </div>
       </section>
+      </div>
     </div>
   </main>
 
@@ -989,6 +1125,13 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js" integrity="sha512-XEKeWX+mI3Ov+tg2evDlVQFzVOIp4T8J3cNcCEPaEUGpxJV3eZaN8rHuvnFPvQpGJBHPmrozJDMpm2xcDvtmyQ==" crossorigin="anonymous"></script>
+  <div id="screamer-overlay" class="screamer-overlay" aria-hidden="true" hidden>
+    <div class="screamer-face" aria-hidden="true">
+      <span class="screamer-eyes">● ●</span>
+      <span class="screamer-mouth">AAAAH</span>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

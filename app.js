@@ -387,34 +387,104 @@ const phasmophobiaObjects=[
       {fr:"Poltergeist",en:"Poltergeist",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Banshee",en:"Banshee",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Utilise la santé mentale de sa cible, et non la moyenne de l’équipe.",summaryEn:"Uses its target's sanity instead of the team's average sanity.",tone:"standard"},
       {fr:"Djinn",en:"Jinn",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
-      {fr:"Cauchemar",en:"Mare",thresholdFr:"40 / 60 %",thresholdEn:"40 / 60%",summaryFr:"60 % si la lumière de sa pièce est éteinte ou cassée ; 40 % si elle est allumée.",summaryEn:"60% when the light in its current room is off or broken; 40% when it is on.",tone:"variable"},
+      {fr:"Cauchemar",en:"Mare",thresholdFr:"40 / 60 %",thresholdEn:"40 / 60%",summaryFr:"60 % si la lumière de sa pièce est éteinte ou cassée ; 40 % si elle est allumée. N'allume jamais une lumière.",summaryEn:"60% when the light in its current room is off or broken; 40% when it is on. Never turns lights on.",tone:"variable"},
       {fr:"Revenant",en:"Revenant",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Ombre",en:"Shade",thresholdFr:"35 %",thresholdEn:"35%",summaryFr:"Ne peut pas démarrer une chasse si un joueur se trouve dans sa pièce actuelle.",summaryEn:"Cannot start a hunt while a player is in its current room.",tone:"late"},
-      {fr:"Démon",en:"Demon",thresholdFr:"70 %",thresholdEn:"70%",summaryFr:"Sa capacité peut déclencher une chasse à n’importe quel niveau de santé mentale.",summaryEn:"Its ability can trigger a hunt at any sanity level.",tone:"early"},
+      {fr:"Démon",en:"Demon",thresholdFr:"70 / 100 %",thresholdEn:"70 / 100%",summaryFr:"Seuil normal 70 %. Sa capacité rare peut déclencher une chasse à n’importe quel niveau de santé mentale ; à considérer comme atteignable jusqu'à 100 %.",summaryEn:"Normal threshold is 70%. Its rare ability can trigger a hunt at any sanity level, effectively up to 100%.",tone:"early",thresholdValues:[70],powerThresholdValues:[100]},
       {fr:"Yurei",en:"Yurei",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Oni",en:"Oni",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
-      {fr:"Yokai",en:"Yokai",thresholdFr:"50 / 80 %",thresholdEn:"50 / 80%",summaryFr:"80 % lorsqu’un joueur utilise le chat vocal à proximité ; sinon 50 %.",summaryEn:"80% when a player uses voice chat nearby; otherwise 50%.",tone:"early"},
+      {fr:"Yokai",en:"Yokai",thresholdFr:"50 / 80 %",thresholdEn:"50 / 80%",summaryFr:"Seuil normal 50 %. Son pouvoir vocal monte temporairement le seuil à 80 % lorsqu’un joueur utilise le chat vocal dans sa pièce.",summaryEn:"Normal threshold is 50%. Its voice power temporarily raises the threshold to 80% when a player uses voice chat in its room.",tone:"early",thresholdValues:[50],powerThresholdValues:[80]},
       {fr:"Hantu",en:"Hantu",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Goryo",en:"Goryo",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Myling",en:"Myling",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
-      {fr:"Onryo",en:"Onryo",thresholdFr:"40 / 60 %",thresholdEn:"40 / 60%",summaryFr:"60 % normalement, 40 % près d’une flamme. Après chaque troisième flamme soufflée, il peut tenter une chasse sans tenir compte de la santé mentale si aucune autre flamme ne le protège.",summaryEn:"60% normally and 40% near a flame. After every third flame it blows out, it can attempt a hunt regardless of sanity if no other flame protects the area.",tone:"variable"},
+      {fr:"Onryo",en:"Onryo",thresholdFr:"40 / 60 / 100 %",thresholdEn:"40 / 60 / 100%",summaryFr:"60 % normalement, 40 % près d’une flamme. Après chaque troisième flamme soufflée, il peut tenter une chasse sans tenir compte de la santé mentale si aucune autre flamme ne le protège.",summaryEn:"60% normally and 40% near a flame. After every third flame it blows out, it can attempt a hunt regardless of sanity if no other flame protects the area.",tone:"variable",thresholdValues:[40,60],powerThresholdValues:[100]},
       {fr:"Les Jumeaux",en:"The Twins",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Raiju",en:"Raiju",thresholdFr:"50 / 65 %",thresholdEn:"50 / 65%",summaryFr:"65 % en présence d’équipement électronique actif à proximité ; sinon 50 %.",summaryEn:"65% near active electronic equipment; otherwise 50%.",tone:"early"},
       {fr:"Obake",en:"Obake",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
-      {fr:"Le Mimic",en:"The Mimic",thresholdFr:"Variable",thresholdEn:"Variable",summaryFr:"Hérite du seuil et des capacités de chasse de l’entité qu’il imite actuellement.",summaryEn:"Inherits the hunt threshold and hunt abilities of the ghost it is currently mimicking.",tone:"variable"},
+      {fr:"Le Mimic",en:"The Mimic",thresholdFr:"15 → 100 %",thresholdEn:"15 → 100%",summaryFr:"Hérite du seuil et des capacités de l’entité imitée : 15 % minimum en imitant un Thayé âgé, jusqu'à 75 % en Thayé jeune et 100 % possible via la capacité rare du Démon.",summaryEn:"Inherits the threshold and abilities of the ghost it mimics: 15% minimum while mimicking an old Thaye, up to 75% as a young Thaye and 100% possible through Demon ability.",tone:"variable",thresholdValues:[15,75],powerThresholdValues:[100]},
       {fr:"Moroi",en:"Moroi",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Deogen",en:"Deogen",thresholdFr:"40 %",thresholdEn:"40%",summaryFr:"Peut commencer à chasser à 40 % de santé mentale moyenne ou moins.",summaryEn:"Can begin hunting at 40% average sanity or lower.",tone:"late"},
       {fr:"Thaye",en:"Thaye",thresholdFr:"75 → 15 %",thresholdEn:"75 → 15%",summaryFr:"Commence à 75 % lorsqu’il est jeune, puis perd 6 points de seuil par âge jusqu’à 15 % à l’âge 10.",summaryEn:"Starts at 75% when young, then loses 6 threshold points per age until reaching 15% at age 10.",tone:"variable"},
-      {fr:"Gallu",en:"Gallu",thresholdFr:"40 / 50 / 60 %",thresholdEn:"40 / 50 / 60%",summaryFr:"60 % lorsqu’il est enragé, 40 % lorsqu’il est affaibli et 50 % dans son état normal.",summaryEn:"60% while enraged, 40% while weakened and 50% in its normal state.",tone:"variable"},
-      {fr:"Dayan",en:"Dayan",thresholdFr:"45 / 50 / 65 %",thresholdEn:"45 / 50 / 65%",summaryFr:"À proximité : 65 % si un joueur bouge, 45 % s’il reste immobile. Sans joueur proche, le seuil standard de 50 % s’applique.",summaryEn:"Nearby: 65% if a player is moving and 45% if they stand still. With no nearby player, the standard 50% threshold applies.",tone:"variable"},
-      {fr:"Obambo",en:"Obambo",thresholdFr:"10 / 65 %",thresholdEn:"10 / 65%",summaryFr:"65 % dans son état agressif et 10 % dans son état calme.",summaryEn:"65% in its aggressive state and 10% in its calm state.",tone:"variable"},
-      {fr:"Aswang",en:"Aswang",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
-      {fr:"Kormos",en:"Kormos",thresholdFr:"50 / 70 %",thresholdEn:"50 / 70%",summaryFr:"70 % lorsqu’un joueur proche sprinte ; sinon le seuil standard de 50 % s’applique.",summaryEn:"70% while a nearby player is sprinting; otherwise the standard 50% threshold applies.",tone:"early"}
+      {fr:"Gallu",en:"Gallu",thresholdFr:"40 / 50 / 60 %",thresholdEn:"40 / 50 / 60%",summaryFr:"50 % normal, 60 % enragé, 40 % affaibli. L'état change avec crucifix, encens et sel ; l'enragé réduit la portée du crucifix, l'affaibli l'augmente.",summaryEn:"50% normally, 60% while enraged, 40% while weakened. State changes with crucifix, incense and salt; enraged reduces crucifix range, weakened increases it.",tone:"variable"},
+      {fr:"Dayan",en:"Dayan",thresholdFr:"45 / 50 / 65 %",thresholdEn:"45 / 50 / 65%",summaryFr:"À moins de 10 m : 65 % si le joueur le plus proche bouge, 45 % s’il reste immobile. Sans joueur proche, seuil standard de 50 %.",summaryEn:"Within 10 m: 65% if the closest player is moving, 45% if they stand still. With no nearby player, the standard 50% threshold applies.",tone:"variable"},
+      {fr:"Obambo",en:"Obambo",thresholdFr:"10 / 65 %",thresholdEn:"10 / 65%",summaryFr:"10 % dans l'état calme, 65 % dans l'état agressif. Démarre calme, change d'état 1 min après l'ouverture puis toutes les 2 min ; chasse agressive 20 % plus courte.",summaryEn:"10% while calm, 65% while aggressive. Starts calm, changes state 1 min after opening and then every 2 min; aggressive hunts are 20% shorter.",tone:"variable"},
+      {fr:"Aswang",en:"Aswang",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard. Peut parfois chasser sans période de grâce, mais ne peut pas tuer un joueur correctement placé dans une cachette officielle.",summaryEn:"Standard threshold. Can sometimes hunt with no grace period, but cannot kill a player correctly hidden in an official hiding spot.",tone:"standard"},
+      {fr:"Kormos",en:"Kormos",thresholdFr:"50 / 70 %",thresholdEn:"50 / 70%",summaryFr:"50 % par défaut, 70 % si un joueur sprinte dans sa pièce. Très mauvaise vision, mais détecte les bruits de pas pendant les chasses.",summaryEn:"50% by default, 70% if a player sprints in its room. Very poor vision, but detects footsteps during hunts.",tone:"early"}
     ];
+    const ghostEvidenceTypes=[
+      {id:"emf",fr:"EMF 5",en:"EMF 5",short:"EMF"},
+      {id:"dots",fr:"Projecteur D.O.T.S.",en:"D.O.T.S. Projector",short:"DOTS"},
+      {id:"uv",fr:"Ultraviolet",en:"Ultraviolet",short:"UV"},
+      {id:"freezing",fr:"Températures glaciales",en:"Freezing Temperatures",short:"0°C"},
+      {id:"orbs",fr:"Orbes fantomatiques",en:"Ghost Orbs",short:"ORB"},
+      {id:"writing",fr:"Écriture fantomatique",en:"Ghost Writing",short:"BOOK"},
+      {id:"spirit",fr:"Spirit Box",en:"Spirit Box",short:"SB"}
+    ];
+    const ghostJournalOrder=["Aswang","Banshee","Dayan","Demon","Deogen","Gallu","Goryo","Hantu","Jinn","Kormos","Mare","Moroi","Myling","Obake","Obambo","Oni","Onryo","Phantom","Poltergeist","Raiju","Revenant","Shade","Spirit","Thaye","The Mimic","The Twins","Wraith","Yokai","Yurei"];
+    const ghostEvidenceMap={
+      Spirit:["emf","spirit","writing"],
+      Wraith:["emf","spirit","dots"],
+      Phantom:["spirit","uv","dots"],
+      Poltergeist:["spirit","uv","writing"],
+      Banshee:["uv","orbs","dots"],
+      Jinn:["emf","uv","freezing"],
+      Mare:["spirit","orbs","writing"],
+      Revenant:["orbs","writing","freezing"],
+      Shade:["emf","writing","freezing"],
+      Demon:["uv","writing","freezing"],
+      Yurei:["orbs","freezing","dots"],
+      Oni:["emf","freezing","dots"],
+      Yokai:["spirit","orbs","dots"],
+      Hantu:["uv","orbs","freezing"],
+      Goryo:["emf","uv","dots"],
+      Myling:["emf","uv","writing"],
+      Onryo:["spirit","orbs","freezing"],
+      "The Twins":["emf","spirit","freezing"],
+      Raiju:["emf","orbs","dots"],
+      Obake:["emf","uv","orbs"],
+      "The Mimic":["spirit","uv","freezing"],
+      Moroi:["spirit","writing","freezing"],
+      Deogen:["spirit","writing","dots"],
+      Thaye:["orbs","writing","dots"],
+      Aswang:["freezing","writing","dots"],
+      Dayan:["emf","orbs","spirit"],
+      Gallu:["emf","spirit","uv"],
+      Kormos:["orbs","spirit","uv"],
+      Obambo:["uv","writing","dots"]
+    };
+    const ghostBonusEvidenceMap={"The Mimic":["orbs"]};
+    const ghostImageMap={
+      Banshee:"https://static.wikia.nocookie.net/phasmophobia/images/2/26/Banshee_Discovered.jpg/revision/latest",
+      Demon:"https://static.wikia.nocookie.net/phasmophobia/images/f/f5/Demon_Discovered.jpg/revision/latest",
+      Deogen:"https://static.wikia.nocookie.net/phasmophobia/images/d/dd/Deogen_Discovered.jpg/revision/latest",
+      Goryo:"https://static.wikia.nocookie.net/phasmophobia/images/6/6b/Goryo_Discovered.jpg/revision/latest",
+      Hantu:"https://static.wikia.nocookie.net/phasmophobia/images/e/e0/Hantu_Discovered.jpg/revision/latest",
+      Jinn:"https://static.wikia.nocookie.net/phasmophobia/images/5/56/Jinn_Discovered.jpg/revision/latest",
+      Mare:"https://static.wikia.nocookie.net/phasmophobia/images/3/32/Mare_Discovered.jpg/revision/latest",
+      Moroi:"https://static.wikia.nocookie.net/phasmophobia/images/9/95/Moroi_Discovered.jpg/revision/latest",
+      Myling:"https://static.wikia.nocookie.net/phasmophobia/images/e/e0/Myling_Discovered.jpg/revision/latest",
+      Obake:"https://static.wikia.nocookie.net/phasmophobia/images/7/7e/Obake_Discovered.jpg/revision/latest",
+      Oni:"https://static.wikia.nocookie.net/phasmophobia/images/8/86/Oni_Discovered.jpg/revision/latest",
+      Onryo:"https://static.wikia.nocookie.net/phasmophobia/images/f/f3/Onryo_Discovered.jpg/revision/latest",
+      Phantom:"https://static.wikia.nocookie.net/phasmophobia/images/2/27/Phantom_Discovered.jpg/revision/latest",
+      Poltergeist:"https://static.wikia.nocookie.net/phasmophobia/images/1/10/Poltergeist_Discovered.jpg/revision/latest",
+      Raiju:"https://static.wikia.nocookie.net/phasmophobia/images/a/aa/Raiju_Discovered.jpg/revision/latest",
+      Revenant:"https://static.wikia.nocookie.net/phasmophobia/images/1/16/Revenant_Discovered.jpg/revision/latest",
+      Shade:"https://static.wikia.nocookie.net/phasmophobia/images/f/ff/Shade_Discovered.jpg/revision/latest",
+      Spirit:"https://static.wikia.nocookie.net/phasmophobia/images/c/c1/Spirit_Discovered.jpg/revision/latest",
+      Thaye:"https://static.wikia.nocookie.net/phasmophobia/images/6/6a/Thaye_Discovered.jpg/revision/latest",
+      "The Mimic":"https://static.wikia.nocookie.net/phasmophobia/images/e/e0/The_Mimic_Discovered.jpg/revision/latest",
+      "The Twins":"https://static.wikia.nocookie.net/phasmophobia/images/f/f8/The_Twins_Discovered.jpg/revision/latest",
+      Wraith:"https://static.wikia.nocookie.net/phasmophobia/images/c/c1/Wraith_Discovered.jpg/revision/latest",
+      Yokai:"https://static.wikia.nocookie.net/phasmophobia/images/2/27/Yokai_Discovered.jpg/revision/latest",
+      Yurei:"https://static.wikia.nocookie.net/phasmophobia/images/3/31/Yurei_Discovered.jpg/revision/latest"
+    };
 
     let allObjects=structuredClone(phasmophobiaObjects),remainingObjects=[],selectedObjects=[],removedObjects=[],permanentlyLostObjects=[];
     let permanentLostNames=new Set(),singleCopyNames=new Set(),roundEffects=[];
     let roundCount=1,winCount=0,lossCount=0,elapsedSeconds=0,timerInterval=null,nextTarotMultiplier=1,challengeOutcome=null;
+    let ghostMemoRemoved=new Set(),ghostMemoChosen="",ghostMemoEvidenceSelected=new Set(),ghostMemoInfo={behavior:true,walk:true,hunt:true,speed:true},ghostWalkSpeedMultiplier=1;
+    let ghostWalkAudio={ctx:null,timer:null,ghostKey:"",speed:0,stepIndex:0,startedAt:0,mode:"fixed",baseSpeed:0,maxSpeed:0,accelRatio:1,accelSeconds:13};
     const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
     function wallIconSvg(icon){
@@ -503,6 +573,28 @@ const phasmophobiaObjects=[
       {id:"brownstone",name:"Brownstone High School",size:"large",image:"https://static.wikia.nocookie.net/phasmophobia/images/a/a5/High_school_updated2.png/revision/latest/scale-to-width-down/640?cb=20240112131538"},
       {id:"sunny-meadows",name:"Sunny Meadows",size:"large",image:"https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752"}
     ];
+    const mapRoomLayouts=[
+      {id:"tanglewood",name:"6 Tanglewood Drive",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/6_Tanglewood_Drive",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/c/cd/Rooms_Tanglewood.png/revision/latest?cb=20260303190102&path-prefix=fr"}]},
+      {id:"edgefield",name:"42 Edgefield Road",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/42_Edgefield_Road",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/8/8f/Rooms_Edgefield.png/revision/latest?cb=20251112081144&path-prefix=fr"}]},
+      {id:"ridgeview",name:"10 Ridgeview Court",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/10_Ridgeview_Court",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/5/51/Rooms_Ridgeview.png/revision/latest?cb=20251112081250&path-prefix=fr"}]},
+      {id:"nells-diner",name:"Nell's Diner",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/Nell%27s_Diner",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/b/bd/Rooms_Nells_Diner.png/revision/latest?cb=20260304165818&path-prefix=fr"}]},
+      {id:"grafton",name:"Grafton Farmhouse",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/Grafton_Farmhouse",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/3/37/Rooms_Grafton.png/revision/latest?cb=20260304164445&path-prefix=fr"}]},
+      {id:"willow",name:"13 Willow Street",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/13_Willow_Street",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/f/f6/Rooms_Willow.png/revision/latest?cb=20251112081400&path-prefix=fr"}]},
+      {id:"camp-woodwind",name:"Camp Woodwind",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/Camp_Woodwind",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/7/78/Rooms_Camp_Woodwind.png/revision/latest?cb=20260304161941&path-prefix=fr"}]},
+      {id:"point-hope",name:"Point Hope",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Point_Hope",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/1/11/Rooms_Point_Hope.png/revision/latest?cb=20260304174801&path-prefix=fr"}]},
+      {id:"bleasdale",name:"Bleasdale Farmhouse",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Bleasdale_Farmhouse",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/0/03/Rooms_Bleasdale.png/revision/latest?cb=20260304165201&path-prefix=fr"}]},
+      {id:"sunny-restricted",name:"Sunny Meadows Restricted",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Sunny_Meadows_Mental_Institution",images:[
+        {fr:"Restriction cour",en:"Courtyard restriction",url:"https://static.wikia.nocookie.net/phasmophobia/images/e/ec/Rooms_SM_Restricted_Courtyard.png/revision/latest?cb=20260304175730&path-prefix=fr"},
+        {fr:"Restriction aile homme",en:"Male wing restriction",url:"https://static.wikia.nocookie.net/phasmophobia/images/e/ec/Rooms_SM_Restricted_Male.png/revision/latest?cb=20260304175943&path-prefix=fr"},
+        {fr:"Restriction aile femme",en:"Female wing restriction",url:"https://static.wikia.nocookie.net/phasmophobia/images/8/80/Rooms_SM_Restricted_Female.png/revision/latest?cb=20260304180521&path-prefix=fr"},
+        {fr:"Restriction hôpital",en:"Hospital restriction",url:"https://static.wikia.nocookie.net/phasmophobia/images/8/8f/Rooms_SM_Restricted_Hospital.png/revision/latest?cb=20260304180744&path-prefix=fr"},
+        {fr:"Restriction sous-sol",en:"Basement restriction",url:"https://static.wikia.nocookie.net/phasmophobia/images/b/b4/Rooms_SM_Restricted_Restricted.png/revision/latest?cb=20260304181004&path-prefix=fr"}
+      ]},
+      {id:"prison",name:"Prison",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Prison",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/0/04/Rooms_Prison.png/revision/latest?cb=20251112081936&path-prefix=fr"}]},
+      {id:"maple-lodge",name:"Maple Lodge Campsite",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Maple_Lodge_Campsite",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/b/bc/Rooms_Maple_Lodge.png/revision/latest?cb=20260304171145&path-prefix=fr"}]},
+      {id:"brownstone",name:"Brownstone High School",size:"large",page:"https://phasmophobia.fandom.com/fr/wiki/Brownstone_High_School",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/0/02/Rooms_Brownstone_High_School.png/revision/latest?cb=20251112082409&path-prefix=fr"}]},
+      {id:"sunny-meadows",name:"Sunny Meadows",size:"large",page:"https://phasmophobia.fandom.com/fr/wiki/Sunny_Meadows_Mental_Institution",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/a/ae/Rooms_Sunny_Meadows.png/revision/latest?cb=20260304175134&path-prefix=fr"}]}
+    ];
     let cursedValidatedMaps=new Set();
     const hunterDifficultySettings={
       noob:{fr:"Noob",en:"Noob",protection:300,hunts:5},
@@ -515,13 +607,15 @@ const phasmophobiaObjects=[
 
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
-    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),inviteRoomView=document.getElementById("invite-room-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),hunterChallengeView=document.getElementById("hunter-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count");
+    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),inviteRoomView=document.getElementById("invite-room-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),mapMemoView=document.getElementById("map-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),hunterChallengeView=document.getElementById("hunter-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count"),mapMemoList=document.getElementById("map-memo-list");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
     const wallRoundDisplay=document.getElementById("wall-round"),wallWinCountDisplay=document.getElementById("wall-win-count"),wallOpenCountDisplay=document.getElementById("wall-open-count"),wallNeededCountDisplay=document.getElementById("wall-needed-count"),wallOpenRandomButton=document.getElementById("wall-open-random"),wallWinRoundButton=document.getElementById("wall-win-round"),wallLoseButton=document.getElementById("wall-lose-challenge"),wallResetButton=document.getElementById("wall-reset"),wallOpenAllDebugButton=document.getElementById("wall-open-all-debug"),wallStatus=document.getElementById("wall-status"),wallGrid=document.getElementById("wall-grid"),wallActiveList=document.getElementById("wall-active-list");
     const themeSelect=document.getElementById("theme-select"),cursedMapGrid=document.getElementById("cursed-map-grid"),cursedProgressCount=document.getElementById("cursed-progress-count"),cursedProgressLabel=document.getElementById("cursed-progress-label"),cursedProgressBar=document.getElementById("cursed-progress-bar"),cursedResetButton=document.getElementById("cursed-reset");
     const hunterTeamAInput=document.getElementById("hunter-team-a"),hunterTeamBInput=document.getElementById("hunter-team-b"),hunterRoundLimitSelect=document.getElementById("hunter-round-limit"),hunterDifficultySelect=document.getElementById("hunter-difficulty"),hunterRoundDisplay=document.getElementById("hunter-round-display"),hunterProtectionTime=document.getElementById("hunter-protection-time"),hunterHuntCount=document.getElementById("hunter-hunt-count"),hunterRoleSummary=document.getElementById("hunter-role-summary"),hunterTeamALabel=document.getElementById("hunter-team-a-label"),hunterTeamBLabel=document.getElementById("hunter-team-b-label"),hunterScoreA=document.getElementById("hunter-score-a"),hunterScoreB=document.getElementById("hunter-score-b"),hunterStatus=document.getElementById("hunter-status"),hunterLog=document.getElementById("hunter-log"),hunterEvidenceAnnounced=document.getElementById("hunter-evidence-announced"),hunterItemsRemoved=document.getElementById("hunter-items-removed"),hunterHuntsCompleted=document.getElementById("hunter-hunts-completed"),hunterInvestigatorChoice=document.getElementById("hunter-investigator-choice"),hunterHunterChoice=document.getElementById("hunter-hunter-choice"),hunterActualGhost=document.getElementById("hunter-actual-ghost"),hunterLockInvestigator=document.getElementById("hunter-lock-investigator"),hunterLockHunter=document.getElementById("hunter-lock-hunter"),hunterInvestigatorLock=document.getElementById("hunter-investigator-lock"),hunterHunterLock=document.getElementById("hunter-hunter-lock"),hunterScoreRound=document.getElementById("hunter-score-round"),hunterRoundResult=document.getElementById("hunter-round-result"),hunterNextRound=document.getElementById("hunter-next-round"),hunterAddOvertime=document.getElementById("hunter-add-overtime"),hunterUndo=document.getElementById("hunter-undo"),hunterReset=document.getElementById("hunter-reset");
-    const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),topRoomPlayers=document.getElementById("top-room-players"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel");
+    const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),challengeSessionControls=[...document.querySelectorAll("[data-challenge-session]")],challengeLiveAreas=[...document.querySelectorAll("[data-challenge-live]")],topCurrentChallenge=document.getElementById("top-current-challenge"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],pagePlayModeButtons=[...document.querySelectorAll("[data-page-play-mode]")],pageStreamerMode=document.querySelector("[data-page-streamer-mode]"),topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel"),screamerButton=document.getElementById("screamer-button"),screamerOverlay=document.getElementById("screamer-overlay");
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
+    let activeChallenge=null;
+    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,hunter:false,possessed:false};
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
     const englishTranslations={
@@ -591,11 +685,26 @@ const phasmophobiaObjects=[
       "Crée ou rejoins une room, puis lance un défi. Les joueurs connectés peuvent agir sur le suivi du défi depuis leur propre écran.":"Create or join a room, then start a challenge. Connected players can use the challenge tracker from their own screen.",
       "Une room active est nécessaire pour ouvrir un défi interactif.":"An active room is required to open an interactive challenge.",
       "Choisis un mode dans la barre du haut avant d’ouvrir un défi.":"Choose a mode in the top bar before opening a challenge.",
+      "Explication des modes de défi":"Challenge mode explanation",
       "Mode de jeu":"Game mode",
       "Solo":"Solo",
       "Multi local":"Local multi",
       "Room":"Room",
       "Streamer":"Streamer",
+      "Solo : progression sur cet écran uniquement, avec le défi en cours affiché dans la topbar.":"Solo: progress stays on this screen only, with the active challenge shown in the topbar.",
+      "Multi local : plusieurs joueurs utilisent le même appareil pour les rôles et validations.":"Local multi: several players use the same device for roles and validations.",
+      "Room : synchronise les joueurs et la progression entre plusieurs appareils.":"Room: syncs players and progress across devices.",
+      "Active les variantes prévues pour le stream, comme les choix du tchat sur certains effets.":"Enables stream variants, such as chat choices for some effects.",
+      "Défi non démarré":"Challenge not started",
+      "Défi démarré":"Challenge started",
+      "Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.":"Rules stay visible. Start the challenge to show tracking and actions.",
+      "Le suivi est visible. Stoppe le défi pour revenir aux règles seules.":"Tracking is visible. Stop the challenge to return to rules only.",
+      "Démarrer le défi":"Start challenge",
+      "Stopper le défi":"Stop challenge",
+      "Aucun défi":"No challenge",
+      "Défi :":"Challenge:",
+      "Défi en cours : aucun":"Active challenge: none",
+      "Room - inactive":"Room - inactive",
       "Off":"Off",
       "On":"On",
       "inactive":"inactive",
@@ -607,7 +716,12 @@ const phasmophobiaObjects=[
       "Aide visuelle":"Visual guide",
       "Une comparaison visuelle simple pour distinguer l’investigateur, qui est de votre côté, de l’entité, qui ne l’est clairement pas.":"A simple visual comparison to distinguish the investigator, who is on your side, from the ghost, which clearly is not.",
       "Ouvrir l’aide visuelle":"Open visual guide",
+      "Plans des pièces":"Room layouts",
+      "Consulte le découpage des pièces de chaque map pour préparer les objectifs, les fuites et les vérifications rapides.":"Check each map's room layout to prepare objectives, escape routes and quick callouts.",
+      "Ouvrir les plans des pièces":"Open room layouts",
       "← Retour au mémo":"← Back to reference",
+      "Découpage officiel des pièces pour chaque map, utile pour comparer les noms de zones et les endroits possibles de l’entité.":"Official room breakdown for each map, useful for comparing zone names and possible ghost rooms.",
+      "Images des plans : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.":"Layout images: Phasmophobia Wiki / Fandom. An Internet connection is required to display the images.",
       "Un repère visuel simple pour savoir rapidement qui est gentil et qui ne l’est pas.":"A simple visual reference to quickly see who is nice and who is not.",
       "Gentil":"Nice",
       "Investigateur":"Investigator",
@@ -989,9 +1103,12 @@ const phasmophobiaObjects=[
       try{localStorage.setItem("tarot-surprise-language",currentLanguage)}catch(error){}
       applyLanguage();
       renderGhostMemo();
+      renderMapMemo();
       renderMediaChallenge();
       renderCursedRun();
       renderHunterChallenge();
+      renderChallengeSessionControls();
+      renderChallengeRoomGate();
       refreshMediaResultLanguage();
       refreshPossessedLanguage();
       if(mediaPopup.classList.contains("open")&&mediaOutcome)showMediaOutcome(mediaOutcome)
@@ -1040,21 +1157,22 @@ const phasmophobiaObjects=[
       else if(!hunterChallengeView.hidden)page="hunter";
       else if(!possessedChallengeView.hidden)page="possessed";
       else if(!funMemoView.hidden)page="funMemo";
+      else if(!mapMemoView.hidden)page="mapMemo";
       else if(!ghostMemoView.hidden)page="ghostMemo";
       else if(inviteRoomView&&!inviteRoomView.hidden)page="inviteRoom";
       else if(!memoView.hidden)page="memo";
       else if(!challengeSelectionView.hidden)page="challenges";
       const titles={
-        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Média Surprise - Phasmophobia",wall:"Mur de la mort - Phasmophobia",cursed:"Cursed Run - Phasmophobia",possessed:"Le Possédé - Phasmophobia"},
-        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise - Phasmophobia",media:"Media Surprise - Phasmophobia",wall:"Wall of Death - Phasmophobia",cursed:"Cursed Run - Phasmophobia",possessed:"The Possessed - Phasmophobia"}
+        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",mapMemo:"Plans des pièces - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise",media:"Média Surprise",wall:"Mur de la mort",cursed:"Cursed Run",possessed:"Le Possédé"},
+        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",mapMemo:"Room Layouts - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise",media:"Media Surprise",wall:"Wall of Death",cursed:"Cursed Run",possessed:"The Possessed"}
       };
-      titles.fr.hunter="Chasseur et enquêteur - Phasmophobia";
-      titles.en.hunter="Hunter and Investigator - Phasmophobia";
+      titles.fr.hunter="Chasseur et enquêteur";
+      titles.en.hunter="Hunter and Investigator";
       titles.fr.inviteRoom="Invitation room - Phasmophobia";
       titles.en.inviteRoom="Room invitation - Phasmophobia";
       document.title=titles[currentLanguage][page]
     }
-    function hideAllViews(){[hubView,inviteRoomView,challengeSelectionView,memoView,ghostMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,hunterChallengeView,possessedChallengeView].forEach(view=>{if(view)view.hidden=true})}
+    function hideAllViews(){stopGhostWalkCadence();[hubView,inviteRoomView,challengeSelectionView,memoView,ghostMemoView,mapMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,hunterChallengeView,possessedChallengeView].forEach(view=>{if(view)view.hidden=true})}
     function currentRouteHash(){
       const hash=decodeURIComponent(location.hash||"").replace(/^#/,"");
       const lastHash=hash.split("#").filter(Boolean).pop()||hash;
@@ -1094,6 +1212,10 @@ const phasmophobiaObjects=[
     function showGhostMemo(updateHistory=true){
       if(updateHistory&&location.hash!=="#memo-ghosts"){location.hash="memo-ghosts";return}
       closeChallengePopup();hideAllViews();ghostMemoView.hidden=false;renderGhostMemo();updateDocumentTitle();window.scrollTo(0,0)
+    }
+    function showMapMemo(updateHistory=true){
+      if(updateHistory&&location.hash!=="#memo-maps"){location.hash="memo-maps";return}
+      closeChallengePopup();hideAllViews();mapMemoView.hidden=false;renderMapMemo();updateDocumentTitle();window.scrollTo(0,0)
     }
     function showFunMemo(updateHistory=true){
       if(updateHistory&&location.hash!=="#memo-fun"){location.hash="memo-fun";return}
@@ -1139,6 +1261,7 @@ const phasmophobiaObjects=[
       else if(route==="chasseur-enqueteur")openHunterChallenge(false);
       else if(route==="le-possede")openPossessedChallenge(false);
       else if(route==="memo-ghosts")showGhostMemo(false);
+      else if(route==="memo-maps")showMapMemo(false);
       else if(route==="memo-fun")showFunMemo(false);
       else if(route==="challenges")showChallengeSelection(false);
       else if(route==="memo")showMemo(false);
@@ -1147,13 +1270,88 @@ const phasmophobiaObjects=[
       updateTopbar()
     }
     function updateTopbar(){
-      const backBtn=document.getElementById("ph-back-btn");if(backBtn)backBtn.hidden=!hubView.hidden
+      const backBtn=document.getElementById("ph-back-btn");if(backBtn)backBtn.hidden=!hubView.hidden;
+      renderActiveChallengeLink()
     }
     function goBack(){
-      if(!ghostMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
+      if(!ghostMemoView.hidden||!mapMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
       if(inviteRoomView&&!inviteRoomView.hidden){showHub(true);return}
       if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!hunterChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
       showHub(true)
+    }
+
+    function challengeLabel(challenge){
+      const labels=currentLanguage==="en"?{
+        tarot:"Tarot Surprise",
+        media:"Media Surprise",
+        wall:"Wall of Death",
+        cursed:"Cursed Run",
+        hunter:"Hunter and Investigator",
+        possessed:"The Possessed"
+      }:{
+        tarot:"Tarot Surprise",
+        media:"Média Surprise",
+        wall:"Mur de la mort",
+        cursed:"Cursed Run",
+        hunter:"Chasseur et enquêteur",
+        possessed:"Le Possédé"
+      };
+      return labels[challenge]||possessedText("Aucun défi","No challenge")
+    }
+    function renderActiveChallengeLink(){
+      if(!topCurrentChallenge)return;
+      topCurrentChallenge.hidden=!activeChallenge;
+      if(!activeChallenge)return;
+      topCurrentChallenge.href=`#${challengeHash(activeChallenge)}`;
+      topCurrentChallenge.textContent=`${possessedText("Défi en cours","Active challenge")} : ${challengeLabel(activeChallenge)}`
+    }
+    function canManageChallengeSession(){return playMode!=="room"||possessedIsHost}
+    function renderChallengeSessionControls(){
+      const canManage=canManageChallengeSession();
+      challengeSessionControls.forEach(control=>{
+        const challenge=control.dataset.challengeSession,started=!!challengeSessionState[challenge];
+        const title=control.querySelector("strong"),note=control.querySelector("p"),start=control.querySelector("[data-challenge-start]"),stop=control.querySelector("[data-challenge-stop]");
+        if(title)title.textContent=started?possessedText("Défi démarré","Challenge started"):possessedText("Défi non démarré","Challenge not started");
+        if(note)note.textContent=!canManage?possessedText("Seul l'hôte peut démarrer ou stopper le défi en room.","Only the host can start or stop the challenge in a room."):started?possessedText("Le suivi est visible. Stoppe le défi pour revenir aux règles seules.","Tracking is visible. Stop the challenge to return to rules only."):possessedText("Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.","Rules stay visible. Start the challenge to show tracking and actions.");
+        if(start){start.hidden=started;start.disabled=!canManage}
+        if(stop){stop.hidden=!started;stop.disabled=!canManage}
+      });
+      challengeLiveAreas.forEach(area=>{area.hidden=!challengeSessionState[area.dataset.challengeLive]})
+    }
+    function syncChallengeStarted(challenge){
+      if(!challenge)return;
+      if(challenge==="possessed"){
+        if(playMode==="room"&&!possessedIsHost)sendRoomMessage({type:"possessed-session",started:!!challengeSessionState.possessed});
+        else broadcastPossessedPublicState();
+      }
+      else scheduleRoomChallengeSync(challenge)
+    }
+    function setChallengeStarted(challenge,started,options={}){
+      if(!(challenge in challengeSessionState))return;
+      if(!canManageChallengeSession()&&options.force!==true&&options.sync!==false){renderChallengeSessionControls();return}
+      const shouldStart=Boolean(started);
+      let previousActive=null;
+      if(shouldStart&&activeChallenge&&activeChallenge!==challenge&&challengeSessionState[activeChallenge]){
+        const confirmed=options.confirm===false||confirm(possessedText(`Un défi est déjà lancé : ${challengeLabel(activeChallenge)}. Le stopper et lancer ${challengeLabel(challenge)} ?`,`A challenge is already running: ${challengeLabel(activeChallenge)}. Stop it and start ${challengeLabel(challenge)}?`));
+        if(!confirmed)return;
+        previousActive=activeChallenge;
+        challengeSessionState[previousActive]=false;
+        if(previousActive==="tarot")pauseTimer()
+      }
+      challengeSessionState[challenge]=shouldStart;
+      if(challenge==="tarot"&&!shouldStart)pauseTimer();
+      if(shouldStart)activeChallenge=challenge;
+      else if(activeChallenge===challenge)activeChallenge=null;
+      renderChallengeSessionControls();
+      renderChallengeRoomGate();
+      renderActiveChallengeLink();
+      if(options.sync===false)return;
+      if(previousActive)syncChallengeStarted(previousActive);
+      if(challenge==="possessed"){
+        if(playMode==="room"&&!possessedIsHost)sendRoomMessage({type:"possessed-session",started:Boolean(started)});
+        else broadcastPossessedPublicState();
+      }
+      else scheduleRoomChallengeSync(challenge)
     }
 
 
@@ -1163,56 +1361,471 @@ const phasmophobiaObjects=[
       return matches.map(number=>Number(number.replace(",","."))).filter(number=>!Number.isNaN(number)).map(number=>Math.max(0,Math.min(100,number)))
     }
     function getGhostThresholdMetrics(ghost){
-      const values=extractThresholdValues(ghost.thresholdEn);
-      if(!values.length)return {values:[0],min:0,max:0};
+      const values=(ghost.thresholdValues||extractThresholdValues(ghost.thresholdEn)).map(value=>Math.max(0,Math.min(100,value)));
+      const powerValues=(ghost.powerThresholdValues||[]).map(value=>Math.max(0,Math.min(100,value)));
+      const displayValues=[...values,...powerValues];
+      if(!displayValues.length)return {values:[0],powerValues:[],displayValues:[0],min:0,max:0,displayMin:0,displayMax:0};
+      const baseValues=values.length?values:displayValues;
+      return {values:baseValues,powerValues,displayValues,min:Math.min(...baseValues),max:Math.max(...baseValues),displayMin:Math.min(...displayValues),displayMax:Math.max(...displayValues)}
+    }
+    function formatGhostNumber(value){
+      const locale=currentLanguage==="en"?"en-US":"fr-FR";
+      return Number(value).toLocaleString(locale,{maximumFractionDigits:3})
+    }
+    function formatGhostThresholdValues(values){
+      const unique=[...new Set(values)].sort((a,b)=>a-b);
+      if(!unique.length)return "";
+      if(unique.length===1)return formatGhostNumber(unique[0]);
+      return `${formatGhostNumber(unique[0])} → ${formatGhostNumber(unique[unique.length-1])}`
+    }
+    function ghostThresholdHtml(ghost){
+      const metrics=getGhostThresholdMetrics(ghost),threshold=currentLanguage==="en"?ghost.thresholdEn:ghost.thresholdFr;
+      if(!metrics.powerValues.length)return `<span class="threshold-normal">${escapeHtml(threshold)}</span>`;
+      const normalLabel=currentLanguage==="en"?"normal":"normal",powerLabel=currentLanguage==="en"?"ability":"pouvoir";
+      return `<span class="threshold-normal">${escapeHtml(formatGhostThresholdValues(metrics.values))} <small>(${escapeHtml(normalLabel)})</small></span><span class="threshold-separator"> / </span><span class="threshold-power">${escapeHtml(formatGhostThresholdValues(metrics.powerValues))} <small>(${escapeHtml(powerLabel)})</small></span><span class="threshold-unit"> %</span>`
+    }
+    function ghostSpeedInfo(ghost){
+      const standard={fr:"1,7 → 2,8 m/s",en:"1.7 → 2.8 m/s",summaryFr:"Vitesse de base 1,7 m/s. Avec une ligne de mire maintenue, la plupart des entités accélèrent jusqu'à 1,65 fois leur vitesse de base, soit environ 2,8 m/s.",summaryEn:"Base speed is 1.7 m/s. With sustained line of sight, most ghosts accelerate up to 1.65 times their base speed, about 2.8 m/s.",values:[1.7,2.8],tone:"standard"};
+      const speeds={
+        Jinn:{fr:"1,7 / 2,5 m/s",en:"1.7 / 2.5 m/s",summaryFr:"Passe à 2,5 m/s s'il a une ligne de mire, se trouve à plus de 3 m du joueur et que le disjoncteur est allumé. À moins de 2 m, ou disjoncteur éteint, il revient à sa vitesse normale.",summaryEn:"Moves at 2.5 m/s with line of sight when more than 3 m away and the breaker is on. Within 2 m, or with the breaker off, it returns to normal speed.",values:[1.7,2.5],tone:"fast"},
+        Revenant:{fr:"1,0 / 3,0 m/s",en:"1.0 / 3.0 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. Se déplace à 1 m/s en errance, passe à 3 m/s dès qu'il détecte un joueur par vue, voix ou électronique, puis décélère vers 1 m/s sur environ 2,7 s après avoir perdu la cible.",summaryEn:"Does not gain line-of-sight speed. Moves at 1 m/s while roaming, jumps to 3 m/s after detecting a player by sight, voice or electronics, then decelerates toward 1 m/s over about 2.7 s after losing the target.",values:[1,3],tone:"fast"},
+        Hantu:{fr:"1,4 → 2,7 m/s",en:"1.4 → 2.7 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. Sa vitesse dépend de la température : 1,4 m/s au-dessus de 15 °C, puis jusqu'à 2,7 m/s sous 0 °C. Souffle glacial visible en chasse si le disjoncteur est éteint.",summaryEn:"Does not gain line-of-sight speed. Its speed depends on temperature: 1.4 m/s above 15C, up to 2.7 m/s below 0C. Cold breath is visible during hunts when the breaker is off.",values:[1.4,1.75,2.1,2.3,2.4,2.5,2.7],walkValues:[1.4,2.7],tone:"variable"},
+        "The Twins":{fr:"1,5 / 1,9 m/s",en:"1.5 / 1.9 m/s",summaryFr:"Une seule entité mécaniquement, mais la chasse choisit 50 % du temps une vitesse lente de 1,5 m/s ou rapide de 1,9 m/s. Avec accélération de ligne de mire, max env. 2,605 / 3,005 m/s.",summaryEn:"Mechanically one ghost, but each hunt has a 50% chance to use slow 1.5 m/s or fast 1.9 m/s base speed. With line-of-sight acceleration, max is about 2.605 / 3.005 m/s.",values:[1.5,1.9,2.605,3.005],walkValues:[1.5,1.9,3.005],tone:"variable"},
+        Raiju:{fr:"1,7 / 2,5 m/s",en:"1.7 / 2.5 m/s",summaryFr:"Passe à 2,5 m/s près d'un appareil électronique actif au même étage : 6 m petite carte, 8 m moyenne, 10 m grande. Interférences et battements de cœur à 15 m. Hors électronique, vitesse standard ; l'accélération LoS peut s'accumuler en arrière-plan.",summaryEn:"Moves at 2.5 m/s near active electronics on the same floor: 6 m small map, 8 m medium, 10 m large. Interference and heartbeat at 15 m. Away from electronics, standard speed; LoS acceleration can build in the background.",values:[1.7,2.5],tone:"fast"},
+        Moroi:{fr:"1,5 → 3,71 m/s",en:"1.5 → 3.71 m/s",summaryFr:"Sa vitesse de base dépend de la santé mentale moyenne : 1,5 m/s à 45 % ou plus, jusqu'à 2,25 m/s entre 0 et 5 %. Avec l'accélération de ligne de mire, il peut atteindre environ 3,71 m/s. Peut maudire via Spirit Box, micro parabolique ou enregistreur de son.",summaryEn:"Base speed depends on average sanity: 1.5 m/s at 45% or above, up to 2.25 m/s between 0 and 5%. With line-of-sight acceleration it can reach about 3.71 m/s. Can curse through Spirit Box, parabolic mic or sound recorder.",values:[1.5,1.583,1.66,1.749,1.832,1.915,1.998,2.081,2.164,2.25,3.71],walkValues:[1.5,2.25,3.71],tone:"fast"},
+        Deogen:{fr:"0,4 → 3,0 m/s",en:"0.4 → 3.0 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. Il sait toujours où sont les joueurs : 3 m/s au-dessus de 6 m, distance x 0,15 m/s sous 6 m, minimum 0,4 m/s. Réponse Spirit Box unique possible à moins de 1 m.",summaryEn:"Does not gain line-of-sight speed. It always knows where players are: 3 m/s above 6 m, distance x 0.15 m/s below 6 m, minimum 0.4 m/s. Unique Spirit Box response possible within 1 m.",values:[0.4,3],tone:"variable"},
+        Thaye:{fr:"1,0 → 2,75 m/s",en:"1.0 → 2.75 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. À l'âge 0 : 2,75 m/s, 75 % de seuil et 200 % d'activité. Perd 0,175 m/s, 6 % de seuil et 15 % d'activité par âge jusqu'à 1 m/s, 15 % et 50 %.",summaryEn:"Does not gain line-of-sight speed. At age 0: 2.75 m/s, 75% threshold and 200% activity. Loses 0.175 m/s, 6% threshold and 15% activity per age down to 1 m/s, 15% and 50%.",values:[1,1.175,1.35,1.525,1.7,1.875,2.05,2.225,2.4,2.575,2.75],walkValues:[1,2.75],tone:"variable"},
+        Aswang:{fr:"1,53 → 2,53 m/s",en:"1.53 → 2.53 m/s",summaryFr:"Vitesse de base 1,53 m/s. Accélération de ligne de mire plus rapide : +0,075 fois sa vitesse de base par seconde, maximum 2,53 m/s après environ 8,67 s. Ne tue pas dans une cachette officielle correctement utilisée.",summaryEn:"Base speed is 1.53 m/s. Faster line-of-sight acceleration: +0.075 times its base speed per second, max 2.53 m/s after about 8.67 s. Cannot kill inside a correctly used official hiding spot.",values:[1.53,2.53],walkAccel:{base:1.53,max:2.53,seconds:8.67},tone:"variable"},
+        Dayan:{fr:"1,2 / 1,7 → 2,8 / 2,25 m/s",en:"1.2 / 1.7 → 2.8 / 2.25 m/s",summaryFr:"À moins de 10 m, vitesse fixe de 1,2 m/s si le joueur le plus proche est immobile et 2,25 m/s s'il bouge. Sans joueur proche, vitesse standard 1,7 → 2,8 m/s ; l'accélération de ligne de mire peut s'accumuler en arrière-plan.",summaryEn:"Within 10 m, fixed 1.2 m/s if the closest player stands still and 2.25 m/s if they move. With no nearby player, standard 1.7 -> 2.8 m/s; line-of-sight acceleration can build in the background.",values:[1.2,1.7,2.25,2.8],walkValues:[1.2,2.25,2.8],tone:"variable"},
+        Gallu:{fr:"1,36 / 1,7 / 1,955 m/s",en:"1.36 / 1.7 / 1.955 m/s",summaryFr:"Trois états : affaibli 1,36 m/s et seuil 40 %, normal 1,7 m/s et 50 %, enragé 1,955 m/s et 60 %. L'état change avec crucifix, encens et sel ; l'enragé devient affaibli après une chasse.",summaryEn:"Three states: weakened 1.36 m/s and 40% threshold, normal 1.7 m/s and 50%, enraged 1.955 m/s and 60%. State changes with crucifix, incense and salt; enraged becomes weakened after a hunt.",values:[1.36,1.7,1.955],tone:"variable"},
+        Kormos:{fr:"1,7 / 2,21 m/s",en:"1.7 / 2.21 m/s",summaryFr:"Vitesse de base 1,7 m/s. S'il se déplace vers un point de détection sonore sans ligne de mire, sa vitesse actuelle est multipliée par 1,3, soit environ 2,21 m/s à vitesse de base. Détecte marche accroupie 10 m, marche 15 m, sprint 30 m.",summaryEn:"Base speed is 1.7 m/s. When moving to a sound-detection waypoint without line of sight, its current speed is multiplied by 1.3, about 2.21 m/s at base speed. Detects crouch walking 10 m, walking 15 m, sprinting 30 m.",values:[1.7,2.21],tone:"variable"},
+        Obambo:{fr:"1,445 / 1,955 m/s",en:"1.445 / 1.955 m/s",summaryFr:"État calme : seuil 10 %, vitesse 1,445 m/s. État agressif : seuil 65 %, vitesse 1,955 m/s et chasse 20 % plus courte si elle démarre dans cet état. Change d'état toutes les 2 min après l'ouverture.",summaryEn:"Calm state: 10% threshold, 1.445 m/s. Aggressive state: 65% threshold, 1.955 m/s and 20% shorter hunt if it starts in that state. Changes state every 2 min after opening.",values:[1.445,1.955],tone:"variable"}
+      };
+      return speeds[ghost.en]||standard
+    }
+    function ghostSpeedMetrics(ghost){
+      const values=ghostSpeedInfo(ghost).values||[1.7];
       return {values,min:Math.min(...values),max:Math.max(...values)}
+    }
+    function ghostWalkLabel(key,detail=""){
+      const labels=currentLanguage==="en"?{
+        base:"base",
+        acceleration:"acceleration",
+        max:"max",
+        specific:"specific"
+      }:{
+        base:"base",
+        acceleration:"accélération",
+        max:"max",
+        specific:"cas spécifique"
+      };
+      return `${labels[key]||key}${detail?` ${detail}`:""}`
+    }
+    function roundedSpeed(value){return Math.round(value*100)/100}
+    function ghostWalkCadenceVariants(ghost){
+      const info=ghostSpeedInfo(ghost),values=[...new Set((info.walkValues||info.values||[1.7]).map(roundedSpeed))].sort((a,b)=>a-b);
+      const standardLike=values.length===2&&Math.abs(values[0]-1.7)<.02&&Math.abs(values[1]-2.8)<.08;
+      if(ghost.en==="The Mimic")return [];
+      if(ghost.en==="The Twins"){
+        const slow=currentLanguage==="en"?"slow":"lent",fast=currentLanguage==="en"?"fast":"rapide";
+        const twinVariants=[
+          {base:1.5,max:2.605,detail:slow},
+          {base:1.9,max:3.005,detail:fast}
+        ];
+        return twinVariants.flatMap(item=>{
+          const base=roundedSpeed(item.base),max=roundedSpeed(item.max),accelRatio=roundedSpeed(max/base);
+          return [
+            {label:ghostWalkLabel("base",item.detail),speed:base,mode:"fixed"},
+            {label:ghostWalkLabel("acceleration",item.detail),speed:base,displaySpeed:roundedSpeed((base+max)/2),mode:"accel",baseSpeed:base,maxSpeed:max,accelRatio,accelSeconds:13},
+            {label:ghostWalkLabel("max",item.detail),speed:max,mode:"fixed"}
+          ]
+        })
+      }
+      if(info.walkAccel){
+        const base=roundedSpeed(info.walkAccel.base),max=roundedSpeed(info.walkAccel.max),accelRatio=roundedSpeed(max/base),accelSeconds=Number(info.walkAccel.seconds)||13;
+        return [
+          {label:ghostWalkLabel("base"),speed:base,mode:"fixed"},
+          {label:ghostWalkLabel("acceleration"),speed:base,displaySpeed:roundedSpeed((base+max)/2),mode:"accel",baseSpeed:base,maxSpeed:max,accelRatio,accelSeconds},
+          {label:ghostWalkLabel("max"),speed:max,mode:"fixed"}
+        ]
+      }
+      if(values.length===1)return [{label:ghostWalkLabel("base"),speed:values[0]}];
+      if(standardLike){
+        const accelRatio=roundedSpeed(values[1]/values[0]);
+        return [
+          {label:ghostWalkLabel("base"),speed:values[0],mode:"fixed"},
+          {label:ghostWalkLabel("acceleration"),speed:values[0],displaySpeed:roundedSpeed((values[0]+values[1])/2),mode:"accel",baseSpeed:values[0],maxSpeed:values[1],accelRatio,accelSeconds:13},
+          {label:ghostWalkLabel("max"),speed:values[1],mode:"fixed"}
+        ]
+      }
+      const specificNames={
+        Jinn:["base","specific"],
+        Raiju:["base","specific"],
+        Revenant:["specific","specific"],
+        Hantu:["specific","specific"],
+        "The Twins":["specific","specific"],
+        Moroi:["base","specific","max"],
+        Deogen:["specific","specific"],
+        Thaye:["specific","specific"]
+      };
+      const kinds=specificNames[ghost.en]||values.map((value,index)=>index===0?"base":index===values.length-1?"max":"specific");
+      const numberedSpecific=values.length===2&&kinds.every(kind=>kind==="specific");
+      return values.slice(0,3).map((speed,index)=>({label:ghostWalkLabel(kinds[index],numberedSpecific?String(index+1):""),speed,mode:"fixed"}))
+    }
+    function stopGhostWalkCadence(){
+      if(ghostWalkAudio.timer){clearInterval(ghostWalkAudio.timer);ghostWalkAudio.timer=null}
+      ghostWalkAudio.ghostKey="";
+      ghostWalkAudio.speed=0;
+      ghostWalkAudio.stepIndex=0;
+      ghostWalkAudio.mode="fixed";
+      ghostWalkAudio.baseSpeed=0;
+      ghostWalkAudio.maxSpeed=0;
+      ghostWalkAudio.accelRatio=1;
+      ghostWalkAudio.accelSeconds=13;
+      document.querySelectorAll(".ghost-walk-btn.active").forEach(button=>{
+        button.classList.remove("active");
+        button.setAttribute("aria-pressed","false")
+      })
+    }
+    function playGhostFootstep(ctx,when,index,speed){
+      const duration=.105,noise=ctx.createBufferSource(),buffer=ctx.createBuffer(1,Math.max(1,Math.floor(ctx.sampleRate*duration)),ctx.sampleRate),data=buffer.getChannelData(0);
+      for(let i=0;i<data.length;i++){
+        const fade=1-i/data.length;
+        data[i]=(Math.random()*2-1)*fade*fade
+      }
+      const noiseFilter=ctx.createBiquadFilter(),noiseGain=ctx.createGain(),thud=ctx.createOscillator(),thudGain=ctx.createGain(),pan=ctx.createStereoPanner?ctx.createStereoPanner():null,output=ctx.createGain();
+      noise.buffer=buffer;
+      noiseFilter.type="bandpass";noiseFilter.frequency.setValueAtTime(190+Math.min(speed,4)*45,when);noiseFilter.Q.setValueAtTime(.8,when);
+      noiseGain.gain.setValueAtTime(.0001,when);noiseGain.gain.exponentialRampToValueAtTime(.32,when+.012);noiseGain.gain.exponentialRampToValueAtTime(.0001,when+duration);
+      thud.type="sine";thud.frequency.setValueAtTime(72+Math.min(speed,4)*8,when);thud.frequency.exponentialRampToValueAtTime(42,when+.09);
+      thudGain.gain.setValueAtTime(.0001,when);thudGain.gain.exponentialRampToValueAtTime(.42,when+.01);thudGain.gain.exponentialRampToValueAtTime(.0001,when+.14);
+      output.gain.setValueAtTime(.72,when);
+      if(pan)pan.pan.setValueAtTime(index%2?-.22:.22,when);
+      noise.connect(noiseFilter);noiseFilter.connect(noiseGain);noiseGain.connect(pan||output);
+      thud.connect(thudGain);thudGain.connect(pan||output);
+      if(pan)pan.connect(output);
+      output.connect(ctx.destination);
+      noise.start(when);thud.start(when);
+      noise.stop(when+duration);thud.stop(when+.16)
+    }
+    function currentGhostWalkSpeed(){
+      if(ghostWalkAudio.mode!=="accel")return ghostWalkAudio.speed;
+      const base=Math.max(.25,ghostWalkAudio.baseSpeed||ghostWalkAudio.speed||1.7),max=Math.max(base,ghostWalkAudio.maxSpeed||base),ratio=Math.max(1,ghostWalkAudio.accelRatio||max/base);
+      const duration=Math.max(4,Math.min(18,Number(ghostWalkAudio.accelSeconds)||13/(ratio/1.65)));
+      const progress=Math.max(0,Math.min(1,(performance.now()-ghostWalkAudio.startedAt)/(duration*1000)));
+      return base+(max-base)*progress
+    }
+    function playGhostWalkCadence(ghostKey,options={}){
+      const numericSpeed=Math.max(.25,Number(options.speed)||1.7),mode=options.mode||"fixed",maxSpeed=Math.max(numericSpeed,Number(options.maxSpeed)||numericSpeed);
+      const sameFixed=mode!=="accel"&&ghostWalkAudio.ghostKey===ghostKey&&ghostWalkAudio.mode===mode&&Math.abs(ghostWalkAudio.speed-numericSpeed)<.01;
+      const sameAccel=mode==="accel"&&ghostWalkAudio.ghostKey===ghostKey&&ghostWalkAudio.mode===mode&&Math.abs(ghostWalkAudio.baseSpeed-(Number(options.baseSpeed)||numericSpeed))<.01&&Math.abs(ghostWalkAudio.maxSpeed-maxSpeed)<.01;
+      if(sameFixed||sameAccel){stopGhostWalkCadence();return}
+      stopGhostWalkCadence();
+      try{
+        const AudioContext=window.AudioContext||window.webkitAudioContext;
+        if(!AudioContext)return;
+        const ctx=ghostWalkAudio.ctx&&ghostWalkAudio.ctx.state!=="closed"?ghostWalkAudio.ctx:new AudioContext();
+        ghostWalkAudio.ctx=ctx;
+        if(ctx.state==="suspended")ctx.resume();
+        ghostWalkAudio.ghostKey=ghostKey;
+        ghostWalkAudio.speed=numericSpeed;
+        ghostWalkAudio.mode=mode;
+        ghostWalkAudio.baseSpeed=Math.max(.25,Number(options.baseSpeed)||numericSpeed);
+        ghostWalkAudio.maxSpeed=maxSpeed;
+        ghostWalkAudio.accelRatio=Math.max(1,Number(options.accelRatio)||ghostWalkAudio.maxSpeed/ghostWalkAudio.baseSpeed);
+        ghostWalkAudio.accelSeconds=Math.max(4,Math.min(18,Number(options.accelSeconds)||13/(ghostWalkAudio.accelRatio/1.65)));
+        ghostWalkAudio.startedAt=performance.now();
+        const schedule=()=>{
+          if(!ghostWalkAudio.ghostKey)return;
+          const currentSpeed=currentGhostWalkSpeed();
+          ghostWalkAudio.speed=currentSpeed;
+          playGhostFootstep(ctx,ctx.currentTime+.02,ghostWalkAudio.stepIndex++,currentSpeed);
+          const stepLength=.72,interval=Math.max(170,Math.min(1600,stepLength/currentSpeed*1000));
+          ghostWalkAudio.timer=setTimeout(schedule,interval)
+        };
+        schedule();
+        renderGhostMemo()
+      }catch(error){stopGhostWalkCadence()}
+    }
+    function ghostSpecialSoundVariants(ghost){
+      const sounds={
+        Banshee:[{id:"banshee-scream",fr:"Cri Banshee",en:"Banshee scream"}],
+        Deogen:[{id:"deogen-breath",fr:"Respiration Spirit Box",en:"Spirit Box breath"}]
+      };
+      return sounds[ghost.en]||[]
+    }
+    function playGhostSpecialSound(soundId){
+      try{
+        const AudioContext=window.AudioContext||window.webkitAudioContext;
+        if(!AudioContext)return;
+        const ctx=ghostWalkAudio.ctx&&ghostWalkAudio.ctx.state!=="closed"?ghostWalkAudio.ctx:new AudioContext();
+        ghostWalkAudio.ctx=ctx;
+        if(ctx.state==="suspended")ctx.resume();
+        const now=ctx.currentTime;
+        if(soundId==="banshee-scream"){
+          const output=ctx.createGain(),osc=ctx.createOscillator(),osc2=ctx.createOscillator(),filter=ctx.createBiquadFilter(),noise=ctx.createBufferSource(),noiseGain=ctx.createGain();
+          const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*1.45),ctx.sampleRate),data=buffer.getChannelData(0);
+          for(let i=0;i<data.length;i++){const t=i/data.length;data[i]=(Math.random()*2-1)*Math.sin(Math.PI*t)*.45}
+          output.gain.setValueAtTime(.0001,now);
+          output.gain.exponentialRampToValueAtTime(.48,now+.08);
+          output.gain.exponentialRampToValueAtTime(.0001,now+1.45);
+          filter.type="bandpass";filter.frequency.setValueAtTime(1250,now);filter.frequency.exponentialRampToValueAtTime(520,now+1.15);filter.Q.setValueAtTime(7,now);
+          osc.type="sawtooth";osc.frequency.setValueAtTime(820,now);osc.frequency.exponentialRampToValueAtTime(360,now+1.2);
+          osc2.type="triangle";osc2.frequency.setValueAtTime(1240,now);osc2.frequency.exponentialRampToValueAtTime(470,now+1.1);
+          noise.buffer=buffer;noiseGain.gain.setValueAtTime(.18,now);
+          osc.connect(filter);osc2.connect(filter);noise.connect(noiseGain);noiseGain.connect(filter);filter.connect(output);output.connect(ctx.destination);
+          osc.start(now);osc2.start(now);noise.start(now);osc.stop(now+1.45);osc2.stop(now+1.45);noise.stop(now+1.45)
+        }else if(soundId==="deogen-breath"){
+          const output=ctx.createGain(),filter=ctx.createBiquadFilter(),noise=ctx.createBufferSource(),buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*2.2),ctx.sampleRate),data=buffer.getChannelData(0);
+          for(let i=0;i<data.length;i++){const t=i/data.length,pulse=.45+.55*Math.sin(t*Math.PI*6);data[i]=(Math.random()*2-1)*pulse}
+          output.gain.setValueAtTime(.0001,now);
+          output.gain.linearRampToValueAtTime(.35,now+.25);
+          output.gain.linearRampToValueAtTime(.2,now+1.65);
+          output.gain.exponentialRampToValueAtTime(.0001,now+2.2);
+          filter.type="lowpass";filter.frequency.setValueAtTime(520,now);filter.Q.setValueAtTime(1.8,now);
+          noise.buffer=buffer;noise.connect(filter);filter.connect(output);output.connect(ctx.destination);
+          noise.start(now);noise.stop(now+2.2)
+        }
+      }catch(error){}
+    }
+    function ghostBehaviorInfo(ghost){
+      const notes={
+        Spirit:{fr:"Encens plus long : après avoir été repoussé, il ne peut pas chasser pendant 180 s au lieu du délai habituel.",en:"Longer smudge: after being repelled, it cannot hunt for 180s instead of the usual delay."},
+        Wraith:{fr:"Ne laisse pas de traces de pas dans le sel et peut se téléporter vers un joueur avant d'interagir.",en:"Does not leave salt footprints and can teleport to a player before interacting."},
+        Phantom:{fr:"Le regarder draine davantage la santé mentale ; moins visible en chasse et invisible sur la photo qui le capture.",en:"Looking at it drains extra sanity; less visible during hunts and absent from the photo that captures it."},
+        Poltergeist:{fr:"Peut lancer plusieurs objets d'un coup et les projette plus fort, ce qui rend le test du tas d'objets très parlant.",en:"Can throw multiple items at once and throws harder, making the item-pile test very revealing."},
+        Banshee:{fr:"Cible un joueur précis, utilise sa santé mentale pour chasser, favorise les événements chantés et peut donner un cri spécial au micro.",en:"Targets one player, uses that target's sanity for hunts, favors singing events and can give a special scream/groan on microphones."},
+        Jinn:{fr:"Si le disjoncteur est allumé, il peut foncer à 2,5 m/s vers un joueur en ligne de mire à plus de 3 m ; pouvoir inactif sans courant.",en:"With the breaker on, it can rush at 2.5 m/s toward a line-of-sight player over 3 m away; power is inactive without electricity."},
+        Mare:{fr:"Chasse plus tôt dans le noir, plus tard avec la lumière allumée, n'allume jamais de lumière et peut éteindre aussitôt un interrupteur activé.",en:"Hunts earlier in darkness, later with the light on, never turns lights on and can immediately switch off a light you just toggled."},
+        Revenant:{fr:"Lent sans cible à 1 m/s, passe à 3 m/s après détection par vue, voix ou électronique, puis ralentit sur environ 2,7 s.",en:"Slow without a target at 1 m/s, jumps to 3 m/s after detecting sight, voice or electronics, then slows over about 2.7 s."},
+        Shade:{fr:"Très discret : activité plus faible quand les joueurs sont proches et pas de départ de chasse si un joueur est dans sa pièce.",en:"Very shy: lower activity while players are nearby and no hunt start while a player is in its room."},
+        Demon:{fr:"Seuil normal 70 %, capacité rare possible jusqu'à 100 %, délai de chasse réduit, encens seulement 60 s et portée de crucifix augmentée de 50 %.",en:"Normal threshold 70%, rare ability possible up to 100%, shorter hunt cooldown, incense only blocks for 60s and crucifix range is increased by 50%."},
+        Yurei:{fr:"Peut claquer une porte et retirer beaucoup de santé mentale ; l'encens le bloque dans sa pièce pendant un moment.",en:"Can slam a door and remove a large amount of sanity; incense traps it in its room for a while."},
+        Oni:{fr:"Très actif, ne fait pas l'événement de souffle brumeux et reste visible plus longtemps pendant les clignotements de chasse.",en:"Very active, does not perform the mist-ball event and stays visible longer during hunt blinks."},
+        Yokai:{fr:"Parler dans sa pièce active son pouvoir : seuil temporaire à 80 % et +30 d'activité. En chasse, il n'entend voix et équipement tenu qu'à 2,5 m.",en:"Talking in its room activates its power: temporary 80% threshold and +30 activity. During hunts, it only hears voices and held equipment within 2.5 m."},
+        Hantu:{fr:"Aime le froid : vitesse de 1,4 à 2,7 m/s selon la température, pas d'accélération LoS, n'allume pas le disjoncteur et peut souffler froid en chasse.",en:"Likes the cold: 1.4 to 2.7 m/s by temperature, no LoS acceleration, does not turn the breaker on and can show cold breath while hunting."},
+        Goryo:{fr:"D.O.T.S. visible uniquement à la caméra quand personne n'est dans la pièce ; change peu de pièce et erre moins loin.",en:"D.O.T.S. only appears on camera while nobody is in the room; changes room rarely and roams less far."},
+        Myling:{fr:"Ses bruits de pas de chasse sont audibles de moins loin ; sons paranormaux plus fréquents au micro, environ toutes les 64 à 127 s.",en:"Its hunt footsteps are audible from a shorter range; paranormal microphone sounds are more frequent, about every 64 to 127 s."},
+        Onryo:{fr:"Les flammes agissent comme protection, mais après chaque troisième flamme soufflée il peut tenter une chasse de pouvoir si aucune flamme ne couvre la zone.",en:"Flames act as protection, but after every third flame it blows out it can try a power hunt if no flame protects the area."},
+        "The Twins":{fr:"Une seule entité mécaniquement : interactions possibles près du fantôme ou à distance, puis chasse lente 1,5 m/s ou rapide 1,9 m/s.",en:"Mechanically one ghost: interactions can happen near the ghost or at range, then hunts are either slow 1.5 m/s or fast 1.9 m/s."},
+        Raiju:{fr:"Électronique active : seuil 65 % et vitesse 2,5 m/s dans 6/8/10 m selon la taille de carte ; interférences dès 15 m.",en:"Active electronics: 65% threshold and 2.5 m/s within 6/8/10 m by map size; interference starts at 15 m."},
+        Obake:{fr:"Peut réduire la durée de ses empreintes, laisser une empreinte spéciale et changer brièvement de modèle pendant une chasse.",en:"Can shorten fingerprint duration, leave a special fingerprint and briefly shapeshift during a hunt."},
+        "The Mimic":{fr:"Imite seuil, vitesse et capacités d'une autre entité : plage pratique 15 à 100 %. Possède toujours des orbes en preuve bonus.",en:"Mimics another ghost's threshold, speed and abilities: practical range 15 to 100%. Always has Ghost Orbs as bonus evidence."},
+        Moroi:{fr:"Maudit via Spirit Box, micro parabolique ou enregistreur : drain de santé mentale doublé, vitesse liée à la santé, encens actif 7 s en chasse.",en:"Curses through Spirit Box, parabolic mic or sound recorder: doubled sanity drain, speed tied to sanity, incense lasts 7 s during hunts."},
+        Deogen:{fr:"Sait toujours où sont les joueurs : 3 m/s à distance, puis ralentit jusqu'à 0,4 m/s près de la cible. Réponse Spirit Box unique à moins de 1 m.",en:"Always knows where players are: 3 m/s at range, then slows down to 0.4 m/s near the target. Unique Spirit Box response within 1 m."},
+        Thaye:{fr:"Ne gagne pas de vitesse LoS. Vieillit près des joueurs : seuil 75 à 15 %, vitesse 2,75 à 1 m/s et activité 200 à 50 %.",en:"Does not gain LoS speed. Ages near players: threshold 75 to 15%, speed 2.75 to 1 m/s and activity 200 to 50%."},
+        Gallu:{fr:"Trois états : normal, enragé après protection/sel/encens, puis affaibli après chasse. Seuil, vitesse, encens et crucifix changent avec l'état.",en:"Three states: normal, enraged after protection/salt/incense, then weakened after a hunt. Threshold, speed, incense and crucifix range change with state."},
+        Dayan:{fr:"À moins de 10 m, il punit le mouvement : 65 % et 2,25 m/s si le joueur bouge, 45 % et 1,2 m/s s'il reste immobile.",en:"Within 10 m, it punishes movement: 65% and 2.25 m/s if the player moves, 45% and 1.2 m/s if they stand still."},
+        Obambo:{fr:"Démarre calme, change d'état 1 min après l'ouverture puis toutes les 2 min. Calme : 10 % et 1,445 m/s ; agressif : 65 %, 1,955 m/s, chasse 20 % plus courte.",en:"Starts calm, changes state 1 min after opening then every 2 min. Calm: 10% and 1.445 m/s; aggressive: 65%, 1.955 m/s, 20% shorter hunt."},
+        Aswang:{fr:"Plus lent de base à 1,53 m/s, mais accélère plus vite en ligne de mire jusqu'à 2,53 m/s. Peut avoir zéro grâce et ne tue pas dans une cachette officielle bien utilisée.",en:"Slower base speed at 1.53 m/s, but accelerates faster in line of sight up to 2.53 m/s. Can have zero grace and cannot kill in a correctly used official hiding spot."},
+        Kormos:{fr:"Très mauvaise vision, mais écoute les pas : accroupi 10 m, marche 15 m, sprint 30 m. Sprint dans sa pièce : seuil 70 %.",en:"Very poor vision, but listens for footsteps: crouch walk 10 m, walk 15 m, sprint 30 m. Sprinting in its room: 70% threshold."}
+      };
+      return notes[ghost.en]||{fr:"Aucune note spécifique renseignée.",en:"No specific note set."}
+    }
+    function ghostSelectionKey(ghost){return ghost.en}
+    function ghostEvidenceName(id){
+      const evidence=ghostEvidenceTypes.find(item=>item.id===id);
+      return evidence?(currentLanguage==="en"?evidence.en:evidence.fr):id
+    }
+    function ghostEvidenceShort(id){
+      const evidence=ghostEvidenceTypes.find(item=>item.id===id);
+      return evidence?evidence.short:id
+    }
+    function ghostEvidenceFor(ghost){return ghostEvidenceMap[ghost.en]||[]}
+    function ghostBonusEvidenceFor(ghost){return ghostBonusEvidenceMap[ghost.en]||[]}
+    function ghostImageUrl(ghost){return ghostImageMap[ghost.en]||""}
+    function ghostEvidenceMatches(ghost){
+      if(!ghostMemoEvidenceSelected.size)return true;
+      const allEvidence=new Set([...ghostEvidenceFor(ghost),...ghostBonusEvidenceFor(ghost)]);
+      return [...ghostMemoEvidenceSelected].every(id=>allEvidence.has(id))
+    }
+    function renderGhostWalkScaleControls(){
+      const scale=document.getElementById("ghost-walk-global-scale");
+      if(!scale)return;
+      const label=currentLanguage==="en"?"Sound speed":"Vitesse sons";
+      scale.innerHTML=`<span>${escapeHtml(label)}</span>${[.5,1,1.5].map(multiplier=>`<button class="ghost-walk-scale-btn${Math.abs(ghostWalkSpeedMultiplier-multiplier)<.01?" active":""}" type="button" data-ghost-walk-multiplier="${multiplier}" aria-pressed="${Math.abs(ghostWalkSpeedMultiplier-multiplier)<.01?"true":"false"}">${Math.round(multiplier*100)}%</button>`).join("")}`;
+      scale.querySelectorAll("[data-ghost-walk-multiplier]").forEach(button=>button.addEventListener("click",()=>{
+        ghostWalkSpeedMultiplier=Number(button.dataset.ghostWalkMultiplier)||1;
+        stopGhostWalkCadence();
+        renderGhostMemo()
+      }))
+    }
+    function orderedGhosts(){return [...ghostHuntThresholds].sort((a,b)=>ghostJournalOrder.indexOf(a.en)-ghostJournalOrder.indexOf(b.en))}
+    function renderGhostEvidenceBoard(){
+      const board=document.getElementById("ghost-evidence-board");
+      if(!board)return;
+      const selectedCount=ghostMemoEvidenceSelected.size;
+      board.innerHTML=`
+        <div class="ghost-evidence-title">
+          <span>${currentLanguage==="en"?"Evidence":"Preuves"}</span>
+        </div>
+        <div class="ghost-evidence-buttons">
+          ${ghostEvidenceTypes.map(evidence=>{
+            const active=ghostMemoEvidenceSelected.has(evidence.id),label=currentLanguage==="en"?evidence.en:evidence.fr;
+            return `<button class="ghost-evidence-btn${active?" active":""}" type="button" data-ghost-evidence="${evidence.id}" aria-pressed="${active?"true":"false"}"><span>${escapeHtml(evidence.short)}</span><strong>${escapeHtml(label)}</strong></button>`
+          }).join("")}
+          <button class="ghost-evidence-clear" type="button" data-ghost-evidence-clear ${selectedCount?"":"disabled"}>${currentLanguage==="en"?"Clear":"Effacer"}</button>
+        </div>`;
+      board.querySelectorAll("[data-ghost-evidence]").forEach(button=>button.addEventListener("click",()=>{
+        const id=button.dataset.ghostEvidence;
+        if(ghostMemoEvidenceSelected.has(id))ghostMemoEvidenceSelected.delete(id);
+        else if(ghostMemoEvidenceSelected.size<4)ghostMemoEvidenceSelected.add(id);
+        const chosenGhost=ghostHuntThresholds.find(ghost=>ghost.en===ghostMemoChosen);
+        if(chosenGhost&&!ghostEvidenceMatches(chosenGhost))ghostMemoChosen="";
+        renderGhostMemo()
+      }));
+      const clear=board.querySelector("[data-ghost-evidence-clear]");
+      if(clear)clear.addEventListener("click",()=>{ghostMemoEvidenceSelected.clear();renderGhostMemo()})
+    }
+    function renderGhostFilterGrid(){
+      const grid=document.getElementById("ghost-filter-grid");
+      if(!grid)return;
+      const intro=currentLanguage==="en"?"Based on the evidence we have gathered, we think the ghost is this type.":"D'après les preuves que nous avons rassemblées, nous pensons que l'entité est de ce type.";
+      grid.innerHTML=`<p class="ghost-book-intro">${escapeHtml(intro)}</p>`+orderedGhosts().map(ghost=>{
+        const key=ghostSelectionKey(ghost),name=currentLanguage==="en"?ghost.en:ghost.fr,available=ghostEvidenceMatches(ghost),removed=ghostMemoRemoved.has(key),chosen=ghostMemoChosen===key;
+        return `<button class="ghost-filter-chip${available?"":" unavailable"}${removed?" removed":""}${chosen?" chosen":""}" type="button" data-ghost-filter="${escapeHtml(key)}" aria-pressed="${chosen?"true":"false"}" ${available?"":"disabled"}>${escapeHtml(name)}</button>`
+      }).join("");
+      grid.querySelectorAll("[data-ghost-filter]").forEach(button=>button.addEventListener("click",()=>{
+        const key=button.dataset.ghostFilter;
+        if(ghostMemoRemoved.has(key)){ghostMemoRemoved.delete(key);if(ghostMemoChosen===key)ghostMemoChosen=""}
+        else if(ghostMemoChosen===key){ghostMemoChosen="";ghostMemoRemoved.add(key)}
+        else{ghostMemoChosen=key}
+        renderGhostMemo()
+      }))
     }
     function renderGhostMemo(){
       if(!ghostMemoList)return;
+      renderGhostWalkScaleControls();
       const query=ghostSearch?normalizeSearch(ghostSearch.value):"";
       ghostMemoList.innerHTML="";
-      const visible=ghostHuntThresholds.filter(ghost=>{
-        const haystack=normalizeSearch([ghost.fr,ghost.en,ghost.summaryFr,ghost.summaryEn,ghost.thresholdFr,ghost.thresholdEn].join(" "));
-        return !query||haystack.includes(query)
+      const visible=orderedGhosts().filter(ghost=>{
+        const speed=ghostSpeedInfo(ghost);
+        const behavior=ghostBehaviorInfo(ghost);
+        const haystack=normalizeSearch([ghost.fr,ghost.en,ghost.summaryFr,ghost.summaryEn,ghost.thresholdFr,ghost.thresholdEn,speed.fr,speed.en,speed.summaryFr,speed.summaryEn,behavior.fr,behavior.en].join(" "));
+        return !ghostMemoRemoved.has(ghostSelectionKey(ghost))&&ghostEvidenceMatches(ghost)&&(!query||haystack.includes(query))
       }).sort((a,b)=>{
-        const ma=getGhostThresholdMetrics(a),mb=getGhostThresholdMetrics(b);
-        if(mb.max!==ma.max)return mb.max-ma.max;
-        if(mb.min!==ma.min)return mb.min-ma.min;
-        return (currentLanguage==="en"?a.en.localeCompare(b.en):a.fr.localeCompare(b.fr))
+        return ghostJournalOrder.indexOf(a.en)-ghostJournalOrder.indexOf(b.en)
       });
       visible.forEach(ghost=>{
         const row=document.createElement("article");
-        row.className=`ghost-row ${ghost.tone}`;
+        const visibleInfoCount=["behavior","walk","hunt","speed"].filter(key=>ghostMemoInfo[key]).length;
+        row.className=`ghost-row ${ghost.tone} info-count-${visibleInfoCount}${ghostMemoInfo.behavior?" has-behavior":" no-behavior"}`;
         const name=currentLanguage==="en"?ghost.en:ghost.fr;
+        const ghostImage=ghostImageUrl(ghost);
         const threshold=currentLanguage==="en"?ghost.thresholdEn:ghost.thresholdFr;
+        const thresholdHtml=ghostThresholdHtml(ghost);
         const summary=currentLanguage==="en"?ghost.summaryEn:ghost.summaryFr;
+        const speed=ghostSpeedInfo(ghost),speedLabel=currentLanguage==="en"?speed.en:speed.fr,speedSummary=currentLanguage==="en"?speed.summaryEn:speed.summaryFr;
+        const behavior=ghostBehaviorInfo(ghost),behaviorSummary=currentLanguage==="en"?behavior.en:behavior.fr;
         const metrics=getGhostThresholdMetrics(ghost);
+        const powerMax=metrics.powerValues.length?Math.max(...metrics.powerValues):metrics.max;
+        const powerLeft=`${metrics.max}%`;
+        const powerWidth=`${Math.max(0,powerMax-metrics.max)}%`;
         const baseWidth=`${metrics.max}%`;
         const rangeWidth=`${Math.max(0,metrics.max-metrics.min)}%`;
+        const speedMetrics=ghostSpeedMetrics(ghost),speedMax=4,speedBaseWidth=`${Math.min(100,speedMetrics.max/speedMax*100)}%`,speedRangeWidth=`${Math.max(0,Math.min(100,(speedMetrics.max-speedMetrics.min)/speedMax*100))}%`,speedRangeLeft=`${Math.min(100,speedMetrics.min/speedMax*100)}%`;
         const scaleLabels=["0%","25%","50%","75%","100%"];
+        const speedLabels=["0","1","2","3","4 m/s"];
         const note=currentLanguage==="en"?"Regular hunt threshold":"Seuil de chasse normal";
         const scaleStart=currentLanguage==="en"?"Low sanity":"Santé basse";
         const scaleEnd=currentLanguage==="en"?"Full sanity":"Santé pleine";
         const markers=metrics.values.map(value=>`<span class="ghost-bar-marker" style="left:${value}%" title="${escapeHtml(String(value))}%"></span>`).join("");
+        const powerNote=currentLanguage==="en"?"ability":"pouvoir";
+        const powerMarkers=metrics.powerValues.map(value=>`<span class="ghost-bar-marker power" style="left:${value}%" title="${escapeHtml(`${powerNote} ${value}%`)}"></span>`).join("");
+        const speedMarkers=speedMetrics.values.map(value=>`<span class="ghost-bar-marker speed" style="left:${Math.min(100,value/speedMax*100)}%" title="${escapeHtml(String(value))} m/s"></span>`).join("");
+        const walkVariants=ghostWalkCadenceVariants(ghost);
+        const walkLabel=currentLanguage==="en"?"Footstep sounds":"Bruits de pas";
+        const walkHint=currentLanguage==="en"?"Play walking cadence":"Écouter la cadence de marche";
+        const walkEmpty=currentLanguage==="en"?"Refer to the mimicked ghost.":"Se référer à l'entité imitée.";
+        const walkButtonsHtml=walkVariants.length?walkVariants.map(variant=>{
+          const mode=variant.mode||"fixed",scaledSpeed=roundedSpeed(variant.speed*ghostWalkSpeedMultiplier),scaledBase=roundedSpeed((variant.baseSpeed||variant.speed)*ghostWalkSpeedMultiplier),scaledMax=roundedSpeed((variant.maxSpeed||variant.speed)*ghostWalkSpeedMultiplier),displaySpeed=variant.speed,displayBase=variant.baseSpeed||variant.speed,displayMax=variant.maxSpeed||variant.speed,accelRatio=variant.accelRatio||scaledMax/scaledBase||1;
+          const active=ghostWalkAudio.ghostKey===ghost.en&&ghostWalkAudio.mode===mode&&(mode==="accel"?Math.abs(ghostWalkAudio.baseSpeed-scaledBase)<.01&&Math.abs(ghostWalkAudio.maxSpeed-scaledMax)<.01:Math.abs(ghostWalkAudio.speed-scaledSpeed)<.01);
+          const speedText=mode==="accel"?`${formatGhostNumber(displayBase)} → ${formatGhostNumber(displayMax)} m/s`:`${formatGhostNumber(displaySpeed)} m/s`;
+          const buttonLabel=`${variant.label} · ${speedText}`;
+          return `<button class="ghost-walk-btn${active?" active":""}" type="button" data-ghost-walk="${escapeHtml(ghost.en)}" data-ghost-walk-mode="${escapeHtml(mode)}" data-ghost-walk-speed="${scaledSpeed}" data-ghost-walk-base="${scaledBase}" data-ghost-walk-max="${scaledMax}" data-ghost-walk-ratio="${accelRatio}" data-ghost-walk-seconds="${variant.accelSeconds||13}" aria-pressed="${active?"true":"false"}" title="${escapeHtml(walkHint)}">${escapeHtml(buttonLabel)}</button>`
+        }).join(""):`<p class="ghost-summary">${escapeHtml(walkEmpty)}</p>`;
+        const walkHtml=`<div class="ghost-info-block walk-info"><div class="ghost-info-head"><span>${escapeHtml(walkLabel)}</span></div><div class="ghost-walk-controls" aria-label="${escapeHtml(walkHint)}">${walkButtonsHtml}</div></div>`;
+        const specialSounds=ghostSpecialSoundVariants(ghost);
+        const specialSoundLabel=currentLanguage==="en"?"Specific sounds":"Sons spécifiques";
+        const specialSoundHint=currentLanguage==="en"?"Play specific sound":"Écouter le son spécifique";
+        const specialSoundHtml=specialSounds.length?`<div class="ghost-special-sounds" aria-label="${escapeHtml(specialSoundLabel)}"><span>${escapeHtml(specialSoundLabel)}</span>${specialSounds.map(sound=>`<button class="ghost-special-sound-btn" type="button" data-ghost-special-sound="${escapeHtml(sound.id)}" title="${escapeHtml(specialSoundHint)}">${escapeHtml(currentLanguage==="en"?sound.en:sound.fr)}</button>`).join("")}</div>`:"";
         row.innerHTML=`
           <div class="ghost-row-main">
-            <h2 class="ghost-row-name">${escapeHtml(name)}</h2>
-            <span class="ghost-threshold-badge">${escapeHtml(threshold)}</span>
+            <div class="ghost-title-line">
+              ${ghostImage?`<img class="ghost-portrait" src="${escapeHtml(ghostImage)}" alt="${escapeHtml(name)}">`:`<span class="ghost-portrait ghost-portrait-placeholder" aria-label="${escapeHtml(currentLanguage==="en"?"Portrait unavailable":"Portrait indisponible")}">${escapeHtml(name.charAt(0))}</span>`}
+              <h2 class="ghost-row-name">${escapeHtml(name)}</h2>
+            </div>
             <p class="ghost-row-note">${escapeHtml(note)}</p>
           </div>
-          <div class="ghost-bar-wrap">
+          ${ghostMemoInfo.behavior?`<div class="ghost-info-block behavior-info">
+            <div class="ghost-info-head"><span>${currentLanguage==="en"?"Characteristics":"Caractéristiques"}</span></div>
+            <p class="ghost-summary">${escapeHtml(behaviorSummary)}</p>
+            ${specialSoundHtml}
+          </div>`:""}
+          ${ghostMemoInfo.walk?walkHtml:""}
+          ${ghostMemoInfo.hunt?`<div class="ghost-bar-wrap ghost-info-block">
+            <div class="ghost-info-head"><span>${escapeHtml(note)}${metrics.powerValues.length?` <em>${escapeHtml(powerNote)}</em>`:""}</span><strong class="threshold-detail">${thresholdHtml}</strong></div>
             <div class="ghost-bar-track">
               <div class="ghost-bar-fill" style="width:${baseWidth}"></div>
+              ${metrics.powerValues.length?`<div class="ghost-bar-power" style="left:${powerLeft};width:${powerWidth}"></div>`:""}
               ${metrics.max!==metrics.min?`<div class="ghost-bar-range" style="left:${metrics.min}%;width:${rangeWidth}"></div>`:""}
               ${markers}
+              ${powerMarkers}
             </div>
             <div class="ghost-row-labels">${scaleLabels.map(label=>`<span>${label}</span>`).join("")}</div>
             <p class="ghost-summary">${escapeHtml(summary)}</p>
-          </div>`;
+          </div>`:""}
+          ${ghostMemoInfo.speed?`<div class="ghost-bar-wrap ghost-info-block speed-info">
+            <div class="ghost-info-head"><span>${currentLanguage==="en"?"Hunt speed":"Vitesse de chasse"}</span><strong>${escapeHtml(speedLabel)}</strong></div>
+            <div class="ghost-bar-track speed-track">
+              <div class="ghost-bar-fill speed-fill" style="width:${speedBaseWidth}"></div>
+              ${speedMetrics.max!==speedMetrics.min?`<div class="ghost-bar-range speed-range" style="left:${speedRangeLeft};width:${speedRangeWidth}"></div>`:""}
+              ${speedMarkers}
+            </div>
+            <div class="ghost-row-labels">${speedLabels.map(label=>`<span>${label}</span>`).join("")}</div>
+            <p class="ghost-summary">${escapeHtml(speedSummary)}</p>
+          </div>`:""}`;
         ghostMemoList.appendChild(row)
       });
       if(!visible.length){ghostMemoList.innerHTML=`<div class="memo-empty">${currentLanguage==="en"?"No ghost matches your search.":"Aucune entité ne correspond à la recherche."}</div>`}
-      if(ghostVisibleCount)ghostVisibleCount.textContent=currentLanguage==="en"?`${visible.length} ghost${visible.length===1?"":"s"}`:`${visible.length} entité${visible.length===1?"":"s"}`
+      ghostMemoList.querySelectorAll("[data-ghost-walk]").forEach(button=>button.addEventListener("click",()=>{
+        playGhostWalkCadence(button.dataset.ghostWalk,{mode:button.dataset.ghostWalkMode,speed:button.dataset.ghostWalkSpeed,baseSpeed:button.dataset.ghostWalkBase,maxSpeed:button.dataset.ghostWalkMax,accelRatio:button.dataset.ghostWalkRatio,accelSeconds:button.dataset.ghostWalkSeconds})
+      }));
+      ghostMemoList.querySelectorAll("[data-ghost-special-sound]").forEach(button=>button.addEventListener("click",()=>{
+        playGhostSpecialSound(button.dataset.ghostSpecialSound)
+      }));
+      if(ghostVisibleCount)ghostVisibleCount.textContent=currentLanguage==="en"?`${visible.length} ghost${visible.length===1?"":"s"}`:`${visible.length} entité${visible.length===1?"":"s"}`;
+      renderGhostEvidenceBoard();
+      renderGhostFilterGrid()
+    }
+
+    function renderMapMemo(){
+      if(!mapMemoList)return;
+      const openLabel=currentLanguage==="en"?"Open wiki page":"Ouvrir la page wiki";
+      mapMemoList.innerHTML=mapRoomLayouts.map(map=>{
+        const size=cursedSizeLabel(map.size);
+        const imageClass=map.images.length>1?" multi":"";
+        const images=map.images.map(image=>{
+          const label=currentLanguage==="en"?image.en:image.fr;
+          const alt=currentLanguage==="en"?`${map.name} room layout - ${label}`:`Découpage des pièces de ${map.name} - ${label}`;
+          return `<figure class="map-room-figure">
+            <figcaption>${escapeHtml(label)}</figcaption>
+            <img src="${image.url}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)">
+          </figure>`
+        }).join("");
+        return `<article class="map-room-card">
+          <div class="map-room-head">
+            <div>
+              <span class="map-room-size">${escapeHtml(size)}</span>
+              <h2>${escapeHtml(map.name)}</h2>
+            </div>
+            <a class="map-room-source" href="${map.page}" target="_blank" rel="noopener noreferrer">${escapeHtml(openLabel)}</a>
+          </div>
+          <div class="map-room-images${imageClass}">
+            ${images}
+          </div>
+        </article>`
+      }).join("")
     }
 
     function mediaLocalizedName(name){return currentLanguage==="en"?translateString(name):name}
@@ -1604,9 +2217,10 @@ const phasmophobiaObjects=[
     function isRoomConnected(){return !!possessedPeer&&possessedPlayers.length>0}
     function hasChallengeRoom(){return playMode!=="room"||isRoomConnected()}
     function shouldSyncRoom(){return playMode==="room"&&isRoomConnected()}
-    function renderTopRoomPlayers(){
-      if(!topRoomPlayers)return;
-      topRoomPlayers.innerHTML=playMode==="room"&&isRoomConnected()?possessedPlayers.map(player=>`<span class="possessed-player-chip${player.host?" host":""}">${escapeHtml(player.name)}</span>`).join(""):""
+    function renderTopRoomSummary(connected=isRoomConnected()){
+      if(!topRoomSummary)return;
+      const players=connected?possessedText(`${possessedPlayers.length} joueur(s)`,`${possessedPlayers.length} player(s)`):possessedText("inactive","inactive");
+      topRoomSummary.textContent=`Room - ${players}`
     }
     function updateLocalDistributionVisibility(){
       if(possessedRolePanel)possessedRolePanel.hidden=playMode!=="local";
@@ -1618,8 +2232,7 @@ const phasmophobiaObjects=[
       challengeLaunchButtons.forEach(button=>{button.disabled=!active;button.title=message});
       if(challengeRoomNote)challengeRoomNote.textContent=message;
       if(topRoomMenu)topRoomMenu.hidden=!needsRoom;
-      if(topRoomSummary)topRoomSummary.textContent=connected?possessedText(`${possessedPlayers.length} joueur(s)`,`${possessedPlayers.length} player(s)`):possessedText("inactive","inactive");
-      renderTopRoomPlayers();updateLocalDistributionVisibility();if(typeof renderPossessedPrivateRole==="function")renderPossessedPrivateRole()
+      renderTopRoomSummary(connected);updateLocalDistributionVisibility();if(typeof renderPossessedPrivateRole==="function")renderPossessedPrivateRole()
     }
     function sendRoomMessage(message,exceptPeer=null){
       if(!message||!shouldSyncRoom())return;
@@ -1631,7 +2244,7 @@ const phasmophobiaObjects=[
       if(!possessedRoomCode||!possessedShareLink)return;
       const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
     }
-    function rememberRoomChallenge(challenge){currentRoomChallenge=challenge||null;updatePossessedInviteLink(currentRoomChallenge)}
+    function rememberRoomChallenge(challenge){currentRoomChallenge=challenge||null;updatePossessedInviteLink(currentRoomChallenge);renderChallengeRoomGate()}
     function sendCurrentChallengeTo(connection){
       if(!currentRoomChallenge||!connection||!connection.open)return;
       connection.send({type:"challenge-route",challenge:currentRoomChallenge});
@@ -1692,10 +2305,14 @@ const phasmophobiaObjects=[
     function applyCursedRoomState(state){if(!state)return;setCursedProgress(state.validated||[],true)}
     function captureHunterRoomState(){return structuredClone(hunterState)}
     function applyHunterRoomState(state){if(!state)return;hunterState={...hunterState,...state,scores:{A:Number(state.scores?.A)||0,B:Number(state.scores?.B)||0},history:Array.isArray(state.history)?state.history:[]};hunterSave();renderHunterChallenge()}
-    function captureRoomChallengeState(challenge){return challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState())))}
+    function captureRoomChallengeState(challenge){
+      const state=challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState())));
+      state.sessionStarted=!!challengeSessionState[challenge];
+      return state
+    }
     function applyRoomChallengeState(message){
       applyingRoomState=true;
-      try{if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)}
+      try{setChallengeStarted(message.challenge,Boolean(message.state&&message.state.sessionStarted),{sync:false,confirm:false});if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)}
       finally{applyingRoomState=false}
     }
     function scheduleRoomChallengeSync(challenge){
@@ -1739,10 +2356,11 @@ const phasmophobiaObjects=[
       if(possessedDiedEarly)possessedDiedEarly.checked=false
     }
     function capturePossessedPublicState(){
-      return {round:possessedGameRound,roundLimit:possessedRoundLimit,scores:{...possessedScores},votes:{...possessedVotes},resolved:possessedRoundResolved,ghostCorrect:!!(possessedGhostCorrect&&possessedGhostCorrect.checked),diedEarly:!!(possessedDiedEarly&&possessedDiedEarly.checked),summary:possessedRoundSummary,started:possessedOnlineStarted,distributionRound:possessedDistributionRound}
+      return {round:possessedGameRound,roundLimit:possessedRoundLimit,scores:{...possessedScores},votes:{...possessedVotes},resolved:possessedRoundResolved,ghostCorrect:!!(possessedGhostCorrect&&possessedGhostCorrect.checked),diedEarly:!!(possessedDiedEarly&&possessedDiedEarly.checked),summary:possessedRoundSummary,started:possessedOnlineStarted,distributionRound:possessedDistributionRound,challengeSessionStarted:!!challengeSessionState.possessed}
     }
     function applyPossessedPublicState(state){
       if(!state)return;
+      setChallengeStarted("possessed",Boolean(state.challengeSessionStarted),{sync:false,confirm:false});
       possessedGameRound=Number(state.round)||possessedGameRound;
       possessedRoundLimit=Math.max(possessedGameRound,Math.min(20,Math.max(1,Number(state.roundLimit)||possessedRoundLimit)));
       possessedScores=state.scores&&typeof state.scores==="object"?{...state.scores}:possessedScores;
@@ -1912,14 +2530,25 @@ const phasmophobiaObjects=[
       const online=mode==="online";possessedLocalTab.classList.toggle("active",!online);possessedOnlineTab.classList.toggle("active",online);possessedLocalTab.setAttribute("aria-selected",String(!online));possessedOnlineTab.setAttribute("aria-selected",String(online));possessedLocalPanel.hidden=online;possessedOnlinePanel.hidden=!online
     }
     function relocateRoomControls(){if(topRoomContent&&possessedOnlinePanel&&possessedOnlinePanel.parentElement!==topRoomContent)topRoomContent.appendChild(possessedOnlinePanel)}
-    function setPlayMode(mode){
-      playMode=["solo","local","room"].includes(mode)?mode:"solo";
+    function confirmStopActiveChallengeForModeChange(){
+      if(!activeChallenge)return true;
+      const confirmed=confirm(possessedText(`Le défi en cours (${challengeLabel(activeChallenge)}) va être stoppé. Continuer ?`,`The active challenge (${challengeLabel(activeChallenge)}) will be stopped. Continue?`));
+      if(confirmed)setChallengeStarted(activeChallenge,false,{confirm:false});
+      return confirmed
+    }
+    function setPlayMode(mode,options={}){
+      const nextMode=["solo","local","room"].includes(mode)?mode:"solo";
+      if(nextMode!==playMode&&options.confirmStop!==false&&!confirmStopActiveChallengeForModeChange())return false;
+      playMode=nextMode;
       playModeButtons.forEach(button=>button.classList.toggle("active",button.dataset.playMode===playMode));
+      pagePlayModeButtons.forEach(button=>button.classList.toggle("active",button.dataset.pagePlayMode===playMode));
       try{localStorage.setItem("phasmo-play-mode",playMode)}catch(error){}
       relocateRoomControls();
       if(playMode==="room"){setPossessedMode("online");if(topRoomMenu)topRoomMenu.open=false}
       else{if(topRoomMenu)topRoomMenu.open=false;if(possessedOnlinePanel)possessedOnlinePanel.hidden=true;if(playMode==="local")setPossessedMode("local")}
-      renderChallengeRoomGate()
+      renderChallengeRoomGate();
+      if(options.openRoom&&playMode==="room"&&topRoomMenu&&!topRoomMenu.hidden)topRoomMenu.open=true;
+      return true
     }
     function loadPlayMode(){let saved="solo";try{saved=localStorage.getItem("phasmo-play-mode")||"solo"}catch(error){}setPlayMode(saved)}
     function randomRoomCode(){
@@ -1987,7 +2616,7 @@ const phasmophobiaObjects=[
       plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
         if(!data)return;
-        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer);if(data.challenge==="possessed")broadcastPossessedPublicState()}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}else if(data.type==="possessed-vote")handlePossessedVote(data,connection.peer);return}
+        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer);if(data.challenge==="possessed")broadcastPossessedPublicState()}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}else if(data.type==="possessed-session"){setChallengeStarted("possessed",Boolean(data.started),{sync:false});broadcastPossessedPublicState()}else if(data.type==="possessed-vote")handlePossessedVote(data,connection.peer);return}
         if(data.type!=="join")return;
         if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
         joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
@@ -2081,7 +2710,8 @@ const phasmophobiaObjects=[
     document.getElementById("win-round-btn").addEventListener("click",()=>startTierSelection("upgrade",4));
     document.getElementById("lose-round-btn").addEventListener("click",()=>startTierSelection("downgrade",2));
     timerButton.addEventListener("click",toggleTimer);
-    streamerMode.addEventListener("change",updateModeDisplay);
+    streamerMode.addEventListener("change",()=>handleStreamerModeChange(streamerMode.checked));
+    if(pageStreamerMode)pageStreamerMode.addEventListener("change",()=>handleStreamerModeChange(pageStreamerMode.checked));
     languageInputs.forEach(input=>input.addEventListener("change",()=>setLanguage(input.checked?"en":"fr")));
     document.querySelectorAll(".lang-btn").forEach(button=>button.addEventListener("click",()=>setLanguage(button.dataset.lang)));
     if(themeSelect)themeSelect.addEventListener("change",()=>setTheme(themeSelect.value));
@@ -2091,6 +2721,7 @@ const phasmophobiaObjects=[
       "open-challenges":()=>showChallengeSelection(true),
       "open-memo":()=>showMemo(true),
       "open-ghost-memo":()=>showGhostMemo(true),
+      "open-map-memo":()=>showMapMemo(true),
       "open-fun-memo":()=>showFunMemo(true)
     };
     document.querySelectorAll(".clickable-card[data-card-target]").forEach(card=>{
@@ -2101,7 +2732,32 @@ const phasmophobiaObjects=[
     document.getElementById("back-challenges-home").addEventListener("click",()=>showHub(true));
     document.getElementById("back-memo-home").addEventListener("click",()=>showHub(true));
     document.getElementById("back-ghost-memo").addEventListener("click",()=>showMemo(true));
+    document.getElementById("back-map-memo").addEventListener("click",()=>showMemo(true));
     document.getElementById("back-fun-memo").addEventListener("click",()=>showMemo(true));
+    function playScreamerSound(){
+      try{
+        const AudioContext=window.AudioContext||window.webkitAudioContext;
+        if(!AudioContext)return;
+        const ctx=new AudioContext(),gain=ctx.createGain(),main=ctx.createOscillator(),second=ctx.createOscillator(),noise=ctx.createBufferSource();
+        const buffer=ctx.createBuffer(1,ctx.sampleRate*1.1,ctx.sampleRate),data=buffer.getChannelData(0);
+        for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(1-i/data.length);
+        main.type="sawtooth";main.frequency.setValueAtTime(90,ctx.currentTime);main.frequency.exponentialRampToValueAtTime(880,ctx.currentTime+.16);main.frequency.exponentialRampToValueAtTime(130,ctx.currentTime+1.05);
+        second.type="square";second.frequency.setValueAtTime(55,ctx.currentTime);second.frequency.exponentialRampToValueAtTime(420,ctx.currentTime+.2);
+        noise.buffer=buffer;
+        gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.9,ctx.currentTime+.04);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+1.1);
+        main.connect(gain);second.connect(gain);noise.connect(gain);gain.connect(ctx.destination);
+        main.start();second.start();noise.start();main.stop(ctx.currentTime+1.12);second.stop(ctx.currentTime+1.12);noise.stop(ctx.currentTime+1.12)
+      }catch(error){}
+    }
+    function triggerScreamer(){
+      if(!screamerOverlay)return;
+      screamerOverlay.hidden=false;
+      screamerOverlay.setAttribute("aria-hidden","false");
+      playScreamerSound();
+      setTimeout(()=>{screamerOverlay.hidden=true;screamerOverlay.setAttribute("aria-hidden","true")},1450)
+    }
+
+    if(screamerButton)screamerButton.addEventListener("click",triggerScreamer);
     document.getElementById("open-tarot-challenge").addEventListener("click",()=>openRoomChallenge("tarot"));
     document.getElementById("back-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-media-challenge").addEventListener("click",()=>openRoomChallenge("media"));
@@ -2114,9 +2770,12 @@ const phasmophobiaObjects=[
     document.getElementById("back-hunter-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-possessed-challenge").addEventListener("click",()=>openRoomChallenge("possessed"));
     document.getElementById("back-possessed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
+    document.querySelectorAll("[data-challenge-start]").forEach(button=>button.addEventListener("click",()=>setChallengeStarted(button.dataset.challengeStart,true)));
+    document.querySelectorAll("[data-challenge-stop]").forEach(button=>button.addEventListener("click",()=>setChallengeStarted(button.dataset.challengeStop,false)));
     possessedLocalTab.addEventListener("click",()=>setPlayMode("local"));
     possessedOnlineTab.addEventListener("click",()=>setPlayMode("room"));
-    playModeButtons.forEach(button=>button.addEventListener("click",()=>setPlayMode(button.dataset.playMode)));
+    playModeButtons.forEach(button=>button.addEventListener("click",()=>setPlayMode(button.dataset.playMode,{openRoom:button.dataset.playMode==="room"})));
+    pagePlayModeButtons.forEach(button=>button.addEventListener("click",()=>setPlayMode(button.dataset.pagePlayMode,{openRoom:button.dataset.pagePlayMode==="room"})));
     possessedLocalCount.addEventListener("change",renderPossessedLocalNames);
     document.getElementById("possessed-local-prepare").addEventListener("click",prepareLocalPossessedRoles);
     possessedLocalReveal.addEventListener("click",revealLocalPossessedRole);
@@ -2178,6 +2837,16 @@ const phasmophobiaObjects=[
     document.getElementById("media-popup-reset").addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Restart the Media Surprise challenge?":"Recommencer le défi Média Surprise ?"))resetMediaChallenge()});
     mediaPopup.addEventListener("click",event=>{if(event.target===mediaPopup)closeMediaPopup()});
     ghostSearch.addEventListener("input",renderGhostMemo);
+    document.querySelectorAll("[data-ghost-info-toggle]").forEach(button=>button.addEventListener("click",()=>{
+      const key=button.dataset.ghostInfoToggle;
+      if(!(key in ghostMemoInfo))return;
+      if(ghostMemoInfo[key]&&Object.values(ghostMemoInfo).filter(Boolean).length===1)return;
+      ghostMemoInfo[key]=!ghostMemoInfo[key];
+      if(key==="walk"&&!ghostMemoInfo.walk)stopGhostWalkCadence();
+      button.classList.toggle("active",ghostMemoInfo[key]);
+      button.setAttribute("aria-pressed",String(ghostMemoInfo[key]));
+      renderGhostMemo()
+    }));
     window.addEventListener("hashchange",applyRoute);
     document.getElementById("challenge-popup-close").addEventListener("click",closeChallengePopup);
     document.getElementById("challenge-popup-x").addEventListener("click",closeChallengePopup);
@@ -2200,7 +2869,18 @@ const phasmophobiaObjects=[
     function resetSelectionDisplay(){resultDiv.innerHTML="Aucun objet en cours de sélection.";scheduleRoomChallengeSync("tarot")}
     function showMessage(title,message){resultDiv.innerHTML=`<p><strong>${escapeHtml(title)}</strong></p><p class="selection-note">${message}</p>`;scheduleRoomChallengeSync("tarot")}
 
-    function updateModeDisplay(){modeDescription.textContent=streamerMode.checked?"On":"Off";scheduleRoomChallengeSync("tarot")}
+    function handleStreamerModeChange(nextChecked){
+      const next=Boolean(nextChecked);
+      if(next!==streamerMode.checked)streamerMode.checked=next;
+      if(activeChallenge&&!confirmStopActiveChallengeForModeChange()){
+        streamerMode.checked=!next;
+        if(pageStreamerMode)pageStreamerMode.checked=streamerMode.checked;
+        return false
+      }
+      updateModeDisplay();
+      return true
+    }
+    function updateModeDisplay(){modeDescription.textContent=streamerMode.checked?"On":"Off";if(pageStreamerMode)pageStreamerMode.checked=streamerMode.checked;scheduleRoomChallengeSync("tarot")}
     function updateTarotStatus(){
       if(nextTarotMultiplier>1){tarotStatus.classList.add("active");tarotStatus.textContent=`Haute-Prêtresse active : le prochain effet sera renforcé ×${nextTarotMultiplier}.`}
       else{tarotStatus.classList.remove("active");tarotStatus.textContent="Haute-Prêtresse : aucun renforcement en attente."}scheduleRoomChallengeSync("tarot")
@@ -2434,9 +3114,11 @@ const phasmophobiaObjects=[
     loadCursedProgress();
     hunterLoad();
     renderGhostMemo();
+    renderMapMemo();
     renderMediaChallenge();
     renderCursedRun();
     renderHunterChallenge();
+    renderChallengeSessionControls();
     renderPossessedLocalNames();
     renderPossessedGamePanel();
     relocateRoomControls();
