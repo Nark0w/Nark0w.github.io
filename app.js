@@ -1614,6 +1614,58 @@ const phasmophobiaObjects=[
       return notes[ghost.en]||{fr:["Aucune note spécifique renseignée."],en:["No specific note set."]}
     }
     function ghostSelectionKey(ghost){return ghost.en}
+    function selectedMimicCandidates(){
+      return orderedGhosts().filter(ghost=>
+        ghost.en!=="The Mimic"&&
+        !ghostMemoRemoved.has(ghostSelectionKey(ghost))&&
+        ghostEvidenceMatches(ghost)
+      )
+    }
+    function mimicAggregateGhost(candidates){
+      const mimic=ghostHuntThresholds.find(ghost=>ghost.en==="The Mimic");
+      if(!candidates.length)return mimic;
+      const values=candidates.flatMap(ghost=>getGhostThresholdMetrics(ghost).values);
+      const powerValues=candidates.flatMap(ghost=>getGhostThresholdMetrics(ghost).powerValues);
+      const allValues=[...values,...powerValues],min=Math.min(...allValues),max=Math.max(...allValues);
+      return {
+        ...mimic,
+        thresholdFr:`${formatGhostNumber(min)} → ${formatGhostNumber(max)} %`,
+        thresholdEn:`${formatGhostNumber(min)} → ${formatGhostNumber(max)}%`,
+        summaryFr:`Plage calculée à partir des ${candidates.length} entités encore possibles.`,
+        summaryEn:`Range calculated from the ${candidates.length} remaining possible ghosts.`,
+        thresholdValues:[...new Set(values)],
+        powerThresholdValues:[...new Set(powerValues)]
+      }
+    }
+    function mimicSpeedInfo(candidates){
+      if(!candidates.length)return ghostSpeedInfo(ghostHuntThresholds.find(ghost=>ghost.en==="The Mimic"));
+      const values=[...new Set(candidates.flatMap(ghost=>ghostSpeedMetrics(ghost).values).map(roundedSpeed))].sort((a,b)=>a-b);
+      const min=values[0],max=values[values.length-1];
+      return {
+        fr:`${formatGhostNumber(min)} → ${formatGhostNumber(max)} m/s`,
+        en:`${formatGhostNumber(min)} → ${formatGhostNumber(max)} m/s`,
+        summaryFr:`Vitesses possibles parmi les ${candidates.length} entités retenues.`,
+        summaryEn:`Possible speeds among the ${candidates.length} retained ghosts.`,
+        values,
+        tone:"variable"
+      }
+    }
+    function mimicWalkCadenceVariants(candidates){
+      const variants=candidates.flatMap(candidate=>{
+        const candidateName=currentLanguage==="en"?candidate.en:candidate.fr;
+        return ghostWalkCadenceVariants(candidate).map(variant=>({...variant,label:`${candidateName} · ${variant.label}`}))
+      });
+      if(variants.length<=12)return variants;
+      const speeds=[...new Set(variants.flatMap(variant=>[
+        roundedSpeed(variant.speed),
+        roundedSpeed(variant.baseSpeed||variant.speed),
+        roundedSpeed(variant.maxSpeed||variant.speed)
+      ]))].sort((a,b)=>a-b);
+      if(!speeds.length)return [];
+      const samples=[speeds[0],speeds[Math.floor((speeds.length-1)/2)],speeds[speeds.length-1]];
+      const labels=currentLanguage==="en"?["selected minimum","selected midpoint","selected maximum"]:["minimum sélectionné","intermédiaire sélectionné","maximum sélectionné"];
+      return [...new Set(samples)].map((speed,index)=>({label:labels[index],speed,mode:"fixed"}))
+    }
     function ghostEvidenceName(id){
       const evidence=ghostEvidenceTypes.find(item=>item.id===id);
       return evidence?(currentLanguage==="en"?evidence.en:evidence.fr):id
@@ -1688,11 +1740,14 @@ const phasmophobiaObjects=[
       if(!ghostMemoList)return;
       renderGhostWalkScaleControls();
       const query=ghostSearch?normalizeSearch(ghostSearch.value):"";
+      const mimicCandidates=selectedMimicCandidates();
       ghostMemoList.innerHTML="";
       const visible=orderedGhosts().filter(ghost=>{
-        const speed=ghostSpeedInfo(ghost);
-        const behavior=ghostBehaviorInfo(ghost);
-        const haystack=normalizeSearch([ghost.fr,ghost.en,ghost.summaryFr,ghost.summaryEn,ghost.thresholdFr,ghost.thresholdEn,speed.fr,speed.en,speed.summaryFr,speed.summaryEn,behavior.fr,behavior.en].join(" "));
+        const isMimic=ghost.en==="The Mimic";
+        const searchGhost=isMimic?mimicAggregateGhost(mimicCandidates):ghost;
+        const speed=isMimic?mimicSpeedInfo(mimicCandidates):ghostSpeedInfo(ghost);
+        const behaviors=isMimic?mimicCandidates.flatMap(candidate=>[ghostBehaviorInfo(candidate).fr,ghostBehaviorInfo(candidate).en]):[ghostBehaviorInfo(ghost).fr,ghostBehaviorInfo(ghost).en];
+        const haystack=normalizeSearch([ghost.fr,ghost.en,searchGhost.summaryFr,searchGhost.summaryEn,searchGhost.thresholdFr,searchGhost.thresholdEn,speed.fr,speed.en,speed.summaryFr,speed.summaryEn,...behaviors].join(" "));
         return !ghostMemoRemoved.has(ghostSelectionKey(ghost))&&ghostEvidenceMatches(ghost)&&(!query||haystack.includes(query))
       }).sort((a,b)=>{
         return ghostJournalOrder.indexOf(a.en)-ghostJournalOrder.indexOf(b.en)
@@ -1702,19 +1757,29 @@ const phasmophobiaObjects=[
         const visibleInfoCount=["behavior","walk","hunt","speed"].filter(key=>ghostMemoInfo[key]).length;
         row.className=`ghost-row ${ghost.tone} info-count-${visibleInfoCount}${ghostMemoInfo.behavior?" has-behavior":" no-behavior"}`;
         const name=currentLanguage==="en"?ghost.en:ghost.fr;
+        const isMimic=ghost.en==="The Mimic";
+        const effectiveGhost=isMimic?mimicAggregateGhost(mimicCandidates):ghost;
         const ghostImage=ghostImageUrl(ghost);
-        const threshold=currentLanguage==="en"?ghost.thresholdEn:ghost.thresholdFr;
-        const thresholdHtml=ghostThresholdHtml(ghost);
-        const summary=currentLanguage==="en"?ghost.summaryEn:ghost.summaryFr;
-        const speed=ghostSpeedInfo(ghost),speedLabel=scaledGhostSpeedLabel(currentLanguage==="en"?speed.en:speed.fr),speedSummary=currentLanguage==="en"?speed.summaryEn:speed.summaryFr;
-        const behavior=ghostBehaviorInfo(ghost),behaviorSummary=currentLanguage==="en"?behavior.en:behavior.fr;
-        const metrics=getGhostThresholdMetrics(ghost);
+        const threshold=currentLanguage==="en"?effectiveGhost.thresholdEn:effectiveGhost.thresholdFr;
+        const thresholdHtml=ghostThresholdHtml(effectiveGhost);
+        const summary=currentLanguage==="en"?effectiveGhost.summaryEn:effectiveGhost.summaryFr;
+        const speed=isMimic?mimicSpeedInfo(mimicCandidates):ghostSpeedInfo(effectiveGhost),speedLabel=scaledGhostSpeedLabel(currentLanguage==="en"?speed.en:speed.fr),speedSummary=currentLanguage==="en"?speed.summaryEn:speed.summaryFr;
+        const behavior=ghostBehaviorInfo(effectiveGhost);
+        const candidateNames=mimicCandidates.map(candidate=>currentLanguage==="en"?candidate.en:candidate.fr);
+        const behaviorSummary=isMimic
+          ?[
+            currentLanguage==="en"?`${mimicCandidates.length} possible ghosts retained.`:`${mimicCandidates.length} entités possibles retenues.`,
+            ...(mimicCandidates.length<=6&&candidateNames.length?[`${currentLanguage==="en"?"Can mimic":"Peut imiter"} : ${candidateNames.join(", ")}.`]:[]),
+            ...(currentLanguage==="en"?behavior.en:behavior.fr)
+          ]
+          :(currentLanguage==="en"?behavior.en:behavior.fr);
+        const metrics=getGhostThresholdMetrics(effectiveGhost);
         const powerMax=metrics.powerValues.length?Math.max(...metrics.powerValues):metrics.max;
         const powerLeft=`${metrics.max}%`;
         const powerWidth=`${Math.max(0,powerMax-metrics.max)}%`;
         const baseWidth=`${metrics.max}%`;
         const rangeWidth=`${Math.max(0,metrics.max-metrics.min)}%`;
-        const baseSpeedMetrics=ghostSpeedMetrics(ghost),speedMetrics={values:baseSpeedMetrics.values.map(value=>roundedSpeed(value*ghostWalkSpeedMultiplier)),min:roundedSpeed(baseSpeedMetrics.min*ghostWalkSpeedMultiplier),max:roundedSpeed(baseSpeedMetrics.max*ghostWalkSpeedMultiplier)},speedMax=4*ghostWalkSpeedMultiplier,speedBaseWidth=`${Math.min(100,speedMetrics.max/speedMax*100)}%`,speedRangeWidth=`${Math.max(0,Math.min(100,(speedMetrics.max-speedMetrics.min)/speedMax*100))}%`,speedRangeLeft=`${Math.min(100,speedMetrics.min/speedMax*100)}%`;
+        const rawSpeedValues=speed.values||[1.7],baseSpeedMetrics={values:rawSpeedValues,min:Math.min(...rawSpeedValues),max:Math.max(...rawSpeedValues)},speedMetrics={values:baseSpeedMetrics.values.map(value=>roundedSpeed(value*ghostWalkSpeedMultiplier)),min:roundedSpeed(baseSpeedMetrics.min*ghostWalkSpeedMultiplier),max:roundedSpeed(baseSpeedMetrics.max*ghostWalkSpeedMultiplier)},speedMax=4*ghostWalkSpeedMultiplier,speedBaseWidth=`${Math.min(100,speedMetrics.max/speedMax*100)}%`,speedRangeWidth=`${Math.max(0,Math.min(100,(speedMetrics.max-speedMetrics.min)/speedMax*100))}%`,speedRangeLeft=`${Math.min(100,speedMetrics.min/speedMax*100)}%`;
         const scaleLabels=["0%","25%","50%","75%","100%"];
         const speedLabels=[0,.25,.5,.75,1].map((ratio,index)=>`${formatGhostNumber(speedMax*ratio)}${index===4?" m/s":""}`);
         const note=currentLanguage==="en"?"Regular hunt threshold":"Seuil de chasse normal";
@@ -1724,7 +1789,7 @@ const phasmophobiaObjects=[
         const powerNote=currentLanguage==="en"?"ability":"pouvoir";
         const powerMarkers=metrics.powerValues.map(value=>`<span class="ghost-bar-marker power" style="left:${value}%" title="${escapeHtml(`${powerNote} ${value}%`)}"></span>`).join("");
         const speedMarkers=speedMetrics.values.map(value=>`<span class="ghost-bar-marker speed" style="left:${Math.min(100,value/speedMax*100)}%" title="${escapeHtml(String(value))} m/s"></span>`).join("");
-        const walkVariants=ghostWalkCadenceVariants(ghost);
+        const walkVariants=isMimic?mimicWalkCadenceVariants(mimicCandidates):ghostWalkCadenceVariants(effectiveGhost);
         const walkLabel=currentLanguage==="en"?"Footstep sounds":"Bruits de pas";
         const walkHint=currentLanguage==="en"?"Play walking cadence":"Écouter la cadence de marche";
         const walkEmpty=currentLanguage==="en"?"Refer to the mimicked ghost.":"Se référer à l'entité imitée.";
@@ -1736,7 +1801,9 @@ const phasmophobiaObjects=[
           return `<button class="ghost-walk-btn${active?" active":""}" type="button" data-ghost-walk="${escapeHtml(ghost.en)}" data-ghost-walk-mode="${escapeHtml(mode)}" data-ghost-walk-speed="${scaledSpeed}" data-ghost-walk-base="${scaledBase}" data-ghost-walk-max="${scaledMax}" data-ghost-walk-ratio="${accelRatio}" data-ghost-walk-seconds="${variant.accelSeconds||13}" aria-pressed="${active?"true":"false"}" title="${escapeHtml(walkHint)}">${escapeHtml(buttonLabel)}</button>`
         }).join(""):`<p class="ghost-summary">${escapeHtml(walkEmpty)}</p>`;
         const walkHtml=`<div class="ghost-info-block walk-info"><div class="ghost-info-head"><span>${escapeHtml(walkLabel)}</span></div><div class="ghost-walk-controls" aria-label="${escapeHtml(walkHint)}">${walkButtonsHtml}</div></div>`;
-        const specialSounds=ghostSpecialSoundVariants(ghost);
+        const specialSounds=isMimic
+          ?[...new Map(mimicCandidates.flatMap(candidate=>ghostSpecialSoundVariants(candidate)).map(sound=>[sound.id,sound])).values()]
+          :ghostSpecialSoundVariants(effectiveGhost);
         const specialSoundLabel=currentLanguage==="en"?"Specific sounds":"Sons spécifiques";
         const specialSoundHint=currentLanguage==="en"?"Play specific sound":"Écouter le son spécifique";
         const specialSoundHtml=specialSounds.length?`<div class="ghost-special-sounds" aria-label="${escapeHtml(specialSoundLabel)}"><span>${escapeHtml(specialSoundLabel)}</span>${specialSounds.map(sound=>`<button class="ghost-special-sound-btn" type="button" data-ghost-special-sound="${escapeHtml(sound.id)}" title="${escapeHtml(specialSoundHint)}">${escapeHtml(currentLanguage==="en"?sound.en:sound.fr)}</button>`).join("")}</div>`:"";
@@ -1744,7 +1811,7 @@ const phasmophobiaObjects=[
           <div class="ghost-row-main">
             <div class="ghost-title-line">
               ${ghostImage?`<img class="ghost-portrait" src="${escapeHtml(ghostImage)}" alt="${escapeHtml(name)}">`:`<span class="ghost-portrait ghost-portrait-placeholder" aria-label="${escapeHtml(currentLanguage==="en"?"Portrait unavailable":"Portrait indisponible")}">${escapeHtml(name.charAt(0))}</span>`}
-              <h2 class="ghost-row-name">${escapeHtml(name)}</h2>
+              <h2 class="ghost-row-name">${escapeHtml(name)}${isMimic?`<small class="ghost-mimic-target">${mimicCandidates.length} ${currentLanguage==="en"?"possible":"possibles"}</small>`:""}</h2>
             </div>
             <p class="ghost-row-note">${escapeHtml(note)}</p>
           </div>

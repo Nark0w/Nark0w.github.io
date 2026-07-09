@@ -522,6 +522,7 @@
     .ghost-portrait{width:min(68px,100%);height:auto;aspect-ratio:1;flex:0 1 68px;object-fit:cover;object-position:center top;background:#080604;border:1px solid var(--line-soft);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)}
     .ghost-portrait-placeholder{display:flex;align-items:center;justify-content:center;color:var(--muted3);font-family:var(--serif);font-size:24px;font-weight:700}
     .ghost-row-name{min-width:0;font-size:15px;font-weight:700;letter-spacing:.03em;color:#ece7dd;margin:0;overflow-wrap:anywhere}
+    .ghost-mimic-target{display:block;margin-top:2px;color:#d8c79b;font-family:var(--mono);font-size:9px;font-weight:400;letter-spacing:.04em}
     .ghost-threshold-badge,.ghost-speed-badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--green-bright);
       background:rgba(111,174,126,.1);border:1px solid rgba(111,174,126,.3);padding:3px 7px;white-space:normal}
     .ghost-threshold-badge .threshold-normal,.threshold-detail .threshold-normal{color:var(--green-bright)}
