@@ -454,16 +454,21 @@ const phasmophobiaObjects=[
     };
     const ghostBonusEvidenceMap={"The Mimic":["orbs"]};
     const ghostImageMap={
+      Aswang:"assets/ghosts/aswang.png",
       Banshee:"https://static.wikia.nocookie.net/phasmophobia/images/2/26/Banshee_Discovered.jpg/revision/latest",
+      Dayan:"assets/ghosts/dayan.png",
       Demon:"https://static.wikia.nocookie.net/phasmophobia/images/f/f5/Demon_Discovered.jpg/revision/latest",
       Deogen:"https://static.wikia.nocookie.net/phasmophobia/images/d/dd/Deogen_Discovered.jpg/revision/latest",
+      Gallu:"assets/ghosts/gallu.png",
       Goryo:"https://static.wikia.nocookie.net/phasmophobia/images/6/6b/Goryo_Discovered.jpg/revision/latest",
       Hantu:"https://static.wikia.nocookie.net/phasmophobia/images/e/e0/Hantu_Discovered.jpg/revision/latest",
       Jinn:"https://static.wikia.nocookie.net/phasmophobia/images/5/56/Jinn_Discovered.jpg/revision/latest",
+      Kormos:"assets/ghosts/kormos.png",
       Mare:"https://static.wikia.nocookie.net/phasmophobia/images/3/32/Mare_Discovered.jpg/revision/latest",
       Moroi:"https://static.wikia.nocookie.net/phasmophobia/images/9/95/Moroi_Discovered.jpg/revision/latest",
       Myling:"https://static.wikia.nocookie.net/phasmophobia/images/e/e0/Myling_Discovered.jpg/revision/latest",
       Obake:"https://static.wikia.nocookie.net/phasmophobia/images/7/7e/Obake_Discovered.jpg/revision/latest",
+      Obambo:"assets/ghosts/obambo.png",
       Oni:"https://static.wikia.nocookie.net/phasmophobia/images/8/86/Oni_Discovered.jpg/revision/latest",
       Onryo:"https://static.wikia.nocookie.net/phasmophobia/images/f/f3/Onryo_Discovered.jpg/revision/latest",
       Phantom:"https://static.wikia.nocookie.net/phasmophobia/images/2/27/Phantom_Discovered.jpg/revision/latest",
@@ -484,7 +489,7 @@ const phasmophobiaObjects=[
     let permanentLostNames=new Set(),singleCopyNames=new Set(),roundEffects=[];
     let roundCount=1,winCount=0,lossCount=0,elapsedSeconds=0,timerInterval=null,nextTarotMultiplier=1,challengeOutcome=null;
     let ghostMemoRemoved=new Set(),ghostMemoChosen="",ghostMemoEvidenceSelected=new Set(),ghostMemoInfo={behavior:true,walk:true,hunt:true,speed:true},ghostWalkSpeedMultiplier=1;
-    let ghostWalkAudio={ctx:null,timer:null,ghostKey:"",speed:0,stepIndex:0,startedAt:0,mode:"fixed",baseSpeed:0,maxSpeed:0,accelRatio:1,accelSeconds:13};
+    let ghostWalkAudio={ctx:null,timer:null,special:null,ghostKey:"",speed:0,stepIndex:0,startedAt:0,mode:"fixed",baseSpeed:0,maxSpeed:0,accelRatio:1,accelSeconds:13};
     const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
     function wallIconSvg(icon){
@@ -1378,6 +1383,12 @@ const phasmophobiaObjects=[
       if(unique.length===1)return formatGhostNumber(unique[0]);
       return `${formatGhostNumber(unique[0])} → ${formatGhostNumber(unique[unique.length-1])}`
     }
+    function scaledGhostSpeedLabel(label){
+      return String(label).replace(/\d+(?:[.,]\d+)?/g,value=>{
+        const scaled=Number(value.replace(",","."))*ghostWalkSpeedMultiplier;
+        return formatGhostNumber(roundedSpeed(scaled))
+      })
+    }
     function ghostThresholdHtml(ghost){
       const metrics=getGhostThresholdMetrics(ghost),threshold=currentLanguage==="en"?ghost.thresholdEn:ghost.thresholdFr;
       if(!metrics.powerValues.length)return `<span class="threshold-normal">${escapeHtml(threshold)}</span>`;
@@ -1556,71 +1567,51 @@ const phasmophobiaObjects=[
     }
     function playGhostSpecialSound(soundId){
       try{
-        const AudioContext=window.AudioContext||window.webkitAudioContext;
-        if(!AudioContext)return;
-        const ctx=ghostWalkAudio.ctx&&ghostWalkAudio.ctx.state!=="closed"?ghostWalkAudio.ctx:new AudioContext();
-        ghostWalkAudio.ctx=ctx;
-        if(ctx.state==="suspended")ctx.resume();
-        const now=ctx.currentTime;
-        if(soundId==="banshee-scream"){
-          const output=ctx.createGain(),osc=ctx.createOscillator(),osc2=ctx.createOscillator(),filter=ctx.createBiquadFilter(),noise=ctx.createBufferSource(),noiseGain=ctx.createGain();
-          const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*1.45),ctx.sampleRate),data=buffer.getChannelData(0);
-          for(let i=0;i<data.length;i++){const t=i/data.length;data[i]=(Math.random()*2-1)*Math.sin(Math.PI*t)*.45}
-          output.gain.setValueAtTime(.0001,now);
-          output.gain.exponentialRampToValueAtTime(.48,now+.08);
-          output.gain.exponentialRampToValueAtTime(.0001,now+1.45);
-          filter.type="bandpass";filter.frequency.setValueAtTime(1250,now);filter.frequency.exponentialRampToValueAtTime(520,now+1.15);filter.Q.setValueAtTime(7,now);
-          osc.type="sawtooth";osc.frequency.setValueAtTime(820,now);osc.frequency.exponentialRampToValueAtTime(360,now+1.2);
-          osc2.type="triangle";osc2.frequency.setValueAtTime(1240,now);osc2.frequency.exponentialRampToValueAtTime(470,now+1.1);
-          noise.buffer=buffer;noiseGain.gain.setValueAtTime(.18,now);
-          osc.connect(filter);osc2.connect(filter);noise.connect(noiseGain);noiseGain.connect(filter);filter.connect(output);output.connect(ctx.destination);
-          osc.start(now);osc2.start(now);noise.start(now);osc.stop(now+1.45);osc2.stop(now+1.45);noise.stop(now+1.45)
-        }else if(soundId==="deogen-breath"){
-          const output=ctx.createGain(),filter=ctx.createBiquadFilter(),noise=ctx.createBufferSource(),buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*2.2),ctx.sampleRate),data=buffer.getChannelData(0);
-          for(let i=0;i<data.length;i++){const t=i/data.length,pulse=.45+.55*Math.sin(t*Math.PI*6);data[i]=(Math.random()*2-1)*pulse}
-          output.gain.setValueAtTime(.0001,now);
-          output.gain.linearRampToValueAtTime(.35,now+.25);
-          output.gain.linearRampToValueAtTime(.2,now+1.65);
-          output.gain.exponentialRampToValueAtTime(.0001,now+2.2);
-          filter.type="lowpass";filter.frequency.setValueAtTime(520,now);filter.Q.setValueAtTime(1.8,now);
-          noise.buffer=buffer;noise.connect(filter);filter.connect(output);output.connect(ctx.destination);
-          noise.start(now);noise.stop(now+2.2)
-        }
+        const sources=soundId==="banshee-scream"
+          ?Array.from({length:20},(_,index)=>`assets/audio/ghosts/banshee-scream-${index+1}.ogg`)
+          :soundId==="deogen-breath"?["assets/audio/ghosts/deogen-breathing.mp3"]:[];
+        if(!sources.length)return;
+        if(ghostWalkAudio.special){ghostWalkAudio.special.pause();ghostWalkAudio.special.currentTime=0}
+        const audio=new Audio(sources[Math.floor(Math.random()*sources.length)]);
+        audio.volume=.9;
+        ghostWalkAudio.special=audio;
+        audio.addEventListener("ended",()=>{if(ghostWalkAudio.special===audio)ghostWalkAudio.special=null},{once:true});
+        audio.play().catch(()=>{if(ghostWalkAudio.special===audio)ghostWalkAudio.special=null})
       }catch(error){}
     }
     function ghostBehaviorInfo(ghost){
       const notes={
-        Spirit:{fr:"Encens plus long : après avoir été repoussé, il ne peut pas chasser pendant 180 s au lieu du délai habituel.",en:"Longer smudge: after being repelled, it cannot hunt for 180s instead of the usual delay."},
-        Wraith:{fr:"Ne laisse pas de traces de pas dans le sel et peut se téléporter vers un joueur avant d'interagir.",en:"Does not leave salt footprints and can teleport to a player before interacting."},
-        Phantom:{fr:"Le regarder draine davantage la santé mentale ; moins visible en chasse et invisible sur la photo qui le capture.",en:"Looking at it drains extra sanity; less visible during hunts and absent from the photo that captures it."},
-        Poltergeist:{fr:"Peut lancer plusieurs objets d'un coup et les projette plus fort, ce qui rend le test du tas d'objets très parlant.",en:"Can throw multiple items at once and throws harder, making the item-pile test very revealing."},
-        Banshee:{fr:"Cible un joueur précis, utilise sa santé mentale pour chasser, favorise les événements chantés et peut donner un cri spécial au micro.",en:"Targets one player, uses that target's sanity for hunts, favors singing events and can give a special scream/groan on microphones."},
-        Jinn:{fr:"Si le disjoncteur est allumé, il peut foncer à 2,5 m/s vers un joueur en ligne de mire à plus de 3 m ; pouvoir inactif sans courant.",en:"With the breaker on, it can rush at 2.5 m/s toward a line-of-sight player over 3 m away; power is inactive without electricity."},
-        Mare:{fr:"Chasse plus tôt dans le noir, plus tard avec la lumière allumée, n'allume jamais de lumière et peut éteindre aussitôt un interrupteur activé.",en:"Hunts earlier in darkness, later with the light on, never turns lights on and can immediately switch off a light you just toggled."},
-        Revenant:{fr:"Lent sans cible à 1 m/s, passe à 3 m/s après détection par vue, voix ou électronique, puis ralentit sur environ 2,7 s.",en:"Slow without a target at 1 m/s, jumps to 3 m/s after detecting sight, voice or electronics, then slows over about 2.7 s."},
-        Shade:{fr:"Très discret : activité plus faible quand les joueurs sont proches et pas de départ de chasse si un joueur est dans sa pièce.",en:"Very shy: lower activity while players are nearby and no hunt start while a player is in its room."},
-        Demon:{fr:"Seuil normal 70 %, capacité rare possible jusqu'à 100 %, délai de chasse réduit, encens seulement 60 s et portée de crucifix augmentée de 50 %.",en:"Normal threshold 70%, rare ability possible up to 100%, shorter hunt cooldown, incense only blocks for 60s and crucifix range is increased by 50%."},
-        Yurei:{fr:"Peut claquer une porte et retirer beaucoup de santé mentale ; l'encens le bloque dans sa pièce pendant un moment.",en:"Can slam a door and remove a large amount of sanity; incense traps it in its room for a while."},
-        Oni:{fr:"Très actif, ne fait pas l'événement de souffle brumeux et reste visible plus longtemps pendant les clignotements de chasse.",en:"Very active, does not perform the mist-ball event and stays visible longer during hunt blinks."},
-        Yokai:{fr:"Parler dans sa pièce active son pouvoir : seuil temporaire à 80 % et +30 d'activité. En chasse, il n'entend voix et équipement tenu qu'à 2,5 m.",en:"Talking in its room activates its power: temporary 80% threshold and +30 activity. During hunts, it only hears voices and held equipment within 2.5 m."},
-        Hantu:{fr:"Aime le froid : vitesse de 1,4 à 2,7 m/s selon la température, pas d'accélération LoS, n'allume pas le disjoncteur et peut souffler froid en chasse.",en:"Likes the cold: 1.4 to 2.7 m/s by temperature, no LoS acceleration, does not turn the breaker on and can show cold breath while hunting."},
-        Goryo:{fr:"D.O.T.S. visible uniquement à la caméra quand personne n'est dans la pièce ; change peu de pièce et erre moins loin.",en:"D.O.T.S. only appears on camera while nobody is in the room; changes room rarely and roams less far."},
-        Myling:{fr:"Ses bruits de pas de chasse sont audibles de moins loin ; sons paranormaux plus fréquents au micro, environ toutes les 64 à 127 s.",en:"Its hunt footsteps are audible from a shorter range; paranormal microphone sounds are more frequent, about every 64 to 127 s."},
-        Onryo:{fr:"Les flammes agissent comme protection, mais après chaque troisième flamme soufflée il peut tenter une chasse de pouvoir si aucune flamme ne couvre la zone.",en:"Flames act as protection, but after every third flame it blows out it can try a power hunt if no flame protects the area."},
-        "The Twins":{fr:"Une seule entité mécaniquement : interactions possibles près du fantôme ou à distance, puis chasse lente 1,5 m/s ou rapide 1,9 m/s.",en:"Mechanically one ghost: interactions can happen near the ghost or at range, then hunts are either slow 1.5 m/s or fast 1.9 m/s."},
-        Raiju:{fr:"Électronique active : seuil 65 % et vitesse 2,5 m/s dans 6/8/10 m selon la taille de carte ; interférences dès 15 m.",en:"Active electronics: 65% threshold and 2.5 m/s within 6/8/10 m by map size; interference starts at 15 m."},
-        Obake:{fr:"Peut réduire la durée de ses empreintes, laisser une empreinte spéciale et changer brièvement de modèle pendant une chasse.",en:"Can shorten fingerprint duration, leave a special fingerprint and briefly shapeshift during a hunt."},
-        "The Mimic":{fr:"Imite seuil, vitesse et capacités d'une autre entité : plage pratique 15 à 100 %. Possède toujours des orbes en preuve bonus.",en:"Mimics another ghost's threshold, speed and abilities: practical range 15 to 100%. Always has Ghost Orbs as bonus evidence."},
-        Moroi:{fr:"Maudit via Spirit Box, micro parabolique ou enregistreur : drain de santé mentale doublé, vitesse liée à la santé, encens actif 7 s en chasse.",en:"Curses through Spirit Box, parabolic mic or sound recorder: doubled sanity drain, speed tied to sanity, incense lasts 7 s during hunts."},
-        Deogen:{fr:"Sait toujours où sont les joueurs : 3 m/s à distance, puis ralentit jusqu'à 0,4 m/s près de la cible. Réponse Spirit Box unique à moins de 1 m.",en:"Always knows where players are: 3 m/s at range, then slows down to 0.4 m/s near the target. Unique Spirit Box response within 1 m."},
-        Thaye:{fr:"Ne gagne pas de vitesse LoS. Vieillit près des joueurs : seuil 75 à 15 %, vitesse 2,75 à 1 m/s et activité 200 à 50 %.",en:"Does not gain LoS speed. Ages near players: threshold 75 to 15%, speed 2.75 to 1 m/s and activity 200 to 50%."},
-        Gallu:{fr:"Trois états : normal, enragé après protection/sel/encens, puis affaibli après chasse. Seuil, vitesse, encens et crucifix changent avec l'état.",en:"Three states: normal, enraged after protection/salt/incense, then weakened after a hunt. Threshold, speed, incense and crucifix range change with state."},
-        Dayan:{fr:"À moins de 10 m, il punit le mouvement : 65 % et 2,25 m/s si le joueur bouge, 45 % et 1,2 m/s s'il reste immobile.",en:"Within 10 m, it punishes movement: 65% and 2.25 m/s if the player moves, 45% and 1.2 m/s if they stand still."},
-        Obambo:{fr:"Démarre calme, change d'état 1 min après l'ouverture puis toutes les 2 min. Calme : 10 % et 1,445 m/s ; agressif : 65 %, 1,955 m/s, chasse 20 % plus courte.",en:"Starts calm, changes state 1 min after opening then every 2 min. Calm: 10% and 1.445 m/s; aggressive: 65%, 1.955 m/s, 20% shorter hunt."},
-        Aswang:{fr:"Plus lent de base à 1,53 m/s, mais accélère plus vite en ligne de mire jusqu'à 2,53 m/s. Peut avoir zéro grâce et ne tue pas dans une cachette officielle bien utilisée.",en:"Slower base speed at 1.53 m/s, but accelerates faster in line of sight up to 2.53 m/s. Can have zero grace and cannot kill in a correctly used official hiding spot."},
-        Kormos:{fr:"Très mauvaise vision, mais écoute les pas : accroupi 10 m, marche 15 m, sprint 30 m. Sprint dans sa pièce : seuil 70 %.",en:"Very poor vision, but listens for footsteps: crouch walk 10 m, walk 15 m, sprint 30 m. Sprinting in its room: 70% threshold."}
+        Spirit:{fr:["Encens : bloque les chasses 180 s.","Aucun autre trait unique."],en:["Incense blocks hunts for 180s.","No other unique trait."]},
+        Wraith:{fr:["Ne perturbe jamais le sel.","Se téléporte parfois vers un joueur.","Téléportation : EMF aux pieds."],en:["Never disturbs salt.","Sometimes teleports to a player.","Teleport leaves EMF at their feet."]},
+        Phantom:{fr:["Invisible sur sa photo/vidéo.","La photo le fait disparaître sur l'instant.","Très peu visible en chasse.","Se déplace parfois vers un joueur.","Le regarder draine plus de santé."],en:["Invisible in its photo/video.","A photo makes it vanish briefly.","Barely visible during hunts.","Sometimes roams to a player.","Looking at it drains more sanity."]},
+        Poltergeist:{fr:["Lance plusieurs objets d'un coup.","Projette les objets deux fois plus loin.","Lance plus souvent que les autres.","En chasse : lancer garanti toutes les 0,5 s."],en:["Throws several objects at once.","Throws objects twice as far.","Throws more often than others.","During hunts: guaranteed throw every 0.5s."]},
+        Banshee:{fr:["Cible un seul joueur.","Chasse selon la santé de sa cible.","Ignore les autres si la cible est présente.","Cri unique au micro parabolique.","Préfère les événements chantés.","Chant sur la cible : -15 % de santé."],en:["Targets only one player.","Hunts from its target's sanity.","Ignores others while its target is present.","Unique parabolic-mic scream.","Prefers singing events.","Singing collision drains 15% sanity."]},
+        Jinn:{fr:["Accélère à 2,5 m/s avec courant et ligne de mire.","Pouvoir : retire 25 % de santé.","Pouvoir : EMF au disjoncteur.","N'éteint jamais directement le disjoncteur."],en:["Rushes at 2.5 m/s with power and line of sight.","Ability drains 25% sanity.","Ability leaves EMF at the breaker.","Never directly turns the breaker off."]},
+        Mare:{fr:["N'allume jamais une lumière.","Peut éteindre aussitôt une lumière allumée.","Chasse à 60 % dans le noir.","Chasse à 40 % dans la lumière.","Préfère casser les ampoules.","Erre davantage vers l'obscurité."],en:["Never turns a light on.","May instantly switch off a light.","Hunts at 60% in darkness.","Hunts at 40% in light.","Prefers breaking lights.","Roams more toward dark rooms."]},
+        Revenant:{fr:["Sans cible : 1 m/s.","Cible détectée : 3 m/s.","Suit la dernière position connue.","Aucune accélération en ligne de mire."],en:["No target: 1 m/s.","Detected target: 3 m/s.","Follows the last known position.","No line-of-sight acceleration."]},
+        Shade:{fr:["Très peu active près des joueurs.","Aucune chasse si un joueur est dans sa pièce.","Seuil de chasse : 35 %.","Préfère la forme ombre.","Préfère les événements de brume."],en:["Very inactive near players.","Cannot hunt with a player in its room.","Hunt threshold: 35%.","Prefers shadow form.","Prefers mist events."]},
+        Demon:{fr:["Seuil normal : 70 %.","Pouvoir rare : chasse à toute santé.","Délai entre chasses : 20 s.","Encens : bloque seulement 60 s.","Crucifix : portée augmentée de 50 %."],en:["Normal threshold: 70%.","Rare ability: hunts at any sanity.","Hunt cooldown: 20s.","Incense blocks for only 60s.","Crucifix range increased by 50%."]},
+        Yurei:{fr:["Pouvoir : ferme doucement une porte.","Pouvoir : -15 % de santé à proximité.","Peut toucher la porte de sortie hors chasse.","Encens : bloqué dans sa pièce 90 s.","Ne fait pas de petits mouvements de porte."],en:["Ability softly closes a door.","Ability drains 15% nearby sanity.","Can touch the exit door outside hunts.","Incense traps it in its room for 90s.","Does not make small door movements."]},
+        Oni:{fr:["Aucun événement de brume.","Très visible pendant les chasses.","Événement de contact : -20 % de santé.","Préfère apparaître sous forme complète.","Plus active près des joueurs."],en:["No mist-form event.","Very visible during hunts.","Collision event drains 20% sanity.","Prefers full-form appearances.","More active near players."]},
+        Yokai:{fr:["Parler près de lui augmente son activité.","Parler dans sa pièce : chasse à 80 %.","En chasse, entend voix/électronique à 2,5 m.","Très faible détection sonore."],en:["Talking nearby raises activity.","Talking in its room: hunts at 80%.","During hunts hears voice/electronics at 2.5m.","Very poor sound detection."]},
+        Hantu:{fr:["Preuve Températures glaciales garantie.","Plus rapide dans le froid.","Vitesse : 1,4 à 2,7 m/s.","Aucune accélération en ligne de mire.","Souffle glacé en chasse sans courant.","N'allume jamais le disjoncteur.","Éteint plus souvent le disjoncteur."],en:["Freezing Temperatures guaranteed.","Faster in cold rooms.","Speed: 1.4 to 2.7 m/s.","No line-of-sight acceleration.","Cold breath during hunts without power.","Never turns the breaker on.","Turns the breaker off more often."]},
+        Goryo:{fr:["Preuve D.O.T.S. garantie.","D.O.T.S. visible seulement à la caméra.","D.O.T.S. absent si un joueur est dans sa pièce.","Ne change jamais de pièce favorite.","Aucune errance longue."],en:["D.O.T.S. evidence guaranteed.","D.O.T.S. visible only on camera.","No D.O.T.S. with a player in its room.","Never changes favorite room.","No long roams."]},
+        Myling:{fr:["Pas et voix audibles à seulement 12 m.","Silencieuse avant les interférences.","Sons paranormaux au micro plus fréquents.","Peut produire 2 sons en moins de 80 s."],en:["Footsteps and voice audible only within 12m.","Quiet before electronic interference.","More frequent paranormal mic sounds.","Can produce 2 sounds in under 80s."]},
+        Onryo:{fr:["N'allume jamais de flamme.","Souffle une flamme avant de chasser près d'elle.","Peut chasser après 3 flammes soufflées.","Près d'une flamme : chasse à 40 %.","Sans flamme : chasse à 60 %."],en:["Never lights a flame.","Blows out a nearby flame before hunting.","May hunt after 3 flames are blown out.","Near a flame: hunts at 40%.","Without a flame: hunts at 60%."]},
+        "The Twins":{fr:["Deux portées d'interaction.","Peut faire 2 interactions en moins d'1 s.","Interactions possibles loin de sa pièce.","Chasse lente : 1,5 m/s.","Chasse rapide : 1,9 m/s.","Le crucifix vérifie sa position réelle."],en:["Two interaction ranges.","May interact twice within 1s.","Can interact far from its room.","Slow hunt: 1.5 m/s.","Fast hunt: 1.9 m/s.","Crucifix checks its real position."]},
+        Raiju:{fr:["Électronique proche : vitesse 2,5 m/s.","Électronique proche : chasse à 65 %.","Sinon : seuil 50 %.","Interférences jusqu'à 15 m.","Accélération possible hors électronique."],en:["Nearby electronics: 2.5 m/s.","Nearby electronics: hunts at 65%.","Otherwise: 50% threshold.","Interference reaches 15m.","Can build acceleration away from electronics."]},
+        Obake:{fr:["Preuve Ultraviolet garantie.","Peut ne laisser aucune empreinte.","Peut laisser une empreinte unique.","Peut réduire de moitié la durée des empreintes.","Change brièvement de modèle en chasse."],en:["Ultraviolet evidence guaranteed.","May leave no fingerprints.","May leave a unique fingerprint.","Can halve fingerprint duration.","Briefly changes model during hunts."]},
+        "The Mimic":{fr:["Imite une autre entité.","Copie ses pouvoirs, seuil et vitesse.","Change d'imitation toutes les 30 à 120 s.","Ne change pas pendant une chasse.","Orbes toujours présents en preuve bonus."],en:["Mimics another ghost.","Copies its abilities, threshold and speed.","Changes mimic every 30 to 120s.","Does not change during a hunt.","Ghost Orbs always appear as bonus evidence."]},
+        Moroi:{fr:["Preuve Spirit Box garantie.","Spirit Box/micro/enregistreur peuvent maudire.","Malédiction : drain passif doublé.","La lumière ne bloque plus le drain.","Plus rapide quand la santé baisse.","Encens aveugle 50 % plus longtemps."],en:["Spirit Box evidence guaranteed.","Spirit Box/mic/recorder can curse.","Curse doubles passive sanity drain.","Light no longer stops the drain.","Faster as sanity drops.","Incense blinds it 50% longer."]},
+        Deogen:{fr:["Preuve Spirit Box garantie.","Sait toujours où sont les joueurs.","À distance : 3 m/s.","Près de la cible : 0,4 m/s.","Très visible en chasse.","Respiration unique à la Spirit Box."],en:["Spirit Box evidence guaranteed.","Always knows every player's location.","At range: 3 m/s.","Near its target: 0.4 m/s.","Very visible during hunts.","Unique Spirit Box breathing response."]},
+        Thaye:{fr:["Vieillit près des joueurs.","Jeune : 2,75 m/s et seuil 75 %.","Vieux : 1 m/s et seuil 15 %.","Activité : 200 % à 50 %.","Aucune accélération en ligne de mire."],en:["Ages near players.","Young: 2.75 m/s and 75% threshold.","Old: 1 m/s and 15% threshold.","Activity: 200% down to 50%.","No line-of-sight acceleration."]},
+        Gallu:{fr:["Trois états : normal, enragé, affaibli.","Enragé : 1,955 m/s et seuil 60 %.","Affaibli : 1,36 m/s et seuil 40 %.","Enragé : ne perturbe pas le sel.","Encens : 4/5/6 s selon l'état.","La portée du crucifix varie selon l'état."],en:["Three states: normal, enraged, weakened.","Enraged: 1.955 m/s and 60% threshold.","Weakened: 1.36 m/s and 40% threshold.","Enraged: does not disturb salt.","Incense: 4/5/6s by state.","Crucifix range changes by state."]},
+        Dayan:{fr:["Réagit au joueur le plus proche à moins de 10 m.","Joueur en mouvement : 2,25 m/s et seuil 65 %.","Joueur immobile : 1,2 m/s et seuil 45 %.","Sans joueur proche : comportement standard."],en:["Reacts to the nearest player within 10m.","Moving player: 2.25 m/s and 65% threshold.","Still player: 1.2 m/s and 45% threshold.","No nearby player: standard behavior."]},
+        Obambo:{fr:["Alterne entre calme et agressif.","Calme : 1,445 m/s et seuil 10 %.","Agressif : 1,955 m/s et seuil 65 %.","Chasse agressive 20 % plus courte.","Change d'état toutes les 2 min."],en:["Alternates between calm and aggressive.","Calm: 1.445 m/s and 10% threshold.","Aggressive: 1.955 m/s and 65% threshold.","Aggressive hunt is 20% shorter.","Changes state every 2 minutes."]},
+        Aswang:{fr:["Vitesse de base : 1,53 m/s.","Accélère plus vite en ligne de mire.","Maximum : 2,53 m/s en 8,67 s.","Peut chasser sans période de grâce.","Ne tue pas dans une cachette officielle.","Après une cachette, la visite à la chasse suivante."],en:["Base speed: 1.53 m/s.","Accelerates faster in line of sight.","Maximum: 2.53 m/s in 8.67s.","May hunt with no grace period.","Cannot kill in an official hiding spot.","After finding one, visits it next hunt."]},
+        Kormos:{fr:["Presque aveugle.","Voit un joueur mobile à moins de 5 m.","Entend les pas pendant les chasses.","Détection : accroupi 10 m, marche 15 m, sprint 30 m.","Vers un bruit : vitesse ×1,3.","Sprint dans sa pièce : chasse à 70 %.","Aucun événement de brume ou de poursuite."],en:["Almost blind.","Sees a moving player within 5m.","Hears footsteps during hunts.","Detection: crouch 10m, walk 15m, sprint 30m.","Moving toward sound: speed ×1.3.","Sprint in its room: hunts at 70%.","No mist or chase events."]}
       };
-      return notes[ghost.en]||{fr:"Aucune note spécifique renseignée.",en:"No specific note set."}
+      return notes[ghost.en]||{fr:["Aucune note spécifique renseignée."],en:["No specific note set."]}
     }
     function ghostSelectionKey(ghost){return ghost.en}
     function ghostEvidenceName(id){
@@ -1715,7 +1706,7 @@ const phasmophobiaObjects=[
         const threshold=currentLanguage==="en"?ghost.thresholdEn:ghost.thresholdFr;
         const thresholdHtml=ghostThresholdHtml(ghost);
         const summary=currentLanguage==="en"?ghost.summaryEn:ghost.summaryFr;
-        const speed=ghostSpeedInfo(ghost),speedLabel=currentLanguage==="en"?speed.en:speed.fr,speedSummary=currentLanguage==="en"?speed.summaryEn:speed.summaryFr;
+        const speed=ghostSpeedInfo(ghost),speedLabel=scaledGhostSpeedLabel(currentLanguage==="en"?speed.en:speed.fr),speedSummary=currentLanguage==="en"?speed.summaryEn:speed.summaryFr;
         const behavior=ghostBehaviorInfo(ghost),behaviorSummary=currentLanguage==="en"?behavior.en:behavior.fr;
         const metrics=getGhostThresholdMetrics(ghost);
         const powerMax=metrics.powerValues.length?Math.max(...metrics.powerValues):metrics.max;
@@ -1723,9 +1714,9 @@ const phasmophobiaObjects=[
         const powerWidth=`${Math.max(0,powerMax-metrics.max)}%`;
         const baseWidth=`${metrics.max}%`;
         const rangeWidth=`${Math.max(0,metrics.max-metrics.min)}%`;
-        const speedMetrics=ghostSpeedMetrics(ghost),speedMax=4,speedBaseWidth=`${Math.min(100,speedMetrics.max/speedMax*100)}%`,speedRangeWidth=`${Math.max(0,Math.min(100,(speedMetrics.max-speedMetrics.min)/speedMax*100))}%`,speedRangeLeft=`${Math.min(100,speedMetrics.min/speedMax*100)}%`;
+        const baseSpeedMetrics=ghostSpeedMetrics(ghost),speedMetrics={values:baseSpeedMetrics.values.map(value=>roundedSpeed(value*ghostWalkSpeedMultiplier)),min:roundedSpeed(baseSpeedMetrics.min*ghostWalkSpeedMultiplier),max:roundedSpeed(baseSpeedMetrics.max*ghostWalkSpeedMultiplier)},speedMax=4*ghostWalkSpeedMultiplier,speedBaseWidth=`${Math.min(100,speedMetrics.max/speedMax*100)}%`,speedRangeWidth=`${Math.max(0,Math.min(100,(speedMetrics.max-speedMetrics.min)/speedMax*100))}%`,speedRangeLeft=`${Math.min(100,speedMetrics.min/speedMax*100)}%`;
         const scaleLabels=["0%","25%","50%","75%","100%"];
-        const speedLabels=["0","1","2","3","4 m/s"];
+        const speedLabels=[0,.25,.5,.75,1].map((ratio,index)=>`${formatGhostNumber(speedMax*ratio)}${index===4?" m/s":""}`);
         const note=currentLanguage==="en"?"Regular hunt threshold":"Seuil de chasse normal";
         const scaleStart=currentLanguage==="en"?"Low sanity":"Santé basse";
         const scaleEnd=currentLanguage==="en"?"Full sanity":"Santé pleine";
@@ -1738,7 +1729,7 @@ const phasmophobiaObjects=[
         const walkHint=currentLanguage==="en"?"Play walking cadence":"Écouter la cadence de marche";
         const walkEmpty=currentLanguage==="en"?"Refer to the mimicked ghost.":"Se référer à l'entité imitée.";
         const walkButtonsHtml=walkVariants.length?walkVariants.map(variant=>{
-          const mode=variant.mode||"fixed",scaledSpeed=roundedSpeed(variant.speed*ghostWalkSpeedMultiplier),scaledBase=roundedSpeed((variant.baseSpeed||variant.speed)*ghostWalkSpeedMultiplier),scaledMax=roundedSpeed((variant.maxSpeed||variant.speed)*ghostWalkSpeedMultiplier),displaySpeed=variant.speed,displayBase=variant.baseSpeed||variant.speed,displayMax=variant.maxSpeed||variant.speed,accelRatio=variant.accelRatio||scaledMax/scaledBase||1;
+          const mode=variant.mode||"fixed",scaledSpeed=roundedSpeed(variant.speed*ghostWalkSpeedMultiplier),scaledBase=roundedSpeed((variant.baseSpeed||variant.speed)*ghostWalkSpeedMultiplier),scaledMax=roundedSpeed((variant.maxSpeed||variant.speed)*ghostWalkSpeedMultiplier),displaySpeed=scaledSpeed,displayBase=scaledBase,displayMax=scaledMax,accelRatio=variant.accelRatio||scaledMax/scaledBase||1;
           const active=ghostWalkAudio.ghostKey===ghost.en&&ghostWalkAudio.mode===mode&&(mode==="accel"?Math.abs(ghostWalkAudio.baseSpeed-scaledBase)<.01&&Math.abs(ghostWalkAudio.maxSpeed-scaledMax)<.01:Math.abs(ghostWalkAudio.speed-scaledSpeed)<.01);
           const speedText=mode==="accel"?`${formatGhostNumber(displayBase)} → ${formatGhostNumber(displayMax)} m/s`:`${formatGhostNumber(displaySpeed)} m/s`;
           const buttonLabel=`${variant.label} · ${speedText}`;
@@ -1759,10 +1750,9 @@ const phasmophobiaObjects=[
           </div>
           ${ghostMemoInfo.behavior?`<div class="ghost-info-block behavior-info">
             <div class="ghost-info-head"><span>${currentLanguage==="en"?"Characteristics":"Caractéristiques"}</span></div>
-            <p class="ghost-summary">${escapeHtml(behaviorSummary)}</p>
+            <ul class="ghost-traits">${behaviorSummary.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
             ${specialSoundHtml}
           </div>`:""}
-          ${ghostMemoInfo.walk?walkHtml:""}
           ${ghostMemoInfo.hunt?`<div class="ghost-bar-wrap ghost-info-block">
             <div class="ghost-info-head"><span>${escapeHtml(note)}${metrics.powerValues.length?` <em>${escapeHtml(powerNote)}</em>`:""}</span><strong class="threshold-detail">${thresholdHtml}</strong></div>
             <div class="ghost-bar-track">
@@ -1784,7 +1774,8 @@ const phasmophobiaObjects=[
             </div>
             <div class="ghost-row-labels">${speedLabels.map(label=>`<span>${label}</span>`).join("")}</div>
             <p class="ghost-summary">${escapeHtml(speedSummary)}</p>
-          </div>`:""}`;
+          </div>`:""}
+          ${ghostMemoInfo.walk?walkHtml:""}`;
         ghostMemoList.appendChild(row)
       });
       if(!visible.length){ghostMemoList.innerHTML=`<div class="memo-empty">${currentLanguage==="en"?"No ghost matches your search.":"Aucune entité ne correspond à la recherche."}</div>`}
