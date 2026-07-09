@@ -182,7 +182,13 @@
         </article>
       </section>
       <p id="challenge-room-note" class="room-sync-note">Choisis un mode dans la barre du haut avant d’ouvrir un défi.</p>
-      <div class="challenge-grid">
+      <section class="challenge-category solo-challenges" aria-labelledby="solo-challenges-title">
+        <div class="challenge-category-head">
+          <span class="challenge-category-kicker">1 joueur minimum</span>
+          <h2 id="solo-challenges-title">Défis solo</h2>
+          <p>Des défis réalisables seul, également jouables en coopération.</p>
+        </div>
+        <div class="challenge-grid">
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
             <div class="challenge-photo"><img src="https://phasmophobia.fandom.com/wiki/Special:Redirect/file/%21WheelOfFortune.png" alt="La Roue de la fortune" loading="eager" referrerpolicy="no-referrer"></div>
@@ -221,6 +227,39 @@
         </article>
         <article class="challenge-select-card">
           <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">🎲</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>Le Dé Maudit</h2>
+            <p>Lance un dé à 4 faces avant chaque contrat : la face impose la difficulté et le temps limite. Enchaîne la plus longue streak possible.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>Streak</span><span>D4 maudit</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/de-maudit" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/de-maudit</a></p>
+            <button id="open-die-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">☠</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>Le Mur de la mort</h2>
+            <p>Ouvre 2 cases avant chaque partie, accumule des malus permanents et tente d'enchainer 5 contrats réussis en Professionnel.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>5 parties</span><span>Professionnel</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Défi original créé par MrTiboute.</a></p>
+            <button id="open-wall-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      <section class="challenge-category multiplayer-challenges" aria-labelledby="multiplayer-challenges-title">
+        <div class="challenge-category-head">
+          <span class="challenge-category-kicker">Plusieurs joueurs requis</span>
+          <h2 id="multiplayer-challenges-title">Défis multijoueur</h2>
+          <p>Des formats conçus autour des équipes, des rôles et de l’affrontement entre joueurs.</p>
+        </div>
+        <div class="challenge-grid">
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
             <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">⚔</span></div>
           </div>
           <div class="challenge-card-body">
@@ -241,19 +280,8 @@
             <button id="open-possessed-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
-        <article class="challenge-select-card">
-          <div class="challenge-card-visual">
-            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">☠</span></div>
-          </div>
-          <div class="challenge-card-body">
-            <h2>Le Mur de la mort</h2>
-            <p>Ouvre 2 cases avant chaque partie, accumule des malus permanents et tente d'enchainer 5 contrats réussis en Professionnel.</p>
-            <div class="challenge-meta"><span>1-4 joueurs</span><span>5 parties</span><span>Professionnel</span></div>
-            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Défi original créé par MrTiboute.</a></p>
-            <button id="open-wall-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
-          </div>
-        </article>
-      </div>
+        </div>
+      </section>
       <p class="hub-footnote">D’autres défis pourront être ajoutés à cette sélection dans le même fichier.</p>
     </section>
   </main>
@@ -563,6 +591,7 @@
       </div>
       <p class="tarot-source">Images et noms anglais des cartes : Phasmophobia Wiki / Fandom. Une connexion Internet est nécessaire pour afficher les images.</p>
     </section>
+    <section class="challenge-difficulty" data-difficulty-panel="tarot"><label for="tarot-difficulty">Difficulté</label><select id="tarot-difficulty" data-challenge-difficulty="tarot"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="tarot"></p></section>
     <section class="challenge-session-control" data-challenge-session="tarot">
       <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
       <div class="challenge-session-actions">
@@ -679,6 +708,7 @@
       <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si vous identifiez correctement le fantôme avec l’équipement débloqué au cours de la partie.</p></div>
     </section>
 
+      <section class="challenge-difficulty" data-difficulty-panel="media"><label for="media-difficulty">Difficulté</label><select id="media-difficulty" data-challenge-difficulty="media"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="media"></p></section>
       <section class="challenge-session-control" data-challenge-session="media">
         <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
         <div class="challenge-session-actions">
@@ -758,6 +788,7 @@
         <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire après 5 parties réussies avec tous les malus révélés encore appliqués.</p></div>
       </section>
 
+      <section class="challenge-difficulty" data-difficulty-panel="wall"><label for="wall-difficulty">Difficulté</label><select id="wall-difficulty" data-challenge-difficulty="wall"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="wall"></p></section>
       <section class="challenge-session-control" data-challenge-session="wall">
         <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
         <div class="challenge-session-actions">
@@ -828,6 +859,7 @@
         <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si toutes les maps sont enchaînées sans erreur, avec l’os récupéré, le fantôme correctement identifié et au moins un survivant à chaque partie.</p></div>
       </section>
 
+      <section class="challenge-difficulty" data-difficulty-panel="cursed"><label for="cursed-difficulty">Difficulté</label><select id="cursed-difficulty" data-challenge-difficulty="cursed"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="cursed"></p></section>
       <section class="challenge-session-control" data-challenge-session="cursed">
         <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
         <div class="challenge-session-actions">
@@ -860,6 +892,75 @@
         <h3>Source du défi</h3>
         <p>Cursed Run a été créé par Maman0vitch, dit "Le Fougueux".</p>
         <p><a href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/cursed-run</a></p>
+      </div>
+    </div>
+  </main>
+
+  <main id="die-challenge-view" class="app-view" hidden>
+    <div class="hunter-container">
+      <div class="hub-topbar">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-toolbar"><button id="back-die-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
+      <h1>Le Dé Maudit</h1>
+
+      <section class="fiche">
+        <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Streak</div></div><div class="fiche-cell"><div class="fiche-k">Dé</div><div class="fiche-v">D4 avant chaque partie</div></div></div>
+        <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enchaîner autant de parties réussies d’affilée que possible pour établir la meilleure streak.</p></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Démarrage</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant chaque partie, un joueur lance un dé à 4 faces.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Face 1 : réussir en Professionnel en moins de 5 min.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Face 2 : réussir en Cauchemar en moins de 10 min.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Face 3 : réussir en Démence en moins de 15 min.</p></div><div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Face 4 : réussir en Personnalisée, base Professionnel sans preuve, en moins de 20 min.</p></div></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Le chronomètre démarre dès qu’un joueur ouvre la porte d’entrée.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>La partie se déroule ensuite comme une partie standard.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>La partie est réussie si l’entité est correctement identifiée et qu’au moins un joueur quitte la partie en vie.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Si l’entité est fausse ou si tous les joueurs meurent, le défi se termine et la streak repart à 0.</p></div></div>
+        <div class="fiche-block win"><div class="fiche-block-label">Record</div><p>À chaque défaite, la streak courante est comparée au record, puis le compteur revient à zéro.</p></div>
+      </section>
+
+      <section class="challenge-difficulty" data-difficulty-panel="die"><label for="die-difficulty">Difficulté</label><select id="die-difficulty" data-challenge-difficulty="die"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="die"></p></section>
+      <section class="challenge-session-control" data-challenge-session="die">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="die">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="die" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="die" hidden>
+        <section class="die-panel" aria-labelledby="die-tracker-title">
+          <h2 id="die-tracker-title">Suivi de streak</h2>
+          <div class="die-stats">
+            <div class="die-stat">Streak actuelle<strong id="die-streak">0</strong></div>
+            <div class="die-stat">Record<strong id="die-record">0</strong></div>
+            <div class="die-stat">Dernier dé<strong id="die-last-roll">-</strong></div>
+          </div>
+          <div id="die-current-card" class="die-current-card">
+            <span class="die-face">?</span>
+            <div>
+              <h3>Aucune partie préparée</h3>
+              <p>Lance le dé pour connaître la difficulté et le temps limite du prochain contrat.</p>
+            </div>
+          </div>
+          <div id="die-roll-grid" class="die-roll-grid" aria-label="Faces du dé maudit">
+            <article><strong>1</strong><span>Professionnel</span><small>&lt; 5 min</small></article>
+            <article><strong>2</strong><span>Cauchemar</span><small>&lt; 10 min</small></article>
+            <article><strong>3</strong><span>Démence</span><small>&lt; 15 min</small></article>
+            <article><strong>4</strong><span>Personnalisée</span><small>&lt; 20 min</small></article>
+          </div>
+          <div class="die-actions">
+            <button id="die-roll-btn" class="warning-btn" type="button">Lancer le dé</button>
+            <button id="die-win-btn" class="good-btn" type="button">Partie réussie</button>
+            <button id="die-lose-btn" class="danger-btn" type="button">Défi perdu</button>
+            <button id="die-reset-btn" class="back-challenges-btn" type="button">Reset</button>
+          </div>
+          <div id="die-status" class="die-status">Prêt à lancer le dé.</div>
+          <div id="die-history" class="die-history" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <div class="credits-box">
+        <h3>Source du défi</h3>
+        <p><a href="https://mrtiboute.tv/defis/de-maudit" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
       </div>
     </div>
   </main>
@@ -969,6 +1070,7 @@
       <div class="fiche-block win"><div class="fiche-block-label">Points</div><p>Fantôme correct : 1 point pour tous. Possédé découvert : 2 points pour chaque Enquêteur. Possédé non découvert : 3 points pour lui. Possédé mort avant ses deux corruptions : 0 point.</p></div>
     </section>
 
+      <section class="challenge-difficulty" data-difficulty-panel="possessed"><label for="possessed-difficulty">Difficulté</label><select id="possessed-difficulty" data-challenge-difficulty="possessed"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="possessed"></p></section>
       <section class="challenge-session-control" data-challenge-session="possessed">
         <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
         <div class="challenge-session-actions">
@@ -1071,7 +1173,7 @@
             <div id="possessed-vote-grid" class="possessed-vote-grid"></div>
             <div class="possessed-round-options">
               <label><input id="possessed-ghost-correct" type="checkbox"> Fantôme correctement identifié par l'équipe</label>
-              <label><input id="possessed-died-early" type="checkbox"> Possédé mort avant ses deux corruptions</label>
+              <label><input id="possessed-died-early" type="checkbox"> <span id="possessed-died-early-label">Possédé mort avant ses deux corruptions</span></label>
             </div>
             <div class="media-actions">
               <button id="possessed-score-round" class="good-btn" type="button">Calculer la manche</button>
