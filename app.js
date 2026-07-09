@@ -490,8 +490,15 @@ const phasmophobiaObjects=[
     let roundCount=1,winCount=0,lossCount=0,elapsedSeconds=0,timerInterval=null,nextTarotMultiplier=1,challengeOutcome=null;
     let ghostMemoRemoved=new Set(),ghostMemoChosen="",ghostMemoEvidenceSelected=new Set(),ghostMemoInfo={behavior:true,walk:true,hunt:true,speed:true},ghostWalkSpeedMultiplier=1;
     let ghostWalkAudio={ctx:null,timer:null,special:null,ghostKey:"",speed:0,stepIndex:0,startedAt:0,mode:"fixed",baseSpeed:0,maxSpeed:0,accelRatio:1,accelSeconds:13};
-    const mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
+    let mediaStartingNames=["Lampe de poche","Allumeur","Appareil photo"];
     let mediaUnlockedNames=new Set(mediaStartingNames),mediaUniqueCount=0,mediaDuplicateCount=0,mediaObjectiveCount=0,mediaPhase="photo",mediaPagesCompleted=new Set(),mediaLastUnlockedName=null,mediaOutcome=null;
+    const cursedDieFaces=[
+      {roll:1,difficulty:"Professionnel",time:"5 min",minutes:5,rule:"Réussir une partie en difficulté Professionnel en moins de 5 min."},
+      {roll:2,difficulty:"Cauchemar",time:"10 min",minutes:10,rule:"Réussir une partie en difficulté Cauchemar en moins de 10 min."},
+      {roll:3,difficulty:"Démence",time:"15 min",minutes:15,rule:"Réussir une partie en difficulté Démence en moins de 15 min."},
+      {roll:4,difficulty:"Personnalisée",time:"20 min",minutes:20,rule:"Base Professionnel sans preuve, à réussir en moins de 20 min."}
+    ];
+    let cursedDieState={streak:0,record:0,currentRoll:null,history:[],status:"Prêt à lancer le dé.",outcome:null};
     function wallIconSvg(icon){
       const icons={
         radio:`<path d="M44 34h32v66H44z"/><path d="M54 34V20h12v14"/><path d="M76 42h12"/><path d="M52 54h16M52 66h16M52 78h16"/>`,
@@ -608,19 +615,66 @@ const phasmophobiaObjects=[
       hard:{fr:"Difficile",en:"Hard",protection:120,hunts:2},
       pro:{fr:"Pro",en:"Pro",protection:60,hunts:1}
     };
+    const challengeDifficultySettings={
+      tarot:{
+        noob:{timeLimit:10800,tier1Limit:6,upgrade:6,downgrade:1,fr:"3 h · +6 objets par victoire · défaite à 6 objets T1.",en:"3h · +6 items per win · defeat at 6 Tier-1 items."},
+        easy:{timeLimit:9000,tier1Limit:5,upgrade:5,downgrade:1,fr:"2 h 30 · +5 objets · défaite à 5 objets T1.",en:"2h30 · +5 items · defeat at 5 Tier-1 items."},
+        normal:{timeLimit:7200,tier1Limit:4,upgrade:4,downgrade:2,fr:"2 h · +4 objets · défaite à 4 objets T1.",en:"2h · +4 items · defeat at 4 Tier-1 items."},
+        hard:{timeLimit:5400,tier1Limit:3,upgrade:3,downgrade:2,fr:"1 h 30 · +3 objets · défaite à 3 objets T1.",en:"1h30 · +3 items · defeat at 3 Tier-1 items."},
+        pro:{timeLimit:3600,tier1Limit:2,upgrade:2,downgrade:3,fr:"1 h · +2 objets · défaite à 2 objets T1.",en:"1h · +2 items · defeat at 2 Tier-1 items."}
+      },
+      media:{
+        noob:{starting:7,unlocks:2,fr:"7 objets de départ · 2 objets débloqués par réussite.",en:"7 starting items · 2 items unlocked per success."},
+        easy:{starting:5,unlocks:2,fr:"5 objets de départ · 2 objets débloqués par réussite.",en:"5 starting items · 2 items unlocked per success."},
+        normal:{starting:3,unlocks:1,fr:"3 objets de départ · 1 objet débloqué par réussite.",en:"3 starting items · 1 item unlocked per success."},
+        hard:{starting:2,unlocks:1,fr:"2 objets de départ · 1 objet débloqué par réussite.",en:"2 starting items · 1 item unlocked per success."},
+        pro:{starting:1,unlocks:1,fr:"Lampe uniquement · 1 objet débloqué par réussite.",en:"Flashlight only · 1 item unlocked per success."}
+      },
+      wall:{
+        noob:{wins:3,opens:1,fr:"3 parties · 1 case par partie.",en:"3 games · 1 cell per game."},
+        easy:{wins:4,opens:1,fr:"4 parties · 1 case par partie.",en:"4 games · 1 cell per game."},
+        normal:{wins:5,opens:2,fr:"5 parties · 2 cases par partie.",en:"5 games · 2 cells per game."},
+        hard:{wins:6,opens:2,fr:"6 parties · 2 cases par partie.",en:"6 games · 2 cells per game."},
+        pro:{wins:7,opens:3,fr:"7 parties · 3 cases par partie.",en:"7 games · 3 cells per game."}
+      },
+      cursed:{
+        noob:{maps:5,fr:"Valider les 5 premières cartes.",en:"Complete the first 5 maps."},
+        easy:{maps:8,fr:"Valider les 8 premières cartes.",en:"Complete the first 8 maps."},
+        normal:{maps:11,fr:"Valider 11 cartes.",en:"Complete 11 maps."},
+        hard:{maps:14,fr:"Valider 14 cartes.",en:"Complete 14 maps."},
+        pro:{maps:15,fr:"Valider les 15 cartes.",en:"Complete all 15 maps."}
+      },
+      die:{
+        noob:{times:[10,15,20,25],fr:"Temps larges : D1 10 min · D2 15 min · D3 20 min · D4 25 min.",en:"Generous timers: D1 10 min · D2 15 min · D3 20 min · D4 25 min."},
+        easy:{times:[7,12,17,22],fr:"Temps faciles : D1 7 min · D2 12 min · D3 17 min · D4 22 min.",en:"Easy timers: D1 7 min · D2 12 min · D3 17 min · D4 22 min."},
+        normal:{times:[5,10,15,20],fr:"Règles officielles : D1 5 min · D2 10 min · D3 15 min · D4 20 min.",en:"Official rules: D1 5 min · D2 10 min · D3 15 min · D4 20 min."},
+        hard:{times:[4,8,12,16],fr:"Temps serrés : D1 4 min · D2 8 min · D3 12 min · D4 16 min.",en:"Tight timers: D1 4 min · D2 8 min · D3 12 min · D4 16 min."},
+        pro:{times:[3,6,9,12],fr:"Temps pro : D1 3 min · D2 6 min · D3 9 min · D4 12 min.",en:"Pro timers: D1 3 min · D2 6 min · D3 9 min · D4 12 min."}
+      },
+      possessed:{
+        noob:{corruptions:1,possessedPoints:2,investigatorPoints:3,fr:"1 corruption · Possédé +2 · Enquêteurs +3.",en:"1 corruption · Possessed +2 · Investigators +3."},
+        easy:{corruptions:2,possessedPoints:2,investigatorPoints:3,fr:"2 corruptions · Possédé +2 · Enquêteurs +3.",en:"2 corruptions · Possessed +2 · Investigators +3."},
+        normal:{corruptions:2,possessedPoints:3,investigatorPoints:2,fr:"2 corruptions · Possédé +3 · Enquêteurs +2.",en:"2 corruptions · Possessed +3 · Investigators +2."},
+        hard:{corruptions:3,possessedPoints:4,investigatorPoints:1,fr:"3 corruptions · Possédé +4 · Enquêteurs +1.",en:"3 corruptions · Possessed +4 · Investigators +1."},
+        pro:{corruptions:4,possessedPoints:5,investigatorPoints:1,fr:"4 corruptions · Possédé +5 · Enquêteurs +1.",en:"4 corruptions · Possessed +5 · Investigators +1."}
+      }
+    };
+    let challengeDifficulties={tarot:"normal",media:"normal",wall:"normal",cursed:"normal",die:"normal",possessed:"normal"};
     let hunterState={teamA:"Équipe A",teamB:"Équipe B",roundLimit:4,difficulty:"normal",round:1,scores:{A:0,B:0},history:[],outcome:null,status:"Prêt à lancer la manche.",investigatorChoice:"",hunterChoice:"",actualGhost:"",investigatorLocked:false,hunterLocked:false,evidenceAnnounced:false,itemsRemoved:false,huntsCompleted:false,roundScored:false,lastRoundResult:"En attente des votes verrouillés."};
 
     const resultDiv=document.getElementById("result"),remainingList=document.getElementById("remaining-list"),selectedList=document.getElementById("selected-list"),removedList=document.getElementById("removed-list"),lostList=document.getElementById("lost-list"),remainingCount=document.getElementById("remaining-count"),selectedCount=document.getElementById("selected-count"),removedCount=document.getElementById("removed-count"),lostCount=document.getElementById("lost-count"),timerButton=document.getElementById("timer-btn"),streamerMode=document.getElementById("streamer-mode"),modeDescription=document.getElementById("mode-description"),tarotStatus=document.getElementById("tarot-status"),activeEffectsDiv=document.getElementById("active-effects"),challengePopup=document.getElementById("challenge-popup"),challengePopupIcon=document.getElementById("challenge-popup-icon"),challengePopupTitle=document.getElementById("challenge-popup-title"),challengePopupMessage=document.getElementById("challenge-popup-message"),challengePopupStats=document.getElementById("challenge-popup-stats");
 
-    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),inviteRoomView=document.getElementById("invite-room-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),mapMemoView=document.getElementById("map-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),hunterChallengeView=document.getElementById("hunter-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count"),mapMemoList=document.getElementById("map-memo-list");
+    const languageInputs=[...document.querySelectorAll("[data-language-switch]")],languageDescriptions=[...document.querySelectorAll("[data-language-description]")],hubView=document.getElementById("hub-view"),inviteRoomView=document.getElementById("invite-room-view"),challengeSelectionView=document.getElementById("challenge-selection-view"),memoView=document.getElementById("memo-view"),ghostMemoView=document.getElementById("ghost-memo-view"),mapMemoView=document.getElementById("map-memo-view"),funMemoView=document.getElementById("fun-memo-view"),tarotChallengeView=document.getElementById("tarot-challenge-view"),mediaChallengeView=document.getElementById("media-challenge-view"),wallChallengeView=document.getElementById("wall-challenge-view"),cursedChallengeView=document.getElementById("cursed-challenge-view"),dieChallengeView=document.getElementById("die-challenge-view"),hunterChallengeView=document.getElementById("hunter-challenge-view"),possessedChallengeView=document.getElementById("possessed-challenge-view"),ghostMemoList=document.getElementById("ghost-memo-list"),ghostSearch=document.getElementById("ghost-search"),ghostVisibleCount=document.getElementById("ghost-visible-count"),mapMemoList=document.getElementById("map-memo-list");
     const mediaPhaseDisplay=document.getElementById("media-phase"),mediaUniqueDisplay=document.getElementById("media-unique-count"),mediaDuplicateDisplay=document.getElementById("media-duplicate-count"),mediaObjectiveDisplay=document.getElementById("media-objective-count"),mediaUnlockedDisplay=document.getElementById("media-unlocked-count"),mediaUniqueButton=document.getElementById("media-unique-btn"),mediaDuplicateButton=document.getElementById("media-duplicate-btn"),mediaPageFullButton=document.getElementById("media-page-full-btn"),mediaTypePhoto=document.getElementById("media-type-photo"),mediaTypeVideo=document.getElementById("media-type-video"),mediaTypeAudio=document.getElementById("media-type-audio"),mediaResult=document.getElementById("media-result"),mediaUnlockedList=document.getElementById("media-unlocked-list"),mediaLockedList=document.getElementById("media-locked-list"),mediaPopup=document.getElementById("media-popup"),mediaPopupIcon=document.getElementById("media-popup-icon"),mediaPopupTitle=document.getElementById("media-popup-title"),mediaPopupMessage=document.getElementById("media-popup-message"),mediaPopupStats=document.getElementById("media-popup-stats");
     const wallRoundDisplay=document.getElementById("wall-round"),wallWinCountDisplay=document.getElementById("wall-win-count"),wallOpenCountDisplay=document.getElementById("wall-open-count"),wallNeededCountDisplay=document.getElementById("wall-needed-count"),wallOpenRandomButton=document.getElementById("wall-open-random"),wallWinRoundButton=document.getElementById("wall-win-round"),wallLoseButton=document.getElementById("wall-lose-challenge"),wallResetButton=document.getElementById("wall-reset"),wallOpenAllDebugButton=document.getElementById("wall-open-all-debug"),wallStatus=document.getElementById("wall-status"),wallGrid=document.getElementById("wall-grid"),wallActiveList=document.getElementById("wall-active-list");
     const themeSelect=document.getElementById("theme-select"),cursedMapGrid=document.getElementById("cursed-map-grid"),cursedProgressCount=document.getElementById("cursed-progress-count"),cursedProgressLabel=document.getElementById("cursed-progress-label"),cursedProgressBar=document.getElementById("cursed-progress-bar"),cursedResetButton=document.getElementById("cursed-reset");
+    const dieStreakDisplay=document.getElementById("die-streak"),dieRecordDisplay=document.getElementById("die-record"),dieLastRollDisplay=document.getElementById("die-last-roll"),dieCurrentCard=document.getElementById("die-current-card"),dieRollGrid=document.getElementById("die-roll-grid"),dieRollButton=document.getElementById("die-roll-btn"),dieWinButton=document.getElementById("die-win-btn"),dieLoseButton=document.getElementById("die-lose-btn"),dieResetButton=document.getElementById("die-reset-btn"),dieStatus=document.getElementById("die-status"),dieHistory=document.getElementById("die-history");
     const hunterTeamAInput=document.getElementById("hunter-team-a"),hunterTeamBInput=document.getElementById("hunter-team-b"),hunterRoundLimitSelect=document.getElementById("hunter-round-limit"),hunterDifficultySelect=document.getElementById("hunter-difficulty"),hunterRoundDisplay=document.getElementById("hunter-round-display"),hunterProtectionTime=document.getElementById("hunter-protection-time"),hunterHuntCount=document.getElementById("hunter-hunt-count"),hunterRoleSummary=document.getElementById("hunter-role-summary"),hunterTeamALabel=document.getElementById("hunter-team-a-label"),hunterTeamBLabel=document.getElementById("hunter-team-b-label"),hunterScoreA=document.getElementById("hunter-score-a"),hunterScoreB=document.getElementById("hunter-score-b"),hunterStatus=document.getElementById("hunter-status"),hunterLog=document.getElementById("hunter-log"),hunterEvidenceAnnounced=document.getElementById("hunter-evidence-announced"),hunterItemsRemoved=document.getElementById("hunter-items-removed"),hunterHuntsCompleted=document.getElementById("hunter-hunts-completed"),hunterInvestigatorChoice=document.getElementById("hunter-investigator-choice"),hunterHunterChoice=document.getElementById("hunter-hunter-choice"),hunterActualGhost=document.getElementById("hunter-actual-ghost"),hunterLockInvestigator=document.getElementById("hunter-lock-investigator"),hunterLockHunter=document.getElementById("hunter-lock-hunter"),hunterInvestigatorLock=document.getElementById("hunter-investigator-lock"),hunterHunterLock=document.getElementById("hunter-hunter-lock"),hunterScoreRound=document.getElementById("hunter-score-round"),hunterRoundResult=document.getElementById("hunter-round-result"),hunterNextRound=document.getElementById("hunter-next-round"),hunterAddOvertime=document.getElementById("hunter-add-overtime"),hunterUndo=document.getElementById("hunter-undo"),hunterReset=document.getElementById("hunter-reset");
     const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),challengeSessionControls=[...document.querySelectorAll("[data-challenge-session]")],challengeLiveAreas=[...document.querySelectorAll("[data-challenge-live]")],topCurrentChallenge=document.getElementById("top-current-challenge"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],pagePlayModeButtons=[...document.querySelectorAll("[data-page-play-mode]")],pageStreamerMode=document.querySelector("[data-page-streamer-mode]"),topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel"),screamerButton=document.getElementById("screamer-button"),screamerOverlay=document.getElementById("screamer-overlay");
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     let activeChallenge=null;
-    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,hunter:false,possessed:false};
+    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,die:false,hunter:false,possessed:false};
+    const challengeDifficultySelects=[...document.querySelectorAll("[data-challenge-difficulty]")];
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
     const englishTranslations={
@@ -753,6 +807,12 @@ const phasmophobiaObjects=[
       "Aucune entité ne correspond à la recherche.":"No ghost matches your search.",
       "Défis Phasmophobia":"Phasmophobia Challenges",
       "Choisis un défi pour ouvrir sa propre vue. Toute l’application, les règles et la progression sont réunies dans un seul fichier HTML.":"Choose a challenge to open its dedicated view. The entire app, its rules and your progress are contained in a single HTML file.",
+      "1 joueur minimum":"1 player minimum",
+      "Défis solo":"Solo challenges",
+      "Des défis réalisables seul, également jouables en coopération.":"Challenges playable alone or cooperatively.",
+      "Plusieurs joueurs requis":"Multiple players required",
+      "Défis multijoueur":"Multiplayer challenges",
+      "Des formats conçus autour des équipes, des rôles et de l’affrontement entre joueurs.":"Formats built around teams, roles and competition between players.",
       "Le Possédé":"The Possessed",
       "De trois à quatre joueurs, les Enquêteurs tentent d’identifier le fantôme tandis qu’un Possédé doit semer discrètement le doute.":"With three to four players, the Investigators try to identify the ghost while one Possessed player secretly spreads doubt.",
       "3-4 joueurs":"3-4 players",
@@ -1159,6 +1219,7 @@ const phasmophobiaObjects=[
       else if(!mediaChallengeView.hidden)page="media";
       else if(!wallChallengeView.hidden)page="wall";
       else if(!cursedChallengeView.hidden)page="cursed";
+      else if(!dieChallengeView.hidden)page="die";
       else if(!hunterChallengeView.hidden)page="hunter";
       else if(!possessedChallengeView.hidden)page="possessed";
       else if(!funMemoView.hidden)page="funMemo";
@@ -1168,8 +1229,8 @@ const phasmophobiaObjects=[
       else if(!memoView.hidden)page="memo";
       else if(!challengeSelectionView.hidden)page="challenges";
       const titles={
-        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",mapMemo:"Plans des pièces - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise",media:"Média Surprise",wall:"Mur de la mort",cursed:"Cursed Run",possessed:"Le Possédé"},
-        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",mapMemo:"Room Layouts - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise",media:"Media Surprise",wall:"Wall of Death",cursed:"Cursed Run",possessed:"The Possessed"}
+        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",mapMemo:"Plans des pièces - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise",media:"Média Surprise",wall:"Mur de la mort",cursed:"Cursed Run",die:"Le Dé Maudit",possessed:"Le Possédé"},
+        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",ghostMemo:"Ghost Reference - Phasmophobia",mapMemo:"Room Layouts - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise",media:"Media Surprise",wall:"Wall of Death",cursed:"Cursed Run",die:"Cursed Die",possessed:"The Possessed"}
       };
       titles.fr.hunter="Chasseur et enquêteur";
       titles.en.hunter="Hunter and Investigator";
@@ -1177,7 +1238,7 @@ const phasmophobiaObjects=[
       titles.en.inviteRoom="Room invitation - Phasmophobia";
       document.title=titles[currentLanguage][page]
     }
-    function hideAllViews(){stopGhostWalkCadence();[hubView,inviteRoomView,challengeSelectionView,memoView,ghostMemoView,mapMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,hunterChallengeView,possessedChallengeView].forEach(view=>{if(view)view.hidden=true})}
+    function hideAllViews(){stopGhostWalkCadence();[hubView,inviteRoomView,challengeSelectionView,memoView,ghostMemoView,mapMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,dieChallengeView,hunterChallengeView,possessedChallengeView].forEach(view=>{if(view)view.hidden=true})}
     function currentRouteHash(){
       const hash=decodeURIComponent(location.hash||"").replace(/^#/,"");
       const lastHash=hash.split("#").filter(Boolean).pop()||hash;
@@ -1246,6 +1307,11 @@ const phasmophobiaObjects=[
       if(!allowChallengeOpen())return;
       hideAllViews();cursedChallengeView.hidden=false;renderCursedRun();updateDocumentTitle();window.scrollTo(0,0)
     }
+    function openDieChallenge(updateHistory=true){
+      if(updateHistory&&location.hash!=="#de-maudit"){location.hash="de-maudit";return}
+      if(!allowChallengeOpen())return;
+      hideAllViews();dieChallengeView.hidden=false;renderCursedDie();updateDocumentTitle();window.scrollTo(0,0)
+    }
     function openHunterChallenge(updateHistory=true){
       if(updateHistory&&location.hash!=="#chasseur-enqueteur"){location.hash="chasseur-enqueteur";return}
       if(!allowChallengeOpen())return;
@@ -1263,6 +1329,7 @@ const phasmophobiaObjects=[
       else if(route==="media-surprise")openMediaChallenge(false);
       else if(route==="mur-de-la-mort")openWallChallenge(false);
       else if(route==="cursed-run")openCursedChallenge(false);
+      else if(route==="de-maudit")openDieChallenge(false);
       else if(route==="chasseur-enqueteur")openHunterChallenge(false);
       else if(route==="le-possede")openPossessedChallenge(false);
       else if(route==="memo-ghosts")showGhostMemo(false);
@@ -1281,7 +1348,7 @@ const phasmophobiaObjects=[
     function goBack(){
       if(!ghostMemoView.hidden||!mapMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
       if(inviteRoomView&&!inviteRoomView.hidden){showHub(true);return}
-      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!hunterChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
+      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!dieChallengeView.hidden||!hunterChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
       showHub(true)
     }
 
@@ -1291,6 +1358,7 @@ const phasmophobiaObjects=[
         media:"Media Surprise",
         wall:"Wall of Death",
         cursed:"Cursed Run",
+        die:"Cursed Die",
         hunter:"Hunter and Investigator",
         possessed:"The Possessed"
       }:{
@@ -1298,6 +1366,7 @@ const phasmophobiaObjects=[
         media:"Média Surprise",
         wall:"Mur de la mort",
         cursed:"Cursed Run",
+        die:"Le Dé Maudit",
         hunter:"Chasseur et enquêteur",
         possessed:"Le Possédé"
       };
@@ -1311,17 +1380,61 @@ const phasmophobiaObjects=[
       topCurrentChallenge.textContent=`${possessedText("Défi en cours","Active challenge")} : ${challengeLabel(activeChallenge)}`
     }
     function canManageChallengeSession(){return playMode!=="room"||possessedIsHost}
+    function isMultiplayerChallenge(challenge){return challenge==="hunter"||challenge==="possessed"}
+    function challengeDifficulty(challenge){
+      const settings=challengeDifficultySettings[challenge]||{};
+      return settings[challengeDifficulties[challenge]]||settings.normal||{}
+    }
+    function updateMediaStartingItems(){
+      const pool=["Lampe de poche","Allumeur","Appareil photo","Lecteur EMF","Thermomètre","Lampe UV","Spirit Box"];
+      mediaStartingNames=pool.slice(0,challengeDifficulty("media").starting||3)
+    }
+    function saveChallengeDifficulties(){try{localStorage.setItem("phasmo-challenge-difficulties",JSON.stringify(challengeDifficulties))}catch(error){}}
+    function loadChallengeDifficulties(){
+      try{
+        const saved=JSON.parse(localStorage.getItem("phasmo-challenge-difficulties")||"{}");
+        Object.keys(challengeDifficulties).forEach(challenge=>{if(challengeDifficultySettings[challenge]?.[saved[challenge]])challengeDifficulties[challenge]=saved[challenge]})
+      }catch(error){}
+      updateMediaStartingItems()
+    }
+    function renderChallengeDifficulties(){
+      challengeDifficultySelects.forEach(select=>{
+        const challenge=select.dataset.challengeDifficulty,setting=challengeDifficulty(challenge);
+        select.value=challengeDifficulties[challenge]||"normal";
+        select.disabled=!!challengeSessionState[challenge]||!canManageChallengeSession();
+        const summary=document.querySelector(`[data-difficulty-summary="${challenge}"]`);
+        if(summary)summary.textContent=currentLanguage==="en"?setting.en:setting.fr
+      });
+      const tarot=challengeDifficulty("tarot"),winButton=document.getElementById("win-round-btn"),loseButton=document.getElementById("lose-round-btn");
+      if(winButton)winButton.textContent=currentLanguage==="en"?`Game completed: upgrade ${tarot.upgrade} items`:`Partie validée : monter ${tarot.upgrade} objets`;
+      if(loseButton)loseButton.textContent=currentLanguage==="en"?`Game lost: downgrade ${tarot.downgrade} items`:`Partie perdue : descendre ${tarot.downgrade} objets`
+    }
+    function setChallengeDifficulty(challenge,value){
+      if(challengeSessionState[challenge]||!challengeDifficultySettings[challenge]?.[value]){renderChallengeDifficulties();return}
+      challengeDifficulties[challenge]=value;
+      if(challenge==="media"){updateMediaStartingItems();resetMediaChallenge()}
+      else if(challenge==="wall")resetWallChallenge();
+      else if(challenge==="cursed")resetCursedRun();
+      else if(challenge==="die")resetCursedDie();
+      else if(challenge==="tarot")resetGame();
+      else if(challenge==="possessed")renderPossessedGamePanel();
+      saveChallengeDifficulties();renderChallengeDifficulties();
+      if(challenge==="possessed"&&playMode==="room"&&possessedIsHost)broadcastPossessedPublicState();
+      else scheduleRoomChallengeSync(challenge)
+    }
     function renderChallengeSessionControls(){
       const canManage=canManageChallengeSession();
       challengeSessionControls.forEach(control=>{
         const challenge=control.dataset.challengeSession,started=!!challengeSessionState[challenge];
+        const soloBlocked=playMode==="solo"&&isMultiplayerChallenge(challenge);
         const title=control.querySelector("strong"),note=control.querySelector("p"),start=control.querySelector("[data-challenge-start]"),stop=control.querySelector("[data-challenge-stop]");
         if(title)title.textContent=started?possessedText("Défi démarré","Challenge started"):possessedText("Défi non démarré","Challenge not started");
-        if(note)note.textContent=!canManage?possessedText("Seul l'hôte peut démarrer ou stopper le défi en room.","Only the host can start or stop the challenge in a room."):started?possessedText("Le suivi est visible. Stoppe le défi pour revenir aux règles seules.","Tracking is visible. Stop the challenge to return to rules only."):possessedText("Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.","Rules stay visible. Start the challenge to show tracking and actions.");
-        if(start){start.hidden=started;start.disabled=!canManage}
+        if(note)note.textContent=soloBlocked?possessedText("Ce défi nécessite le mode Multi local ou Room.","This challenge requires Local multi or Room mode."):!canManage?possessedText("Seul l'hôte peut démarrer ou stopper le défi en room.","Only the host can start or stop the challenge in a room."):started?possessedText("Le suivi est visible. Stoppe le défi pour revenir aux règles seules.","Tracking is visible. Stop the challenge to return to rules only."):possessedText("Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.","Rules stay visible. Start the challenge to show tracking and actions.");
+        if(start){start.hidden=started;start.disabled=!canManage||soloBlocked}
         if(stop){stop.hidden=!started;stop.disabled=!canManage}
       });
       challengeLiveAreas.forEach(area=>{area.hidden=!challengeSessionState[area.dataset.challengeLive]})
+      renderChallengeDifficulties()
     }
     function syncChallengeStarted(challenge){
       if(!challenge)return;
@@ -1333,6 +1446,7 @@ const phasmophobiaObjects=[
     }
     function setChallengeStarted(challenge,started,options={}){
       if(!(challenge in challengeSessionState))return;
+      if(started&&playMode==="solo"&&isMultiplayerChallenge(challenge)){renderChallengeSessionControls();return}
       if(!canManageChallengeSession()&&options.force!==true&&options.sync!==false){renderChallengeSessionControls();return}
       const shouldStart=Boolean(started);
       let previousActive=null;
@@ -1942,11 +2056,15 @@ const phasmophobiaObjects=[
       mediaSetResult(currentLanguage==="en"?`${escapeHtml(sourceText)} unlocked <strong>${escapeHtml(mediaLocalizedName(obj.name))}</strong>.`:`${escapeHtml(sourceText)} a débloqué <strong>${escapeHtml(obj.name)}</strong>.`,obj);
       renderMediaChallenge();return obj
     }
+    function mediaUnlockRewards(source){
+      const count=challengeDifficulty("media").unlocks||1;
+      for(let index=0;index<count;index++)mediaUnlockRandom(source)
+    }
     function mediaAddUnique(){
       if(mediaPagesCompleted.has(mediaPhase)||!mediaTypeAvailable(mediaPhase))return;
       mediaUniqueCount++;
       const singular={fr:{photo:"Une photo unique",video:"Une vidéo unique",audio:"Un audio unique"},en:{photo:"A unique photo",video:"A unique video",audio:"A unique audio"}};
-      mediaUnlockRandom({fr:singular.fr[mediaPhase],en:singular.en[mediaPhase]})
+      mediaUnlockRewards({fr:singular.fr[mediaPhase],en:singular.en[mediaPhase]})
     }
     function mediaAddDuplicate(){
       if(mediaPagesCompleted.has(mediaPhase)||!mediaTypeAvailable(mediaPhase))return;
@@ -1956,7 +2074,7 @@ const phasmophobiaObjects=[
     }
     function mediaCompleteObjective(){
       mediaObjectiveCount++;
-      mediaUnlockRandom({fr:"L’objectif du journal",en:"The journal objective"})
+      mediaUnlockRewards({fr:"L’objectif du journal",en:"The journal objective"})
     }
     function mediaCompletePage(){
       if(mediaPagesCompleted.has(mediaPhase)||!mediaTypeAvailable(mediaPhase))return;
@@ -2036,11 +2154,13 @@ const phasmophobiaObjects=[
     }
     function renderCursedRun(){
       if(!cursedMapGrid)return;
-      const count=cursedValidatedMaps.size,total=cursedMaps.length,complete=count===total;
+      const requiredMaps=cursedMaps.slice(0,challengeDifficulty("cursed").maps||cursedMaps.length);
+      const requiredIds=new Set(requiredMaps.map(map=>map.id));
+      const count=[...cursedValidatedMaps].filter(id=>requiredIds.has(id)).length,total=requiredMaps.length,complete=count===total;
       if(cursedProgressCount)cursedProgressCount.textContent=`${count} / ${total}`;
       if(cursedProgressLabel)cursedProgressLabel.textContent=currentLanguage==="en"?(complete?"run complete":"maps validated"):(complete?"défi validé":"maps validées");
       if(cursedProgressBar)cursedProgressBar.style.width=`${total?count/total*100:0}%`;
-      cursedMapGrid.innerHTML=cursedMaps.map((map,index)=>{
+      cursedMapGrid.innerHTML=requiredMaps.map((map,index)=>{
         const validated=cursedValidatedMaps.has(map.id);
         const alt=currentLanguage==="en"?`${map.name} map image`:`Image de la map ${map.name}`;
         const note=currentLanguage==="en"?(validated?"Validated - click to undo":"Click the photo to validate"):(validated?"Validee - clique pour annuler":"Clique sur la photo pour valider");
@@ -2060,6 +2180,93 @@ const phasmophobiaObjects=[
         </article>`
       }).join("");
       cursedMapGrid.querySelectorAll("[data-cursed-map]").forEach(button=>button.addEventListener("click",()=>toggleCursedMap(button.dataset.cursedMap)));
+    }
+
+    function cursedDieFace(roll=cursedDieState.currentRoll){return cursedDieFaces.find(face=>face.roll===Number(roll))||null}
+    function cursedDieMinutes(face){
+      const times=challengeDifficulty("die").times||[5,10,15,20];
+      return Number(times[(face?.roll||1)-1])||face?.minutes||5
+    }
+    function cursedDieTimeLabel(face){return `${cursedDieMinutes(face)} min`}
+    function cursedDieRule(face){
+      const time=cursedDieTimeLabel(face);
+      if(!face)return "";
+      return face.roll===4?`Base Professionnel sans preuve, à réussir en moins de ${time}.`:`Réussir une partie en difficulté ${face.difficulty} en moins de ${time}.`
+    }
+    function saveCursedDieState(){try{localStorage.setItem("phasmo-cursed-die",JSON.stringify(cursedDieState))}catch(error){}}
+    function loadCursedDieState(){
+      try{
+        const saved=JSON.parse(localStorage.getItem("phasmo-cursed-die")||"{}");
+        cursedDieState={
+          streak:Math.max(0,Number(saved.streak)||0),
+          record:Math.max(0,Number(saved.record)||0),
+          currentRoll:cursedDieFace(saved.currentRoll)?Number(saved.currentRoll):null,
+          history:Array.isArray(saved.history)?saved.history.slice(0,12):[],
+          status:saved.status||"Prêt à lancer le dé.",
+          outcome:saved.outcome||null
+        }
+      }catch(error){cursedDieState={streak:0,record:0,currentRoll:null,history:[],status:"Prêt à lancer le dé.",outcome:null}}
+    }
+    function setCursedDieState(state,save=true){
+      cursedDieState={...cursedDieState,...state};
+      cursedDieState.streak=Math.max(0,Number(cursedDieState.streak)||0);
+      cursedDieState.record=Math.max(cursedDieState.streak,Number(cursedDieState.record)||0);
+      cursedDieState.currentRoll=cursedDieFace(cursedDieState.currentRoll)?Number(cursedDieState.currentRoll):null;
+      cursedDieState.history=Array.isArray(cursedDieState.history)?cursedDieState.history.slice(0,12):[];
+      if(save)saveCursedDieState();
+      renderCursedDie()
+    }
+    function cursedDieHistoryLine(entry){
+      const result=entry.result==="win"?(currentLanguage==="en"?"Success":"Réussite"):(currentLanguage==="en"?"Defeat":"Défaite");
+      const face=cursedDieFace(entry.roll);
+      return `${result} · D${entry.roll} ${face?face.difficulty:""} · ${entry.time||""} · ${currentLanguage==="en"?"streak":"streak"} ${entry.streak}`
+    }
+    function renderCursedDie(){
+      if(!dieStreakDisplay)return;
+      const face=cursedDieFace();
+      dieStreakDisplay.textContent=cursedDieState.streak;
+      dieRecordDisplay.textContent=cursedDieState.record;
+      dieLastRollDisplay.textContent=face?`D${face.roll}`:"-";
+      if(dieRollGrid){
+        dieRollGrid.innerHTML=cursedDieFaces.map(item=>`<article><strong>${item.roll}</strong><span>${escapeHtml(item.difficulty)}</span><small>&lt; ${escapeHtml(cursedDieTimeLabel(item))}</small></article>`).join("")
+      }
+      if(dieCurrentCard){
+        dieCurrentCard.innerHTML=face?`<span class="die-face">${face.roll}</span><div><h3>${escapeHtml(face.difficulty)} · moins de ${escapeHtml(cursedDieTimeLabel(face))}</h3><p>${escapeHtml(cursedDieRule(face))} Le chrono démarre à l’ouverture de la porte d’entrée.</p></div>`:`<span class="die-face">?</span><div><h3>Aucune partie préparée</h3><p>Lance le dé pour connaître la difficulté et le temps limite du prochain contrat.</p></div>`
+      }
+      if(dieStatus){
+        dieStatus.classList.toggle("win",cursedDieState.outcome==="win");
+        dieStatus.classList.toggle("loss",cursedDieState.outcome==="loss");
+        dieStatus.textContent=cursedDieState.status||"Prêt à lancer le dé."
+      }
+      if(dieHistory){
+        dieHistory.innerHTML=cursedDieState.history.length?cursedDieState.history.map(entry=>`<div class="die-history-item">${escapeHtml(cursedDieHistoryLine(entry))}</div>`).join(""):`<div class="die-history-empty">Aucune partie validée pour le moment.</div>`
+      }
+      const canScore=!!face;
+      if(dieWinButton)dieWinButton.disabled=!canScore;
+      if(dieLoseButton)dieLoseButton.disabled=!canScore&&cursedDieState.streak===0
+    }
+    function rollCursedDie(){
+      const roll=crypto?.getRandomValues?(()=>{const buffer=new Uint32Array(1);crypto.getRandomValues(buffer);return buffer[0]%4+1})():Math.floor(Math.random()*4)+1;
+      const face=cursedDieFace(roll);
+      setCursedDieState({currentRoll:roll,outcome:null,status:`Dé lancé : ${face.difficulty}, objectif en moins de ${cursedDieTimeLabel(face)}.`});
+      scheduleRoomChallengeSync("die")
+    }
+    function completeCursedDieRound(){
+      const face=cursedDieFace();if(!face)return;
+      const nextStreak=cursedDieState.streak+1,nextRecord=Math.max(cursedDieState.record,nextStreak);
+      const entry={result:"win",roll:face.roll,time:cursedDieTimeLabel(face),streak:nextStreak,at:Date.now()};
+      setCursedDieState({streak:nextStreak,record:nextRecord,currentRoll:null,outcome:"win",status:`Partie réussie : streak ${nextStreak}. Relance le dé pour continuer.`,history:[entry,...cursedDieState.history]});
+      scheduleRoomChallengeSync("die")
+    }
+    function failCursedDieChallenge(){
+      const face=cursedDieFace(),finalStreak=cursedDieState.streak;
+      const entry={result:"loss",roll:face?face.roll:"-",time:face?cursedDieTimeLabel(face):"",streak:finalStreak,at:Date.now()};
+      setCursedDieState({streak:0,record:Math.max(cursedDieState.record,finalStreak),currentRoll:null,outcome:"loss",status:`Défi terminé : streak retenue ${finalStreak}. Le compteur repart à 0.`,history:[entry,...cursedDieState.history]});
+      scheduleRoomChallengeSync("die")
+    }
+    function resetCursedDie(){
+      setCursedDieState({streak:0,record:0,currentRoll:null,history:[],status:"Dé maudit réinitialisé. Prêt à lancer le dé.",outcome:null});
+      scheduleRoomChallengeSync("die")
     }
 
     function hunterText(fr,en){return currentLanguage==="en"?en:fr}
@@ -2215,8 +2422,8 @@ const phasmophobiaObjects=[
 
     function wallMalusAt(index){return wallMaluses[wallMalusOrder[index]??index]||wallMaluses[index%wallMaluses.length]}
     function wallHasActiveMalus(title){return wallOpenedIndexes.some(index=>wallMalusAt(index).title===title)}
-    function wallTargetWins(){return wallHasActiveMalus("1 Round en plus")?6:5}
-    function wallRequiredOpenCount(){return 2+(wallHasActiveMalus("1 Case en Plus par Round")?1:0)}
+    function wallTargetWins(){return (challengeDifficulty("wall").wins||5)+(wallHasActiveMalus("1 Round en plus")?1:0)}
+    function wallRequiredOpenCount(){return (challengeDifficulty("wall").opens||2)+(wallHasActiveMalus("1 Case en Plus par Round")?1:0)}
     function wallCurrentRoundOpenCount(){return Math.max(0,wallOpenedIndexes.length-wallRoundStartIndex)}
     function wallRemainingOpenCount(){return Math.max(0,wallRequiredOpenCount()-wallCurrentRoundOpenCount())}
     function wallCanOpen(){return !wallOutcome&&wallWins<wallTargetWins()&&wallRemainingOpenCount()>0&&wallOpenedIndexes.length<wallMalusOrder.length}
@@ -2297,7 +2504,7 @@ const phasmophobiaObjects=[
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
       else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
     }
-    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",cursed:"cursed-run",hunter:"chasseur-enqueteur",possessed:"le-possede"}[challenge]||"challenges"}
+    function challengeHash(challenge){return {tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",cursed:"cursed-run",die:"de-maudit",hunter:"chasseur-enqueteur",possessed:"le-possede"}[challenge]||"challenges"}
     function updatePossessedInviteLink(challenge=currentRoomChallenge){
       if(!possessedRoomCode||!possessedShareLink)return;
       const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
@@ -2315,6 +2522,7 @@ const phasmophobiaObjects=[
       else if(challenge==="media")openMediaChallenge(true);
       else if(challenge==="wall")openWallChallenge(true);
       else if(challenge==="cursed")openCursedChallenge(true);
+      else if(challenge==="die")openDieChallenge(true);
       else if(challenge==="hunter")openHunterChallenge(true);
       else if(challenge==="possessed")openPossessedChallenge(true)
     }
@@ -2361,16 +2569,28 @@ const phasmophobiaObjects=[
     }
     function captureCursedRoomState(){return {validated:[...cursedValidatedMaps]}}
     function applyCursedRoomState(state){if(!state)return;setCursedProgress(state.validated||[],true)}
+    function captureCursedDieRoomState(){return structuredClone(cursedDieState)}
+    function applyCursedDieRoomState(state){if(!state)return;setCursedDieState(state,true)}
     function captureHunterRoomState(){return structuredClone(hunterState)}
     function applyHunterRoomState(state){if(!state)return;hunterState={...hunterState,...state,scores:{A:Number(state.scores?.A)||0,B:Number(state.scores?.B)||0},history:Array.isArray(state.history)?state.history:[]};hunterSave();renderHunterChallenge()}
     function captureRoomChallengeState(challenge){
-      const state=challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState())));
+      const state=challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="die"?captureCursedDieRoomState():(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState()))));
       state.sessionStarted=!!challengeSessionState[challenge];
+      if(challengeDifficulties[challenge])state.difficulty=challengeDifficulties[challenge];
       return state
     }
     function applyRoomChallengeState(message){
       applyingRoomState=true;
-      try{setChallengeStarted(message.challenge,Boolean(message.state&&message.state.sessionStarted),{sync:false,confirm:false});if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)}
+      try{
+        const difficulty=message.state&&message.state.difficulty;
+        if(challengeDifficultySettings[message.challenge]?.[difficulty]){
+          challengeDifficulties[message.challenge]=difficulty;
+          if(message.challenge==="media")updateMediaStartingItems();
+          saveChallengeDifficulties()
+        }
+        setChallengeStarted(message.challenge,Boolean(message.state&&message.state.sessionStarted),{sync:false,confirm:false});
+        if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="die")applyCursedDieRoomState(message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)
+      }
       finally{applyingRoomState=false}
     }
     function scheduleRoomChallengeSync(challenge){
@@ -2414,10 +2634,14 @@ const phasmophobiaObjects=[
       if(possessedDiedEarly)possessedDiedEarly.checked=false
     }
     function capturePossessedPublicState(){
-      return {round:possessedGameRound,roundLimit:possessedRoundLimit,scores:{...possessedScores},votes:{...possessedVotes},resolved:possessedRoundResolved,ghostCorrect:!!(possessedGhostCorrect&&possessedGhostCorrect.checked),diedEarly:!!(possessedDiedEarly&&possessedDiedEarly.checked),summary:possessedRoundSummary,started:possessedOnlineStarted,distributionRound:possessedDistributionRound,challengeSessionStarted:!!challengeSessionState.possessed}
+      return {round:possessedGameRound,roundLimit:possessedRoundLimit,scores:{...possessedScores},votes:{...possessedVotes},resolved:possessedRoundResolved,ghostCorrect:!!(possessedGhostCorrect&&possessedGhostCorrect.checked),diedEarly:!!(possessedDiedEarly&&possessedDiedEarly.checked),summary:possessedRoundSummary,started:possessedOnlineStarted,distributionRound:possessedDistributionRound,challengeSessionStarted:!!challengeSessionState.possessed,difficulty:challengeDifficulties.possessed}
     }
     function applyPossessedPublicState(state){
       if(!state)return;
+      if(challengeDifficultySettings.possessed[state.difficulty]){
+        challengeDifficulties.possessed=state.difficulty;
+        saveChallengeDifficulties()
+      }
       setChallengeStarted("possessed",Boolean(state.challengeSessionStarted),{sync:false,confirm:false});
       possessedGameRound=Number(state.round)||possessedGameRound;
       possessedRoundLimit=Math.max(possessedGameRound,Math.min(20,Math.max(1,Number(state.roundLimit)||possessedRoundLimit)));
@@ -2434,6 +2658,7 @@ const phasmophobiaObjects=[
     }
     function renderPossessedGamePanel(){
       const players=possessedRoundPlayers();ensurePossessedScores(players);
+      const difficulty=challengeDifficulty("possessed");
       const voted=players.filter(player=>possessedVotes[player.id]).length,total=players.length||4;
       possessedRoundNumber.textContent=`${possessedGameRound}/${possessedRoundLimit}`;
       possessedVoteCount.textContent=`${voted}/${total}`;
@@ -2451,6 +2676,8 @@ const phasmophobiaObjects=[
       }).join(""):`<div class="wall-empty">Le vote apparaitra après la distribution.</div>`;
       possessedVoteGrid.querySelectorAll(".possessed-vote-btn:not(:disabled)").forEach(button=>button.addEventListener("click",()=>submitPossessedVote(button.dataset.voter,button.dataset.target)));
       possessedGhostCorrect.disabled=!canManage||possessedRoundResolved;possessedDiedEarly.disabled=!canManage||possessedRoundResolved;
+      const diedEarlyLabel=document.getElementById("possessed-died-early-label");
+      if(diedEarlyLabel)diedEarlyLabel.textContent=possessedText(`Possédé mort avant ses ${difficulty.corruptions} corruption(s)`,`Possessed died before completing ${difficulty.corruptions} corruption(s)`);
       possessedScoreRound.disabled=!canManage||possessedRoundResolved||!players.length||(playMode==="room"?!possessedCurrentPossessedId:!possessedCurrentPossessedId);
       possessedNextRound.disabled=!canManage||possessedGameRound>=possessedRoundLimit;
       possessedNextRound.textContent=possessedGameRound>=possessedRoundLimit?possessedText("Limite atteinte","Limit reached"):possessedText("Nouvelle manche","Next round");
@@ -2480,22 +2707,23 @@ const phasmophobiaObjects=[
     }
     function scorePossessedRound(){
       const players=possessedRoundPlayers();if(!players.length||!possessedCurrentPossessedId)return;
+      const difficulty=challengeDifficulty("possessed");
       ensurePossessedScores(players);
       const counts={};Object.values(possessedVotes).forEach(targetId=>{if(players.some(player=>player.id===targetId))counts[targetId]=(counts[targetId]||0)+1});
       const maxVotes=Math.max(0,...Object.values(counts)),topIds=Object.keys(counts).filter(id=>counts[id]===maxVotes&&maxVotes>0),accusedId=topIds.length===1?topIds[0]:null;
       const discovered=accusedId===possessedCurrentPossessedId,ghostOk=!!possessedGhostCorrect.checked,diedEarly=!!possessedDiedEarly.checked,deltas={};
       players.forEach(player=>{deltas[player.id]=ghostOk?1:0});
-      if(discovered)players.filter(player=>player.id!==possessedCurrentPossessedId).forEach(player=>{deltas[player.id]+=2});
-      else if(!diedEarly)deltas[possessedCurrentPossessedId]+=3;
+      if(discovered)players.filter(player=>player.id!==possessedCurrentPossessedId).forEach(player=>{deltas[player.id]+=difficulty.investigatorPoints||2});
+      else if(!diedEarly)deltas[possessedCurrentPossessedId]+=difficulty.possessedPoints||3;
       if(diedEarly)deltas[possessedCurrentPossessedId]=0;
       players.forEach(player=>{possessedScores[player.id]=(Number(possessedScores[player.id])||0)+deltas[player.id]});
       const accusedText=accusedId?possessedPlayerName(accusedId,players):(topIds.length>1?possessedText("égalité","tie"):possessedText("aucun vote","no vote"));
       const possessedName=possessedPlayerName(possessedCurrentPossessedId,players);
       const deltaText=players.map(player=>`${escapeHtml(player.name)} ${deltas[player.id]>=0?"+":""}${deltas[player.id]}`).join(" / ");
       const outcomeLines=[];
-      outcomeLines.push(discovered?possessedText("Le Possédé est découvert : +2 pour chaque Enquêteur.","The Possessed was found: +2 for each Investigator."):possessedText("Le Possédé n'est pas découvert.","The Possessed was not found."));
-      if(!discovered&&!diedEarly)outcomeLines.push(possessedText("Possédé non découvert : +3 pour lui.","Undiscovered Possessed: +3 for them."));
-      if(diedEarly)outcomeLines.push(possessedText("Le Possédé est mort avant ses deux corruptions : il marque 0 point sur cette manche.","The Possessed died before two corruptions: they score 0 for this round."));
+      outcomeLines.push(discovered?possessedText(`Le Possédé est découvert : +${difficulty.investigatorPoints} pour chaque Enquêteur.`,`The Possessed was found: +${difficulty.investigatorPoints} for each Investigator.`):possessedText("Le Possédé n'est pas découvert.","The Possessed was not found."));
+      if(!discovered&&!diedEarly)outcomeLines.push(possessedText(`Possédé non découvert : +${difficulty.possessedPoints} pour lui.`,`Undiscovered Possessed: +${difficulty.possessedPoints} for them.`));
+      if(diedEarly)outcomeLines.push(possessedText(`Le Possédé est mort avant ses ${difficulty.corruptions} corruption(s) : il marque 0 point sur cette manche.`,`The Possessed died before completing ${difficulty.corruptions} corruption(s): they score 0 for this round.`));
       if(ghostOk)outcomeLines.push(possessedText("Fantôme correct : +1 pour tous.","Correct ghost: +1 for everyone."));
       if(possessedGameRound>=possessedRoundLimit){const leaders=possessedScoreLeaders(players).winners;outcomeLines.push(possessedText(`Partie terminée après ${possessedRoundLimit} manche(s). Gagnant : ${leaders.length?leaders.join(", "):"aucun"}.`,`Game over after ${possessedRoundLimit} round(s). Winner: ${leaders.length?leaders.join(", "):"none"}.`))}
       possessedRoundSummary=`<strong>Manche ${possessedGameRound}</strong><br>Vote final : ${escapeHtml(accusedText)}. Le Possédé était ${escapeHtml(possessedName)}.<br>${outcomeLines.join("<br>")}<br><strong>Points :</strong> ${deltaText}`;
@@ -2605,6 +2833,7 @@ const phasmophobiaObjects=[
       if(playMode==="room"){setPossessedMode("online");if(topRoomMenu)topRoomMenu.open=false}
       else{if(topRoomMenu)topRoomMenu.open=false;if(possessedOnlinePanel)possessedOnlinePanel.hidden=true;if(playMode==="local")setPossessedMode("local")}
       renderChallengeRoomGate();
+      renderChallengeSessionControls();
       if(options.openRoom&&playMode==="room"&&topRoomMenu&&!topRoomMenu.hidden)topRoomMenu.open=true;
       return true
     }
@@ -2765,8 +2994,8 @@ const phasmophobiaObjects=[
     document.getElementById("reset-game-btn").addEventListener("click",()=>{
       if(confirm("Réinitialiser le défi entier ? Le chrono, les manches, les victoires, les défaites, les pertes définitives et tous les tiers seront remis à zéro.")) resetGame();
     });
-    document.getElementById("win-round-btn").addEventListener("click",()=>startTierSelection("upgrade",4));
-    document.getElementById("lose-round-btn").addEventListener("click",()=>startTierSelection("downgrade",2));
+    document.getElementById("win-round-btn").addEventListener("click",()=>startTierSelection("upgrade",challengeDifficulty("tarot").upgrade||4));
+    document.getElementById("lose-round-btn").addEventListener("click",()=>startTierSelection("downgrade",challengeDifficulty("tarot").downgrade||2));
     timerButton.addEventListener("click",toggleTimer);
     streamerMode.addEventListener("change",()=>handleStreamerModeChange(streamerMode.checked));
     if(pageStreamerMode)pageStreamerMode.addEventListener("change",()=>handleStreamerModeChange(pageStreamerMode.checked));
@@ -2824,12 +3053,15 @@ const phasmophobiaObjects=[
     document.getElementById("back-wall-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-cursed-challenge").addEventListener("click",()=>openRoomChallenge("cursed"));
     document.getElementById("back-cursed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
+    document.getElementById("open-die-challenge").addEventListener("click",()=>openRoomChallenge("die"));
+    document.getElementById("back-die-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-hunter-challenge").addEventListener("click",()=>openRoomChallenge("hunter"));
     document.getElementById("back-hunter-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-possessed-challenge").addEventListener("click",()=>openRoomChallenge("possessed"));
     document.getElementById("back-possessed-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.querySelectorAll("[data-challenge-start]").forEach(button=>button.addEventListener("click",()=>setChallengeStarted(button.dataset.challengeStart,true)));
     document.querySelectorAll("[data-challenge-stop]").forEach(button=>button.addEventListener("click",()=>setChallengeStarted(button.dataset.challengeStop,false)));
+    challengeDifficultySelects.forEach(select=>select.addEventListener("change",()=>setChallengeDifficulty(select.dataset.challengeDifficulty,select.value)));
     possessedLocalTab.addEventListener("click",()=>setPlayMode("local"));
     possessedOnlineTab.addEventListener("click",()=>setPlayMode("room"));
     playModeButtons.forEach(button=>button.addEventListener("click",()=>setPlayMode(button.dataset.playMode,{openRoom:button.dataset.playMode==="room"})));
@@ -2874,6 +3106,10 @@ const phasmophobiaObjects=[
     wallResetButton.addEventListener("click",()=>{if(confirm("Réinitialiser le Mur de la mort ? Les cases ouvertes et la progression seront perdues."))resetWallChallenge()});
     wallOpenAllDebugButton.addEventListener("click",wallOpenAllDebug);
     if(cursedResetButton)cursedResetButton.addEventListener("click",()=>{if(confirm(currentLanguage==="en"?"Reset the Cursed Run map progress?":"Réinitialiser la progression des maps Cursed Run ?"))resetCursedRun()});
+    if(dieRollButton)dieRollButton.addEventListener("click",rollCursedDie);
+    if(dieWinButton)dieWinButton.addEventListener("click",completeCursedDieRound);
+    if(dieLoseButton)dieLoseButton.addEventListener("click",()=>{if(confirm("Terminer le défi et remettre la streak à 0 ?"))failCursedDieChallenge()});
+    if(dieResetButton)dieResetButton.addEventListener("click",()=>{if(confirm("Réinitialiser le Dé Maudit ? La streak, le record et l'historique seront effacés."))resetCursedDie()});
     [hunterTeamAInput,hunterTeamBInput,hunterRoundLimitSelect,hunterDifficultySelect].forEach(input=>input&&input.addEventListener("change",hunterApplySetup));
     if(hunterTeamAInput)hunterTeamAInput.addEventListener("input",()=>{hunterState.teamA=hunterTeamAInput.value.trim()||"Équipe A";renderHunterChallenge();hunterSync()});
     if(hunterTeamBInput)hunterTeamBInput.addEventListener("input",()=>{hunterState.teamB=hunterTeamBInput.value.trim()||"Équipe B";renderHunterChallenge();hunterSync()});
@@ -3137,16 +3373,17 @@ const phasmophobiaObjects=[
     function updateTimer(){const h=String(Math.floor(elapsedSeconds/3600)).padStart(2,"0"),m=String(Math.floor((elapsedSeconds%3600)/60)).padStart(2,"0"),s=String(elapsedSeconds%60).padStart(2,"0");document.getElementById("timer").textContent=`${h}:${m}:${s}`}
     function checkChallengeState(){
       if(challengeOutcome)return;
+      const difficulty=challengeDifficulty("tarot"),timeLimit=difficulty.timeLimit||7200,tier1Limit=difficulty.tier1Limit||4;
       const t1=allObjects.filter(o=>o.tier===1).length,t3=allObjects.filter(o=>o.tier===3).length;
-      if(t3===allObjects.length&&elapsedSeconds<=7200){
+      if(t3===allObjects.length&&elapsedSeconds<=timeLimit){
         resultDiv.innerHTML="<p>🏆 Défi réussi : tous les objets sont Tier 3 !</p>";
-        showChallengePopup("victory","Tous les objets du magasin ont atteint le Tier 3 en moins de 2 heures.")
-      }else if(t1>=4){
-        resultDiv.innerHTML="<p>💀 Défi perdu : 4 objets ou plus sont Tier 1.</p>";
-        showChallengePopup("defeat",`${t1} objets sont tombés au Tier 1. La limite autorisée est de 3.`)
-      }else if(elapsedSeconds>7200){
-        resultDiv.innerHTML="<p>⏰ Défi perdu : les 2h sont dépassées.</p>";
-        showChallengePopup("defeat","Le chrono a dépassé la limite de 2 heures.")
+        showChallengePopup("victory",`Tous les objets du magasin ont atteint le Tier 3 en ${formatElapsedTime()}.`)
+      }else if(t1>=tier1Limit){
+        resultDiv.innerHTML=`<p>💀 Défi perdu : ${tier1Limit} objets ou plus sont Tier 1.</p>`;
+        showChallengePopup("defeat",`${t1} objets sont tombés au Tier 1. La limite autorisée est de ${tier1Limit-1}.`)
+      }else if(elapsedSeconds>timeLimit){
+        resultDiv.innerHTML="<p>⏰ Défi perdu : la limite de temps est dépassée.</p>";
+        showChallengePopup("defeat",`Le chrono a dépassé ${Math.round(timeLimit/60)} minutes.`)
       }
     }
     function resetRound(showMessage=true){roundEffects=[];nextTarotMultiplier=1;startNewRoundLists();updateTarotStatus();renderActiveEffects();if(showMessage)resultDiv.innerHTML="Manche réinitialisée. Lampe de poche Tier 3 sélectionnée par défaut.";updateLists()}
@@ -3167,14 +3404,17 @@ const phasmophobiaObjects=[
       document.getElementById("tier1-count").textContent=allObjects.filter(o=>o.tier===1).length;document.getElementById("tier2-count").textContent=allObjects.filter(o=>o.tier===2).length;document.getElementById("tier3-count").textContent=allObjects.filter(o=>o.tier===3).length;
       renderList(remainingList,remainingObjects,chooseRemainingObject);renderList(selectedList,selectedObjects,null);renderList(removedList,removedObjects,null);renderList(lostList,permanentlyLostObjects,null);scheduleRoomChallengeSync("tarot")
     }
+    loadChallengeDifficulties();
     resetGame();
     resetWallChallenge();
     loadCursedProgress();
+    loadCursedDieState();
     hunterLoad();
     renderGhostMemo();
     renderMapMemo();
     renderMediaChallenge();
     renderCursedRun();
+    renderCursedDie();
     renderHunterChallenge();
     renderChallengeSessionControls();
     renderPossessedLocalNames();

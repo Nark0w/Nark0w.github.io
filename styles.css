@@ -141,6 +141,10 @@
     .mode-label{min-width:62px;text-align:left;font-family:var(--mono);font-size:12px;color:var(--ink)}
     .control-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:14px}
     .challenge-session-control{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1280px;margin:18px auto;padding:16px;background:rgba(13,11,9,.64);border:1px solid var(--line);border-left:3px solid var(--green)}
+    .challenge-difficulty{display:grid;grid-template-columns:auto minmax(130px,190px) minmax(0,1fr);align-items:center;gap:12px;max-width:1280px;margin:18px auto;padding:12px 16px;background:rgba(13,11,9,.62);border:1px solid var(--line);border-left:3px solid var(--amber)}
+    .challenge-difficulty label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d8c79b}
+    .challenge-difficulty select{width:100%;margin:0}
+    .challenge-difficulty p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}
     .challenge-session-control strong{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--green-bright);margin-bottom:5px}
     .challenge-session-control p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
     .challenge-session-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;flex:0 0 auto}
@@ -197,6 +201,12 @@
     .portal-card.memo .portal-launch-btn:hover{color:#b6ecc3}
 
     .challenge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+    .challenge-category{max-width:1280px;margin:30px auto 0}
+    .challenge-category-head{display:grid;gap:5px;margin-bottom:14px;padding:0 0 12px;border-bottom:1px solid var(--line);text-align:left}
+    .challenge-category-head h2{margin:0;font-size:25px;letter-spacing:.05em}
+    .challenge-category-head p{margin:0;color:var(--muted);font-size:13px}
+    .challenge-category-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--green-bright)}
+    .multiplayer-challenges .challenge-category-kicker{color:var(--amber)}
     .challenge-mode-guide{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:14px;max-width:1280px;margin:0 auto 14px;text-align:left}
     .challenge-mode-guide article{padding:16px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
     .challenge-mode-block{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -337,8 +347,8 @@
 
     /* ----- media challenge ----- */
     .media-container,.possessed-container,.wall-container,.hunter-container{position:relative}
-    .media-panel,.possessed-panel,.wall-panel,.hunter-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
-    .media-panel h2,.possessed-panel h2,.wall-panel h2,.hunter-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
+    .media-panel,.possessed-panel,.wall-panel,.hunter-panel,.die-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
+    .media-panel h2,.possessed-panel h2,.wall-panel h2,.hunter-panel h2,.die-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
     .media-phase-badge{color:var(--green-bright)!important}
     .media-type-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:16px 0}
     .media-type-btn{font-family:var(--serif);background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--muted2);
@@ -392,6 +402,25 @@
     .hunter-log{display:flex;flex-direction:column;gap:7px;margin-top:14px}
     .hunter-log-item{padding:9px 11px;background:rgba(0,0,0,.28);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:#cfc7bc;line-height:1.4}
     .hunter-log-empty{padding:12px;border:1px dashed var(--line);color:var(--muted2);text-align:center;font-family:var(--mono);font-size:12px}
+    .die-stats{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+    .die-stat{background:rgba(0,0,0,.4);padding:12px 16px;min-width:138px;border:1px solid var(--line);text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
+    .die-stat strong{display:block;font-family:var(--serif);font-size:28px;color:var(--ink);letter-spacing:.04em;margin-top:4px}
+    .die-current-card{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:16px;max-width:760px;margin:16px auto;padding:18px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);border-left:3px solid var(--amber);text-align:left}
+    .die-current-card .die-face{display:flex;align-items:center;justify-content:center;width:76px;height:76px;background:#efeae0;color:#120f0c;border-radius:12px;font-family:var(--display);font-size:44px;box-shadow:0 0 18px rgba(199,154,75,.24)}
+    .die-current-card h3{margin:0 0 6px;font-size:20px;color:#efeae0}
+    .die-current-card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+    .die-roll-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+    .die-roll-grid article{padding:13px;background:rgba(0,0,0,.32);border:1px solid var(--line);text-align:center}
+    .die-roll-grid strong{display:block;font-family:var(--display);font-size:30px;color:var(--red-bright);line-height:1}
+    .die-roll-grid span{display:block;margin-top:5px;color:#efeae0}
+    .die-roll-grid small{display:block;margin-top:4px;font-family:var(--mono);font-size:11px;color:var(--muted2)}
+    .die-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0}
+    .die-status{margin:12px auto 0;max-width:980px;padding:11px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:13px;line-height:1.45;color:#bcb4a9;text-align:center}
+    .die-status.win{border-color:var(--green);color:var(--green-bright)}
+    .die-status.loss{border-color:var(--red);color:#f1b7ae}
+    .die-history{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+    .die-history-item{padding:9px 11px;background:rgba(0,0,0,.28);border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:#cfc7bc;line-height:1.4}
+    .die-history-empty{padding:12px;border:1px dashed var(--line);color:var(--muted2);text-align:center;font-family:var(--mono);font-size:12px}
     .wall-grid{--wall-cell-size:clamp(178px,21vw,216px);display:grid;grid-template-columns:repeat(auto-fill,var(--wall-cell-size));justify-content:center;gap:10px;margin:18px 0}
     .wall-cell{position:relative;width:var(--wall-cell-size);aspect-ratio:1/1;min-height:0;margin:0;padding:12px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
     .wall-cell:hover{border-color:var(--red);transform:translateY(-1px)}
@@ -715,6 +744,8 @@
       .top-room-content{right:auto;left:0}
     }
     @media(max-width:640px){
+      .challenge-difficulty{grid-template-columns:1fr}
+      .die-current-card{grid-template-columns:1fr;text-align:center;justify-items:center}
       .app-view{padding:28px 16px 70px}
       .lists{grid-template-columns:1fr}
       .tarot-action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
