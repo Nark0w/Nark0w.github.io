@@ -99,6 +99,13 @@
             <p>Consulte rapidement les informations utiles sur les entités de Phasmophobia.</p>
           </div>
         </article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-card-target="open-noobs" aria-label="Ouvrir Phasmophobia pour les noobs">
+          <div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🎓</span></div>
+          <div class="portal-card-body">
+            <h2>Phasmophobia pour les noobs</h2>
+            <p>Des tutos par niveau pour passer de “j’ai peur de la porte” à “je sais ce que je fais”. Presque.</p>
+          </div>
+        </article>
       </div>
       <section class="credits-box" aria-labelledby="credits-title">
         <h2 id="credits-title">Sources et crédits</h2>
@@ -112,6 +119,162 @@
         </div>
         <p>Les informations générales, noms d’objets et certaines images proviennent du wiki communautaire Phasmophobia / Fandom. Cette application est un projet non officiel et n’est affiliée ni à MrTiboute ni aux créateurs du jeu.</p>
       </section>
+    </section>
+  </main>
+
+  <main id="noobs-view" class="app-view challenge-select-view" hidden>
+    <section class="challenge-hub noobs-hub" aria-labelledby="noobs-title">
+      <div class="section-topbar">
+        <button id="back-noobs-home" class="back-challenges-btn" type="button">← Retour à l’accueil</button>
+        <div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div>
+      </div>
+      <header class="hub-header">
+        <div class="hero-kicker">Guide non officiel — zéro honte, beaucoup de lampes</div>
+        <h1 id="noobs-title">Phasmophobia pour les noobs</h1>
+        <p>Choisis ton niveau. Chaque page donne les priorités, les réflexes et les erreurs classiques à éviter.</p>
+      </header>
+      <div class="portal-grid noobs-level-grid">
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="amateur" aria-label="Ouvrir le tuto Amateur"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🔦</span></div><div class="portal-card-body"><h2>Amateur</h2><p>Les bases : camion, matériel, pièce du ghost, premières preuves et sortie vivante.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="intermediate" aria-label="Ouvrir le tuto Intermédiaire"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🌡️</span></div><div class="portal-card-body"><h2>Intermédiaire</h2><p>Enquête plus rapide, santé mentale qui compte, objectifs secondaires et meilleur placement du matériel.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="professional" aria-label="Ouvrir le tuto Professionnel"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">📋</span></div><div class="portal-card-body"><h2>Professionnel</h2><p>La vraie routine : setup efficace, tests ciblés, gestion des chasses et décisions propres.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="nightmare" aria-label="Ouvrir le tuto Cauchemar"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🌙</span></div><div class="portal-card-body"><h2>Cauchemar</h2><p>Moins de preuves, plus de comportement : apprendre à éliminer sans tout voir.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="insanity" aria-label="Ouvrir le tuto Démence"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🧠</span></div><div class="portal-card-body"><h2>Démence</h2><p>Une preuve, peu d’informations, beaucoup de méthode. Le jeu commence à mentir par omission.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="apoc1" aria-label="Ouvrir le tuto Apocalypse 1"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🥉</span></div><div class="portal-card-body"><h2>Apocalypse I</h2><p>Préparation du défi : contrat solo, custom dur, objectifs et survie sur grande map.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="apoc2" aria-label="Ouvrir le tuto Apocalypse 2"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🥈</span></div><div class="portal-card-body"><h2>Apocalypse II</h2><p>Plus punitif : moins de marge, tests plus courts, gestion stricte de l’encens et des déplacements.</p></div></article>
+        <article class="portal-card noobs clickable-card" tabindex="0" data-noob-level-open="apoc3" aria-label="Ouvrir le tuto Apocalypse 3"><div class="portal-card-visual"><span class="portal-icon" aria-hidden="true">🥇</span></div><div class="portal-card-body"><h2>Apocalypse III</h2><p>Le gros morceau : stratégie de preuve minimale, objectifs risqués, discipline et extraction.</p></div></article>
+      </div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="amateur">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-amateur-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-amateur-title">Amateur — arrêter d’avoir peur du camion</h1><p>Objectif : comprendre le cycle d’une enquête sans mourir bêtement.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/a/a4/Tanglewood_Front.png/revision/latest/scale-to-width-down/640?cb=20260303141434" alt="Entrée de Tanglewood dans Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>Commence sur petite maison : tu veux apprendre les réflexes, pas te perdre dans un labyrinthe.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Objectif de niveau</h2><p>Entrer, trouver la pièce favorite, poser 2 ou 3 objets de preuve, cocher le ghost, ressortir. Ne cherche pas encore à optimiser : cherche à comprendre ce que chaque outil raconte.</p></article>
+        <article><h2>Matériel conseillé</h2><p>Lampe + thermomètre pour chercher, EMF pour confirmer une interaction, caméra vidéo pour orbes, Spirit Box avec lumière éteinte, livre posé dans la zone active.</p></article>
+        <article><h2>Routine simple</h2><p>Fais un tour lumières allumées, repère une cachette, trouve la zone froide, dépose le matériel, retourne au camion observer. Reviens uniquement avec un objectif clair.</p></article>
+        <article><h2>Erreur classique</h2><p>Tout garder en main. Dans Phasmophobia, ton sac à dos n’existe pas vraiment : un objet posé au bon endroit travaille pendant que tu fais autre chose.</p></article>
+      </div>
+      <div class="memo-warning"><strong>Réflexe de survie :</strong> si la porte se verrouille, coupe l’électronique en main, tais-toi, cache-toi. Amateur ou pas, le ghost ne respecte pas les stagiaires.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="intermediate">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-intermediate-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-intermediate-title">Intermédiaire — enquêter sans tourner en rond</h1><p>Objectif : accélérer la prise d’informations et commencer à gérer la santé mentale.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/1/1c/Thermometer090_T1.png/revision/latest" alt="Thermomètre de Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>Le thermomètre aide à confirmer une zone, mais l’activité et les sons restent tout aussi importants.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Objectif de niveau</h2><p>Faire une enquête complète avec moins d’allers-retours inutiles. Chaque voyage doit apporter quelque chose : preuve, objectif, photo, sécurité ou élimination.</p></article>
+        <article><h2>Lire la pièce</h2><p>Une pièce froide n’est pas toujours suffisante. Combine température, objets déplacés, portes touchées, sons au micro, EMF et comportement du ghost.</p></article>
+        <article><h2>Santé mentale</h2><p>La lumière protège ta santé mentale. Coupe-la seulement pour Spirit Box, orbes, DOTS caméra ou tests précis. Les pilules ne servent pas à décorer le camion.</p></article>
+        <article><h2>Objectifs secondaires</h2><p>Fais-les quand la zone est connue et que tu as une cachette. Ne fais pas un objectif dangereux juste parce qu’il est écrit dans le journal.</p></article>
+      </div>
+      <div class="memo-warning"><strong>À retenir :</strong> une preuve “absente” n’élimine quelque chose que si le test était propre : bon endroit, bonnes conditions, assez de temps.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="professional">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-professional-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-professional-title">Professionnel — jouer propre, vite, vivant</h1><p>Objectif : construire une routine fiable et arrêter de dépendre de la chance.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/9/93/EMF090_T2.png/revision/latest" alt="Lecteur EMF de Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>En Professionnel, tu dois savoir quoi tester et pourquoi tu le testes.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Début de partie</h2><p>Deux joueurs cherchent la pièce, un sécurise l’électricité/cachettes, un prépare photo/objectifs. En solo : pièce d’abord, cachette ensuite, preuves après.</p></article>
+        <article><h2>Tests ciblés</h2><p>Quand il reste peu de ghosts, choisis le test le moins dangereux : Obake aux UV, Goryo au DOTS caméra, Onryo aux flammes, Yokai à la voix, Banshee à la cible.</p></article>
+        <article><h2>Chasse contrôlée</h2><p>Avant de provoquer : encens, briquet, cachette ou boucle, chemin de retraite. Une chasse non préparée est une loterie avec des chaussures.</p></article>
+        <article><h2>Décision finale</h2><p>Ne cherche pas toutes les preuves si deux comportements suffisent. L’objectif est d’avoir raison, pas de remplir un album souvenir.</p></article>
+      </div>
+      <div class="memo-warning"><strong>Conseil :</strong> note mentalement la santé moyenne au début des chasses : c’est souvent une preuve comportementale déguisée.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="nightmare">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-nightmare-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-nightmare-title">Cauchemar — quand le journal ne suffit plus</h1><p>Objectif : conclure avec preuves limitées et comportements.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/8/80/Edgefield_first_floor_hallway.png/revision/latest/scale-to-width-down/640?cb=20240112130531" alt="Couloir sombre d'Edgefield" loading="lazy" referrerpolicy="no-referrer"><figcaption>Cauchemar apprend une vérité simple : parfois le ghost ne te donnera pas tout.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Objectif de niveau</h2><p>Accepter qu’il manque une preuve. Tu dois savoir éliminer avec les garanties, les impossibilités et les comportements de chasse.</p></article>
+        <article><h2>Vitesse et pas</h2><p>Écoute les pas : Revenant, Deogen, Hantu, Raiju, Moroi, Twins et Thaye donnent énormément d’informations pendant les chasses.</p></article>
+        <article><h2>Tests sans preuve</h2><p>Mimic garde les orbes bonus, Obake peut montrer une empreinte spéciale, Phantom disparaît en photo, Wraith ne marche pas dans le sel.</p></article>
+        <article><h2>Gestion du risque</h2><p>Si un test exige une chasse, prépare-le comme une opération : spot, encens, sortie, silence. Tu testes le ghost, pas ton assurance-vie.</p></article>
+      </div>
+      <div class="memo-warning"><strong>Astuce :</strong> utilise le mémo des entités pour comparer les candidats restants au lieu de tout garder dans ta tête pendant que les lumières clignotent.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="insanity">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-insanity-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-insanity-title">Démence — une preuve, beaucoup de sang-froid</h1><p>Objectif : construire une conclusion avec presque rien.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/b/b1/Entit%C3%A91.png/revision/latest/scale-to-width-down/1000?cb=20220901214054&path-prefix=fr" alt="Entité de Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>En Démence, chaque information sûre vaut de l’or. Chaque supposition coûte cher.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Priorité</h2><p>La preuve unique sert de point d’ancrage. Ensuite, tu cherches des comportements exclusifs : vitesse, capacités, seuils de chasse, interactions impossibles.</p></article>
+        <article><h2>Éviter les faux négatifs</h2><p>Ne barre pas Spirit Box, DOTS ou écriture trop vite. Les conditions doivent être parfaites, sinon ton “absence” n’est qu’un mauvais test.</p></article>
+        <article><h2>Chasses utiles</h2><p>Une chasse peut donner vitesse, accélération, détection électronique, portée audio, comportement de cible. Observe depuis un plan sûr.</p></article>
+        <article><h2>Sortir au bon moment</h2><p>Si tu as un faisceau d’indices cohérent, pars. Rester pour une certitude parfaite transforme souvent une bonne déduction en photo de cadavre.</p></article>
+      </div>
+      <div class="memo-warning"><strong>Règle d’or :</strong> en Démence, tu ne “devines” pas : tu empiles des petits faits jusqu’à ce qu’un ghost reste debout.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="apoc1">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-apoc1-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-apoc1-title">Apocalypse I — préparer le bronze</h1><p>Objectif : apprendre la discipline du défi Apocalypse sans brûler toutes tes ressources mentales.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752" alt="Sunny Meadows dans Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>Apocalypse se prépare comme une expédition : trajet, objectifs, extraction.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Préparation</h2><p>Connais la map, choisis ton chemin, repère les lignes de fuite et accepte d’abandonner une run si les objectifs sont absurdes.</p></article>
+        <article><h2>Objectifs</h2><p>Priorise les objectifs faisables sans chasse. Si un objectif impose une chasse, il doit avoir un plan précis et une raison d’être tenté.</p></article>
+        <article><h2>Survie</h2><p>Encens, briquet et trajet retour sont non négociables. Ton premier but n’est pas d’être héroïque : c’est de revenir au camion avec des infos.</p></article>
+        <article><h2>Lecture du ghost</h2><p>Les preuves peuvent être secondaires. Vitesse, capacité et comportement de chasse deviennent ton vrai tableau d’enquête.</p></article>
+      </div>
+      <div class="memo-warning"><strong>Objectif mental :</strong> Bronze = apprendre la méthode. Ne joue pas Apocalypse comme une partie normale très énervée.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="apoc2">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-apoc2-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-apoc2-title">Apocalypse II — réduire les erreurs</h1><p>Objectif : garder le contrôle quand les paramètres punissent chaque hésitation.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/8/87/Prison_entrance.png/revision/latest/scale-to-width-down/640?cb=20240112131231" alt="Entrée de Prison dans Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>Plus la difficulté monte, plus une route simple vaut mieux qu’un plan brillant mais fragile.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Moins de tests</h2><p>Chaque test doit éliminer plusieurs ghosts ou confirmer une hypothèse forte. Les tests “pour voir” coûtent trop cher.</p></article>
+        <article><h2>Encens</h2><p>Compte tes encens comme des vies. Si tu en utilises un sans information gagnée, la run vient de devenir plus mauvaise.</p></article>
+        <article><h2>Objectifs dangereux</h2><p>Photo du ghost, événement, encens pendant chasse : prépare l’angle, la distance, la retraite. Ne les improvise pas dans un couloir.</p></article>
+        <article><h2>Décision</h2><p>Apocalypse II récompense la conclusion raisonnable. Si deux ghosts restent, choisis le test le plus court ou prends la décision la plus cohérente.</p></article>
+      </div>
+      <div class="memo-warning"><strong>Le piège :</strong> vouloir “juste une info de plus”. À ce niveau, cette phrase est souvent l’écran de mort en version polie.</div>
+    </section>
+  </main>
+
+  <main class="app-view challenge-select-view" hidden data-noob-level-view="apoc3">
+    <section class="memo-shell noob-lesson" aria-labelledby="noob-apoc3-title">
+      <div class="section-topbar"><button class="back-challenges-btn" type="button" data-back-noobs>← Retour aux niveaux</button><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div></div>
+      <header class="memo-header"><h1 id="noob-apoc3-title">Apocalypse III — débloquer la carte dorée</h1><p>Objectif : réussir le vrai défi Apocalypse 3 du jeu pour obtenir la récompense Gold/Legend et le skin de carte ID.</p></header>
+      <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752" alt="Sunny Meadows dans Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>Le défi Apocalypse III se joue en solo sur Sunny Meadows avec un multiplicateur custom très élevé. Ce n’est pas une enquête normale : c’est une extraction chirurgicale.</figcaption></figure>
+      <div class="noob-lesson-grid">
+        <article><h2>Conditions à valider</h2><p>Joue en solo, sur Sunny Meadows, avec un multiplicateur suffisant pour Apocalypse III. Il faut identifier l’entité, réussir les 3 objectifs secondaires, prendre une photo du ghost et quitter vivant.</p></article>
+        <article><h2>Paramètres à viser</h2><p>Base custom très punitive : santé mentale basse, peu ou pas de preuves, ghost rapide, joueur lent, météo/électricité défavorables. Ne modifie pas au hasard : vérifie que le multiplicateur reste au niveau Gold.</p></article>
+        <article><h2>Reset intelligent</h2><p>Reset si les objectifs sont trop dangereux ensemble, si la pièce est trop profonde, ou si le ghost est impossible à identifier sans plusieurs chasses suicidaires. Une bonne run commence souvent avant d’ouvrir la porte.</p></article>
+        <article><h2>Objectifs acceptables</h2><p>Les meilleurs objectifs sont ceux faisables depuis une zone contrôlée : encens, photo, événement proche, crucifix si la pièce est accessible. Les objectifs qui demandent de rester loin et longtemps méritent souvent un reset.</p></article>
+        <article><h2>Plan d’entrée</h2><p>Entre avec lampe, encens/allumeur et outil d’écoute ou objectif. Repère ton trajet retour, garde l’entrée comme zone de repli, et ne t’enfonce pas sans raison claire. Chaque détour doit rapporter une info.</p></article>
+        <article><h2>Identifier sans preuves</h2><p>Écoute les pas et les accélérations : Deogen, Revenant, Hantu, Moroi, Raiju, Twins et Thaye peuvent se trahir. Si le comportement ne donne rien de net, ne transforme pas la run en roulette russe.</p></article>
+        <article><h2>Photo du ghost</h2><p>Prépare l’appareil avant de provoquer. Le meilleur scénario : ghost visible proche, photo rapide, encens immédiat, puis retraite. Si tu dois choisir entre photo parfaite et survie, choisis la survie.</p></article>
+        <article><h2>Extraction</h2><p>Quand l’identité, les 3 objectifs et la photo sont faits, pars. Apocalypse III ne récompense pas les preuves bonus ; il récompense les joueurs qui savent arrêter au bon moment.</p></article>
+      </div>
+      <div class="fiche-rules">
+        <h3 class="fiche-rules-title">Méthode courte recommandée</h3>
+        <div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant la porte : regarde les objectifs. S’ils forcent trop d’exposition, reset sans culpabilité.</p></div>
+        <div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Début de run : sécurise une route simple entrée ↔ zone de repli. Ne cherche pas à “visiter” Sunny Meadows.</p></div>
+        <div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Première info : localise approximativement le ghost par son, activité, objet déplacé ou chasse écoutée depuis une position sûre.</p></div>
+        <div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Milieu de run : valide les objectifs un par un. Après chaque objectif risqué, reviens respirer au camion et réévalue.</p></div>
+        <div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Fin de run : provoque la photo seulement quand ton plan de fuite est prêt. Photo, encens, retrait, journal, départ.</p></div>
+      </div>
+      <div class="memo-warning"><strong>Résumé brutal :</strong> Apocalypse III, ce n’est pas “être courageux”. C’est choisir une run viable, identifier avec peu d’indices, faire la photo sans paniquer, puis sortir vivant avec la carte dorée dans la poche.</div>
     </section>
   </main>
 
@@ -182,6 +345,9 @@
         </article>
       </section>
       <p id="challenge-room-note" class="room-sync-note">Choisis un mode dans la barre du haut avant d’ouvrir un défi.</p>
+      <div class="random-challenge-bar">
+        <button id="random-challenge-btn" class="challenge-launch-btn random-challenge-btn" type="button">Défi aléatoire</button>
+      </div>
       <section class="challenge-category solo-challenges" aria-labelledby="solo-challenges-title">
         <div class="challenge-category-head">
           <span class="challenge-category-kicker">1 joueur minimum</span>
@@ -235,6 +401,58 @@
             <div class="challenge-meta"><span>1-4 joueurs</span><span>Streak</span><span>D4 maudit</span></div>
             <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/de-maudit" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/de-maudit</a></p>
             <button id="open-die-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">▦</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>Le Bingo Phasmo</h2>
+            <p>Enchaîne les parties dans la difficulté de ton choix et coche les objectifs jusqu’à aligner une ligne complète sur ta grille.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>Grille 5x5</span><span>Bingo</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/bingo" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/bingo</a></p>
+            <button id="open-bingo-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual"><div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">🚚</span></div></div>
+          <div class="challenge-card-body">
+            <h2>Le Camion Maudit</h2>
+            <p>À chaque partie, le camion te force à choisir entre deux objets tirés au hasard. L’autre reste interdit pour la partie.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>1 choix forcé</span><span>Objets</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/camion-maudit" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/camion-maudit</a></p>
+            <button class="challenge-launch-btn" type="button" data-open-simple-challenge="truck">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual"><div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">💸</span></div></div>
+          <div class="challenge-card-body">
+            <h2>Le Cauchemar du Pauvre</h2>
+            <p>Enchaîne le plus de parties réussies en Cauchemar avec un équipement limité et tente de battre ta meilleure streak.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>Streak</span><span>Cauchemar</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/cauchemar-pauvre" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/cauchemar-pauvre</a></p>
+            <button class="challenge-launch-btn" type="button" data-open-simple-challenge="poor">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual"><div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">⏱</span></div></div>
+          <div class="challenge-card-body">
+            <h2>5 minutes pour vivre</h2>
+            <p>Une partie express : identifie correctement l’entité et fais survivre au moins un joueur avant la fin du temps imparti.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>5 minutes</span><span>Speedrun</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/5-minutes" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/5-minutes</a></p>
+            <button class="challenge-launch-btn" type="button" data-open-simple-challenge="five">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual"><div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">🎯</span></div></div>
+          <div class="challenge-card-body">
+            <h2>Pari Gagnant</h2>
+            <p>Parie sur une entité avant la partie, puis tente de réussir l’enquête avec ce pari en tête.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>Pari</span><span>Entité aléatoire</span></div>
+            <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/pari-gagnant" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/pari-gagnant</a></p>
+            <button class="challenge-launch-btn" type="button" data-open-simple-challenge="bet">Ouvrir le défi</button>
           </div>
         </article>
         <article class="challenge-select-card">
@@ -962,6 +1180,105 @@
         <h3>Source du défi</h3>
         <p><a href="https://mrtiboute.tv/defis/de-maudit" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
       </div>
+    </div>
+  </main>
+
+  <main id="bingo-challenge-view" class="app-view" hidden>
+    <div class="hunter-container">
+      <div class="hub-topbar">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-toolbar"><button id="back-bingo-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
+      <h1>Le Bingo Phasmo</h1>
+
+      <section class="fiche">
+        <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Grille bingo</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Au choix</div></div></div>
+        <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enchaîner les parties dans la difficulté de votre choix jusqu’à remplir une ligne de bingo.</p></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Démarrage</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Prendre ou générer une grille de bingo 5x5.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Chaque joueur peut utiliser sa propre grille en multijoueur.</p></div></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Les parties se déroulent normalement, sans règle particulière.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Coche une case quand son objectif est validé pendant une partie.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Une ligne verticale, horizontale ou diagonale de 5 cases valide le bingo.</p></div></div>
+        <div class="fiche-block win"><div class="fiche-block-label">Multijoueur</div><p>Le gagnant est le joueur qui remplit sa grille en premier.</p></div>
+      </section>
+
+      <section class="challenge-difficulty" data-difficulty-panel="bingo"><label for="bingo-difficulty">Difficulté</label><select id="bingo-difficulty" data-challenge-difficulty="bingo"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="bingo"></p></section>
+      <section class="challenge-session-control" data-challenge-session="bingo">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="bingo">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="bingo" hidden>Stopper le défi</button>
+        </div>
+      </section>
+      <div class="challenge-live-area" data-challenge-live="bingo" hidden>
+        <section class="bingo-panel" aria-labelledby="bingo-tracker-title">
+          <h2 id="bingo-tracker-title">Grille de bingo</h2>
+          <div class="bingo-stats">
+            <div class="bingo-stat">Cases cochées<strong id="bingo-marked-count">0 / 25</strong></div>
+            <div class="bingo-stat">Lignes<strong id="bingo-line-count">0</strong></div>
+            <div class="bingo-stat">Objectif<strong id="bingo-target">1 ligne</strong></div>
+          </div>
+          <div class="bingo-actions">
+            <button id="bingo-generate-btn" class="warning-btn" type="button">Générer une grille</button>
+            <button id="bingo-reset-marks-btn" class="back-challenges-btn" type="button">Décocher les cases</button>
+            <button id="bingo-reset-btn" class="danger-btn" type="button">Reset Bingo</button>
+          </div>
+          <div class="bingo-board-wrap">
+            <div class="bingo-letters" aria-hidden="true"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
+            <div id="bingo-grid" class="bingo-grid" aria-label="Grille du Bingo Phasmo"></div>
+          </div>
+          <div id="bingo-status" class="bingo-status">Génère une grille pour commencer.</div>
+        </section>
+      </div>
+
+      <div class="credits-box">
+        <h3>Source du défi</h3>
+        <p><a href="https://mrtiboute.tv/defis/bingo" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
+      </div>
+    </div>
+  </main>
+
+  <template id="simple-challenge-template"></template>
+  <main class="app-view" hidden data-simple-challenge-view="truck">
+    <div class="hunter-container"><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div>
+      <div class="challenge-toolbar"><button class="back-challenges-btn" type="button" data-back-simple-challenge>← Retour aux défis</button></div><h1>Le Camion Maudit</h1>
+      <section class="fiche"><div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Choix forcé</div></div><div class="fiche-cell"><div class="fiche-k">Thème</div><div class="fiche-v">Objets</div></div></div><div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Réussir les parties en respectant le choix maudit du camion.</p></div><div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Avant la partie, tire deux objets au hasard.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Choisis l’objet autorisé : l’autre est interdit pour la partie.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>La partie est réussie si l’entité est correctement identifiée et qu’au moins un joueur survit.</p></div></div></section>
+      <section class="challenge-difficulty" data-difficulty-panel="truck"><label for="truck-difficulty">Difficulté</label><select id="truck-difficulty" data-challenge-difficulty="truck"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="truck"></p></section>
+      <section class="challenge-session-control" data-challenge-session="truck"><div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div><div class="challenge-session-actions"><button class="good-btn" type="button" data-challenge-start="truck">Démarrer le défi</button><button class="danger-btn" type="button" data-challenge-stop="truck" hidden>Stopper le défi</button></div></section>
+      <div class="challenge-live-area" data-challenge-live="truck" hidden><section class="simple-panel" data-simple-panel="truck"></section></div><div class="credits-box"><h3>Source du défi</h3><p><a href="https://mrtiboute.tv/defis/camion-maudit" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p></div>
+    </div>
+  </main>
+
+  <main class="app-view" hidden data-simple-challenge-view="poor">
+    <div class="hunter-container"><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div>
+      <div class="challenge-toolbar"><button class="back-challenges-btn" type="button" data-back-simple-challenge>← Retour aux défis</button></div><h1>Le Cauchemar du Pauvre</h1>
+      <section class="fiche"><div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Streak</div></div><div class="fiche-cell"><div class="fiche-k">Difficulté</div><div class="fiche-v">Cauchemar</div></div></div><div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Enchaîner le plus de parties réussies possible en Cauchemar avec peu de moyens.</p></div><div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Joue en Cauchemar.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>La streak augmente si l’entité est correctement identifiée et qu’au moins un joueur survit.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Une erreur ou une équipe entièrement morte met fin à la streak.</p></div></div></section>
+      <section class="challenge-difficulty" data-difficulty-panel="poor"><label for="poor-difficulty">Difficulté</label><select id="poor-difficulty" data-challenge-difficulty="poor"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="poor"></p></section>
+      <section class="challenge-session-control" data-challenge-session="poor"><div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div><div class="challenge-session-actions"><button class="good-btn" type="button" data-challenge-start="poor">Démarrer le défi</button><button class="danger-btn" type="button" data-challenge-stop="poor" hidden>Stopper le défi</button></div></section>
+      <div class="challenge-live-area" data-challenge-live="poor" hidden><section class="simple-panel" data-simple-panel="poor"></section></div><div class="credits-box"><h3>Source du défi</h3><p><a href="https://mrtiboute.tv/defis/cauchemar-pauvre" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p></div>
+    </div>
+  </main>
+
+  <main class="app-view" hidden data-simple-challenge-view="five">
+    <div class="hunter-container"><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div>
+      <div class="challenge-toolbar"><button class="back-challenges-btn" type="button" data-back-simple-challenge>← Retour aux défis</button></div><h1>5 minutes pour vivre</h1>
+      <section class="fiche"><div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Speedrun</div></div><div class="fiche-cell"><div class="fiche-k">Temps</div><div class="fiche-v">5 min</div></div></div><div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Identifier l’entité et repartir vivant avant la fin du temps imparti.</p></div><div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Lance le chrono à l’ouverture de la porte.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>La partie se déroule normalement, mais le temps est limité.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Victoire si l’entité est correctement identifiée et qu’au moins un joueur survit dans le temps.</p></div></div></section>
+      <section class="challenge-difficulty" data-difficulty-panel="five"><label for="five-difficulty">Difficulté</label><select id="five-difficulty" data-challenge-difficulty="five"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="five"></p></section>
+      <section class="challenge-session-control" data-challenge-session="five"><div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div><div class="challenge-session-actions"><button class="good-btn" type="button" data-challenge-start="five">Démarrer le défi</button><button class="danger-btn" type="button" data-challenge-stop="five" hidden>Stopper le défi</button></div></section>
+      <div class="challenge-live-area" data-challenge-live="five" hidden><section class="simple-panel" data-simple-panel="five"></section></div><div class="credits-box"><h3>Source du défi</h3><p><a href="https://mrtiboute.tv/defis/5-minutes" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p></div>
+    </div>
+  </main>
+
+  <main class="app-view" hidden data-simple-challenge-view="bet">
+    <div class="hunter-container"><div class="hub-topbar"><div class="lang-control"><span class="lang-label">Langue</span><div class="lang-buttons"><button type="button" class="lang-btn" data-lang="fr">FR</button><button type="button" class="lang-btn" data-lang="en">EN</button></div></div></div>
+      <div class="challenge-toolbar"><button class="back-challenges-btn" type="button" data-back-simple-challenge>← Retour aux défis</button></div><h1>Pari Gagnant</h1>
+      <section class="fiche"><div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Pari</div></div><div class="fiche-cell"><div class="fiche-k">Thème</div><div class="fiche-v">Entité</div></div></div><div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Parier sur une entité avant ou au début de la partie, puis réussir l’enquête.</p></div><div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Tire ou choisis une entité comme pari.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Joue la partie normalement en gardant ce pari.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Victoire si le pari correspond à l’entité réelle et qu’au moins un joueur survit.</p></div></div></section>
+      <section class="challenge-difficulty" data-difficulty-panel="bet"><label for="bet-difficulty">Difficulté</label><select id="bet-difficulty" data-challenge-difficulty="bet"><option value="noob">Noob</option><option value="easy">Facile</option><option value="normal" selected>Normal</option><option value="hard">Difficile</option><option value="pro">Pro</option></select><p data-difficulty-summary="bet"></p></section>
+      <section class="challenge-session-control" data-challenge-session="bet"><div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.</p></div><div class="challenge-session-actions"><button class="good-btn" type="button" data-challenge-start="bet">Démarrer le défi</button><button class="danger-btn" type="button" data-challenge-stop="bet" hidden>Stopper le défi</button></div></section>
+      <div class="challenge-live-area" data-challenge-live="bet" hidden><section class="simple-panel" data-simple-panel="bet"></section></div><div class="credits-box"><h3>Source du défi</h3><p><a href="https://mrtiboute.tv/defis/pari-gagnant" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p></div>
     </div>
   </main>
 
