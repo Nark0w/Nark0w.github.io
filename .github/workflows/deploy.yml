@@ -1,39 +1,55 @@
-name: Deploy to GitHub Pages
+name: CI/CD
 
 on:
+  pull_request:
+    branches: ["main"]
   push:
     branches: ["main"]
   workflow_dispatch:
 
-# Explicit permissions required by actions/deploy-pages (OIDC + Pages write)
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment; do not cancel in-progress runs
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  validate:
+    name: Validate and build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-      - name: Upload artifact
+      - name: Run quality checks
+        run: npm run check
+
+      - name: Build deployment artifact
+        run: npm run build
+
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "dist"
 
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
