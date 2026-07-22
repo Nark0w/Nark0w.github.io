@@ -391,6 +391,7 @@ const phasmophobiaObjects=[
       {fr:"Revenant",en:"Revenant",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Ombre",en:"Shade",thresholdFr:"35 %",thresholdEn:"35%",summaryFr:"Ne peut pas démarrer une chasse si un joueur se trouve dans sa pièce actuelle.",summaryEn:"Cannot start a hunt while a player is in its current room.",tone:"late"},
       {fr:"Démon",en:"Demon",thresholdFr:"70 / 100 %",thresholdEn:"70 / 100%",summaryFr:"Seuil normal 70 %. Sa capacité rare peut déclencher une chasse à n’importe quel niveau de santé mentale ; à considérer comme atteignable jusqu'à 100 %.",summaryEn:"Normal threshold is 70%. Its rare ability can trigger a hunt at any sanity level, effectively up to 100%.",tone:"early",thresholdValues:[70],powerThresholdValues:[100]},
+      {fr:"Deildegast",en:"Deildegast",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard. Sa vitesse pendant la chasse dépend du nombre d’objets environnementaux distincts déplacés depuis la chasse précédente.",summaryEn:"Standard threshold. Its hunt speed depends on the number of distinct environmental objects moved since the previous hunt.",tone:"variable"},
       {fr:"Yurei",en:"Yurei",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Oni",en:"Oni",thresholdFr:"50 %",thresholdEn:"50%",summaryFr:"Seuil standard.",summaryEn:"Standard threshold.",tone:"standard"},
       {fr:"Yokai",en:"Yokai",thresholdFr:"50 / 80 %",thresholdEn:"50 / 80%",summaryFr:"Seuil normal 50 %. Son pouvoir vocal monte temporairement le seuil à 80 % lorsqu’un joueur utilise le chat vocal dans sa pièce.",summaryEn:"Normal threshold is 50%. Its voice power temporarily raises the threshold to 80% when a player uses voice chat in its room.",tone:"early",thresholdValues:[50],powerThresholdValues:[80]},
@@ -420,7 +421,7 @@ const phasmophobiaObjects=[
       {id:"writing",fr:"Écriture fantomatique",en:"Ghost Writing",short:"BOOK"},
       {id:"spirit",fr:"Spirit Box",en:"Spirit Box",short:"SB"}
     ];
-    const ghostJournalOrder=["Aswang","Banshee","Dayan","Demon","Deogen","Gallu","Goryo","Hantu","Jinn","Kormos","Mare","Moroi","Myling","Obake","Obambo","Oni","Onryo","Phantom","Poltergeist","Raiju","Revenant","Shade","Spirit","Thaye","The Mimic","The Twins","Wraith","Yokai","Yurei"];
+    const ghostJournalOrder=["Aswang","Banshee","Dayan","Deildegast","Demon","Deogen","Gallu","Goryo","Hantu","Jinn","Kormos","Mare","Moroi","Myling","Obake","Obambo","Oni","Onryo","Phantom","Poltergeist","Raiju","Revenant","Shade","Spirit","Thaye","The Mimic","The Twins","Wraith","Yokai","Yurei"];
     const ghostEvidenceMap={
       Spirit:["emf","spirit","writing"],
       Wraith:["emf","spirit","dots"],
@@ -445,6 +446,7 @@ const phasmophobiaObjects=[
       "The Mimic":["spirit","uv","freezing"],
       Moroi:["spirit","writing","freezing"],
       Deogen:["spirit","writing","dots"],
+      Deildegast:["emf","writing","dots"],
       Thaye:["orbs","writing","dots"],
       Aswang:["freezing","writing","dots"],
       Dayan:["emf","orbs","spirit"],
@@ -644,7 +646,30 @@ const phasmophobiaObjects=[
       {id:"ridgeview",name:"10 Ridgeview Court",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/10_Ridgeview_Court",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/5/51/Rooms_Ridgeview.png/revision/latest?cb=20251112081250&path-prefix=fr"}]},
       {id:"nells-diner",name:"Nell's Diner",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/Nell%27s_Diner",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/b/bd/Rooms_Nells_Diner.png/revision/latest?cb=20260304165818&path-prefix=fr"}]},
       {id:"grafton",name:"Grafton Farmhouse",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/Grafton_Farmhouse",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/3/37/Rooms_Grafton.png/revision/latest?cb=20260304164445&path-prefix=fr"}]},
-      {id:"willow",name:"13 Willow Street",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/13_Willow_Street",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/f/f6/Rooms_Willow.png/revision/latest?cb=20251112081400&path-prefix=fr"}]},
+      {
+        id:"willow",name:"13 Willow Street",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/13_Willow_Street",
+        images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/f/f6/Rooms_Willow.png/revision/latest?path-prefix=fr"}],
+        update:{
+          labelFr:"Remaniée en v0.18.0.0 · 21 juillet 2026",labelEn:"Reworked in v0.18.0.0 · July 21, 2026",
+          summaryFr:"La disposition générale reste familière, mais plusieurs pièces ont changé d’usage et le sous-sol est désormais beaucoup plus ouvert.",
+          summaryEn:"The overall layout remains familiar, but several rooms have been repurposed and the basement is now much more open.",
+          highlightsFr:[
+            "11 pièces : une seule chambre, un atelier d’art à la place de l’ancienne seconde chambre et une salle de sport à la place du garage.",
+            "Sous-sol remanié : buanderie, salle de sport et bar / salle de jeux.",
+            "Disjoncteur : deux emplacements possibles, dans la salle de sport ou la buanderie.",
+            "Cachettes principales : salon, garde-manger, atelier, deux dans la chambre, sous l’escalier et dans la buanderie.",
+            "Objets maudits : boîte à musique au salon, cercle dans la cuisine, miroir dans la salle de sport, poupée dans la chambre, patte dans l’atelier, tarot au bar et Ouija près de la buanderie."
+          ],
+          highlightsEn:[
+            "11 rooms: one bedroom, an art studio replacing the former second bedroom, and a gym replacing the garage.",
+            "Reworked basement: laundry room, sports room, and bar / game room.",
+            "Fuse box: two possible locations, in the gym or the laundry room.",
+            "Main hiding spots: living room, pantry, art studio, two in the bedroom, under the stairs, and in the laundry room.",
+            "Cursed possessions: Music Box in the living room, Summoning Circle in the kitchen, Mirror in the gym, Doll in the bedroom, Paw in the art studio, Tarot in the bar, and Ouija near the laundry room."
+          ],
+          source:"https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes"
+        }
+      },
       {id:"camp-woodwind",name:"Camp Woodwind",size:"small",page:"https://phasmophobia.fandom.com/fr/wiki/Camp_Woodwind",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/7/78/Rooms_Camp_Woodwind.png/revision/latest?cb=20260304161941&path-prefix=fr"}]},
       {id:"point-hope",name:"Point Hope",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Point_Hope",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/1/11/Rooms_Point_Hope.png/revision/latest?cb=20260304174801&path-prefix=fr"}]},
       {id:"bleasdale",name:"Bleasdale Farmhouse",size:"medium",page:"https://phasmophobia.fandom.com/fr/wiki/Bleasdale_Farmhouse",images:[{fr:"Plan des pièces",en:"Room layout",url:"https://static.wikia.nocookie.net/phasmophobia/images/0/03/Rooms_Bleasdale.png/revision/latest?cb=20260304165201&path-prefix=fr"}]},
@@ -816,6 +841,8 @@ const phasmophobiaObjects=[
       "Chaque média unique réussi (photo, vidéo ou capture audio de la liste) débloque un équipement tiré au hasard.":"Each unique media captured (photo, video or audio from the list) unlocks one randomly chosen item.",
       "Un même type de média ne compte qu’une fois : variez vos preuves.":"The same media type only counts once: vary your evidence.",
       "Vous ne pouvez utiliser que l’équipement déjà débloqué pour progresser.":"You may only use already-unlocked equipment to progress.",
+      "Info v0.18.0.0 :":"v0.18.0.0 update:",
+      "une lecture EMF 5 peut désormais fournir sa propre photo. Si plusieurs médias sont cadrés, le jeu priorise le média unique ou le mieux récompensé.":"an EMF Level 5 reading can now provide its own photo. If several media targets are framed, the game prioritizes the unique or highest-reward media.",
       "Tirez les rôles en secret : 3 Enquêteurs et 1 Possédé (utilisez le tirage ci-dessus).":"Draw roles secretly: 3 Investigators and 1 Possessed (use the draw above).",
       "Les Enquêteurs collectent les preuves et votent en fin de partie sur le type de fantôme.":"Investigators collect evidence and vote on the ghost type at the end.",
       "Le Possédé agit normalement mais sape l’enquête : fausses infos, gaspillage d’équipement, isolement d’un coéquipier.":"The Possessed acts normal but undermines the investigation: false info, wasted gear, isolating a teammate.",
@@ -907,10 +934,10 @@ const phasmophobiaObjects=[
       "Rechercher une entité":"Search for a ghost",
       "Personnage du jeu Phasmophobia, côté gentil":"Phasmophobia game character, nice side",
       "Entité de Phasmophobia, côté pas gentil":"Phasmophobia ghost, not-nice side",
-      "29 entités":"29 ghosts",
+      "30 entités":"30 ghosts",
       "Pourcentage de santé mentale":"Sanity percentage",
-      "Données de chasse régulière vérifiées le 30 juin 2026. Les valeurs conditionnelles sont précisées sur chaque fiche.":"Regular-hunt data verified on June 30, 2026. Conditional values are detailed on each card.",
-      "Données de chasse régulière vérifiées le 30 juin 2026. Les valeurs conditionnelles sont précisées sur chaque ligne.":"Regular-hunt data verified on June 30, 2026. Conditional values are detailed on each row.",
+      "Données de chasse régulière vérifiées le 22 juillet 2026. Les valeurs conditionnelles sont précisées sur chaque ligne.":"Regular-hunt data verified on July 22, 2026. Conditional values are detailed on each row.",
+      "Notes officielles v0.18.0.0":"Official v0.18.0.0 patch notes",
       "Aucune entité ne correspond à la recherche.":"No ghost matches your search.",
       "Défis Phasmophobia":"Phasmophobia Challenges",
       "Choisis un défi pour ouvrir sa propre vue. Toute l’application, les règles et la progression sont réunies dans un seul fichier HTML.":"Choose a challenge to open its dedicated view. The entire app, its rules and your progress are contained in a single HTML file.",
@@ -1699,6 +1726,7 @@ const phasmophobiaObjects=[
         Raiju:{fr:"1,7 / 2,5 m/s",en:"1.7 / 2.5 m/s",summaryFr:"Passe à 2,5 m/s près d'un appareil électronique actif au même étage : 6 m petite carte, 8 m moyenne, 10 m grande. Interférences et battements de cœur à 15 m. Hors électronique, vitesse standard ; l'accélération LoS peut s'accumuler en arrière-plan.",summaryEn:"Moves at 2.5 m/s near active electronics on the same floor: 6 m small map, 8 m medium, 10 m large. Interference and heartbeat at 15 m. Away from electronics, standard speed; LoS acceleration can build in the background.",values:[1.7,2.5],tone:"fast"},
         Moroi:{fr:"1,5 → 3,71 m/s",en:"1.5 → 3.71 m/s",summaryFr:"Sa vitesse de base dépend de la santé mentale moyenne : 1,5 m/s à 45 % ou plus, jusqu'à 2,25 m/s entre 0 et 5 %. Avec l'accélération de ligne de mire, il peut atteindre environ 3,71 m/s. Peut maudire via Spirit Box, micro parabolique ou enregistreur de son.",summaryEn:"Base speed depends on average sanity: 1.5 m/s at 45% or above, up to 2.25 m/s between 0 and 5%. With line-of-sight acceleration it can reach about 3.71 m/s. Can curse through Spirit Box, parabolic mic or sound recorder.",values:[1.5,1.583,1.66,1.749,1.832,1.915,1.998,2.081,2.164,2.25,3.71],walkValues:[1.5,2.25,3.71],tone:"fast"},
         Deogen:{fr:"0,4 → 3,0 m/s",en:"0.4 → 3.0 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. Il sait toujours où sont les joueurs : 3 m/s au-dessus de 6 m, distance x 0,15 m/s sous 6 m, minimum 0,4 m/s. Réponse Spirit Box unique possible à moins de 1 m.",summaryEn:"Does not gain line-of-sight speed. It always knows where players are: 3 m/s above 6 m, distance x 0.15 m/s below 6 m, minimum 0.4 m/s. Unique Spirit Box response possible within 1 m.",values:[0.4,3],tone:"variable"},
+        Deildegast:{fr:"0,4 → 3,0 m/s",en:"0.4 → 3.0 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. Sans objet déplacé, il chasse à environ 3 m/s. Chaque objet environnemental distinct déplacé entre deux chasses ralentit la chasse suivante, jusqu’à 30 objets et un minimum d’environ 0,4 m/s ; le compteur repart après la chasse.",summaryEn:"Does not gain line-of-sight speed. With no objects moved, it hunts at about 3 m/s. Each distinct environmental object moved between hunts slows the next hunt, up to 30 objects and a minimum of about 0.4 m/s; the counter resets after the hunt.",values:[0.4,3],tone:"variable"},
         Thaye:{fr:"1,0 → 2,75 m/s",en:"1.0 → 2.75 m/s",summaryFr:"Ne gagne pas de vitesse en ligne de mire. À l'âge 0 : 2,75 m/s, 75 % de seuil et 200 % d'activité. Perd 0,175 m/s, 6 % de seuil et 15 % d'activité par âge jusqu'à 1 m/s, 15 % et 50 %.",summaryEn:"Does not gain line-of-sight speed. At age 0: 2.75 m/s, 75% threshold and 200% activity. Loses 0.175 m/s, 6% threshold and 15% activity per age down to 1 m/s, 15% and 50%.",values:[1,1.175,1.35,1.525,1.7,1.875,2.05,2.225,2.4,2.575,2.75],walkValues:[1,2.75],tone:"variable"},
         Aswang:{fr:"1,53 → 2,53 m/s",en:"1.53 → 2.53 m/s",summaryFr:"Vitesse de base 1,53 m/s. Accélération de ligne de mire plus rapide : +0,075 fois sa vitesse de base par seconde, maximum 2,53 m/s après environ 8,67 s. Ne tue pas dans une cachette officielle correctement utilisée.",summaryEn:"Base speed is 1.53 m/s. Faster line-of-sight acceleration: +0.075 times its base speed per second, max 2.53 m/s after about 8.67 s. Cannot kill inside a correctly used official hiding spot.",values:[1.53,2.53],walkAccel:{base:1.53,max:2.53,seconds:8.67},tone:"variable"},
         Dayan:{fr:"1,2 / 1,7 → 2,8 / 2,25 m/s",en:"1.2 / 1.7 → 2.8 / 2.25 m/s",summaryFr:"À moins de 10 m, vitesse fixe de 1,2 m/s si le joueur le plus proche est immobile et 2,25 m/s s'il bouge. Sans joueur proche, vitesse standard 1,7 → 2,8 m/s ; l'accélération de ligne de mire peut s'accumuler en arrière-plan.",summaryEn:"Within 10 m, fixed 1.2 m/s if the closest player stands still and 2.25 m/s if they move. With no nearby player, standard 1.7 -> 2.8 m/s; line-of-sight acceleration can build in the background.",values:[1.2,1.7,2.25,2.8],walkValues:[1.2,2.25,2.8],tone:"variable"},
@@ -1771,6 +1799,7 @@ const phasmophobiaObjects=[
         "The Twins":["specific","specific"],
         Moroi:["base","specific","max"],
         Deogen:["specific","specific"],
+        Deildegast:["specific","specific"],
         Thaye:["specific","specific"]
       };
       const kinds=specificNames[ghost.en]||values.map((value,index)=>index===0?"base":index===values.length-1?"max":"specific");
@@ -1898,6 +1927,7 @@ const phasmophobiaObjects=[
         "The Mimic":{fr:["Imite une autre entité.","Copie ses pouvoirs, seuil et vitesse.","Change d'imitation toutes les 30 à 120 s.","Ne change pas pendant une chasse.","Orbes toujours présents en preuve bonus."],en:["Mimics another ghost.","Copies its abilities, threshold and speed.","Changes mimic every 30 to 120s.","Does not change during a hunt.","Ghost Orbs always appear as bonus evidence."]},
         Moroi:{fr:["Preuve Spirit Box garantie.","Spirit Box/micro/enregistreur peuvent maudire.","Malédiction : drain passif doublé.","La lumière ne bloque plus le drain.","Plus rapide quand la santé baisse.","Encens aveugle 50 % plus longtemps."],en:["Spirit Box evidence guaranteed.","Spirit Box/mic/recorder can curse.","Curse doubles passive sanity drain.","Light no longer stops the drain.","Faster as sanity drops.","Incense blinds it 50% longer."]},
         Deogen:{fr:["Preuve Spirit Box garantie.","Sait toujours où sont les joueurs.","À distance : 3 m/s.","Près de la cible : 0,4 m/s.","Très visible en chasse.","Respiration unique à la Spirit Box."],en:["Spirit Box evidence guaranteed.","Always knows every player's location.","At range: 3 m/s.","Near its target: 0.4 m/s.","Very visible during hunts.","Unique Spirit Box breathing response."]},
+        Deildegast:{fr:["Preuves : EMF 5, Écriture et D.O.T.S.","Seuil de chasse : 50 %.","Débute chaque cycle à environ 3 m/s.","Déplacer des objets du décor ralentit la chasse suivante.","Jusqu’à 30 objets distincts comptabilisés.","Minimum : environ 0,4 m/s.","Aucune accélération en ligne de mire.","Les joueurs morts peuvent aussi déplacer les objets."],en:["Evidence: EMF 5, Ghost Writing, and D.O.T.S.","Hunt threshold: 50%.","Starts each cycle at about 3 m/s.","Moving environmental objects slows the next hunt.","Up to 30 distinct objects are counted.","Minimum: about 0.4 m/s.","No line-of-sight acceleration.","Dead players can also move objects."]},
         Thaye:{fr:["Vieillit près des joueurs.","Jeune : 2,75 m/s et seuil 75 %.","Vieux : 1 m/s et seuil 15 %.","Activité : 200 % à 50 %.","Aucune accélération en ligne de mire."],en:["Ages near players.","Young: 2.75 m/s and 75% threshold.","Old: 1 m/s and 15% threshold.","Activity: 200% down to 50%.","No line-of-sight acceleration."]},
         Gallu:{fr:["Trois états : normal, enragé, affaibli.","Enragé : 1,955 m/s et seuil 60 %.","Affaibli : 1,36 m/s et seuil 40 %.","Enragé : ne perturbe pas le sel.","Encens : 4/5/6 s selon l'état.","La portée du crucifix varie selon l'état."],en:["Three states: normal, enraged, weakened.","Enraged: 1.955 m/s and 60% threshold.","Weakened: 1.36 m/s and 40% threshold.","Enraged: does not disturb salt.","Incense: 4/5/6s by state.","Crucifix range changes by state."]},
         Dayan:{fr:["Réagit au joueur le plus proche à moins de 10 m.","Joueur en mouvement : 2,25 m/s et seuil 65 %.","Joueur immobile : 1,2 m/s et seuil 45 %.","Sans joueur proche : comportement standard."],en:["Reacts to the nearest player within 10m.","Moving player: 2.25 m/s and 65% threshold.","Still player: 1.2 m/s and 45% threshold.","No nearby player: standard behavior."]},
@@ -2157,6 +2187,15 @@ const phasmophobiaObjects=[
       mapMemoList.innerHTML=mapRoomLayouts.map(map=>{
         const size=cursedSizeLabel(map.size);
         const imageClass=map.images.length>1?" multi":"";
+        const update=map.update;
+        const updateHtml=update?`<section class="map-room-update">
+          <div class="map-room-update-head">
+            <strong>${escapeHtml(currentLanguage==="en"?update.labelEn:update.labelFr)}</strong>
+            <a href="${update.source}" target="_blank" rel="noopener noreferrer">${escapeHtml(currentLanguage==="en"?"Official patch notes":"Notes officielles")}</a>
+          </div>
+          <p>${escapeHtml(currentLanguage==="en"?update.summaryEn:update.summaryFr)}</p>
+          <ul>${(currentLanguage==="en"?update.highlightsEn:update.highlightsFr).map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </section>`:"";
         const images=map.images.map(image=>{
           const label=currentLanguage==="en"?image.en:image.fr;
           const alt=currentLanguage==="en"?`${map.name} room layout - ${label}`:`Découpage des pièces de ${map.name} - ${label}`;
@@ -2173,6 +2212,7 @@ const phasmophobiaObjects=[
             </div>
             <a class="map-room-source" href="${map.page}" target="_blank" rel="noopener noreferrer">${escapeHtml(openLabel)}</a>
           </div>
+          ${updateHtml}
           <div class="map-room-images${imageClass}">
             ${images}
           </div>

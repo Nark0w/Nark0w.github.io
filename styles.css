@@ -705,11 +705,25 @@
     .map-room-size{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--green-bright)}
     .map-room-source{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 11px;background:rgba(0,0,0,.36);border:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none}
     .map-room-source:hover{border-color:var(--green);color:var(--green-bright);background:rgba(111,174,126,.1)}
+    .map-room-update{margin:0 0 14px;padding:14px;background:rgba(111,174,126,.08);border:1px solid rgba(111,174,126,.28);border-left:3px solid var(--green)}
+    .map-room-update-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .map-room-update-head strong{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--green-bright)}
+    .map-room-update-head a{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line)}
+    .map-room-update-head a:hover{color:var(--green-bright);border-color:var(--green)}
+    .map-room-update p{margin:0 0 9px;color:#cfc7bc;line-height:1.45}
+    .map-room-update ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:7px 18px;margin:0;padding:0;list-style:none;color:#a59c91;font-size:12px;line-height:1.4}
+    .map-room-update li{position:relative;padding-left:12px}
+    .map-room-update li::before{content:"•";position:absolute;left:0;color:var(--green-bright)}
     .map-room-images{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
     .map-room-images.multi{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
     .map-room-figure{margin:0;background:#0e0b09;border:1px solid var(--line-soft);padding:10px}
     .map-room-figure figcaption{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
     .map-room-figure img{width:100%;max-height:820px;object-fit:contain;display:block;background:#050403}
+
+    @media(max-width:620px){
+      .map-room-update-head{align-items:flex-start;flex-direction:column}
+      .map-room-update ul{grid-template-columns:1fr}
+    }
 
     /* ----- fun memo ----- */
     .fun-memo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,340px));justify-content:center;gap:18px}
