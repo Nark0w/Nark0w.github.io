@@ -460,6 +460,7 @@ const phasmophobiaObjects=[
       Banshee:"https://static.wikia.nocookie.net/phasmophobia/images/2/26/Banshee_Discovered.jpg/revision/latest",
       Dayan:"assets/ghosts/dayan.png",
       Demon:"https://static.wikia.nocookie.net/phasmophobia/images/f/f5/Demon_Discovered.jpg/revision/latest",
+      Deildegast:"assets/ghosts/deildegast.png",
       Deogen:"https://static.wikia.nocookie.net/phasmophobia/images/d/dd/Deogen_Discovered.jpg/revision/latest",
       Gallu:"assets/ghosts/gallu.png",
       Goryo:"https://static.wikia.nocookie.net/phasmophobia/images/6/6b/Goryo_Discovered.jpg/revision/latest",
