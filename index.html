@@ -258,14 +258,14 @@
       <header class="memo-header"><h1 id="noob-apoc3-title">Apocalypse III — débloquer la carte dorée</h1><p>Objectif : réussir le vrai défi Apocalypse 3 du jeu pour obtenir la récompense Gold/Legend et le skin de carte ID.</p></header>
       <figure class="noob-lesson-hero"><img src="https://static.wikia.nocookie.net/phasmophobia/images/c/cb/Smmi_updated1.png/revision/latest/scale-to-width-down/640?cb=20240112131752" alt="Sunny Meadows dans Phasmophobia" loading="lazy" referrerpolicy="no-referrer"><figcaption>Le défi Apocalypse III se joue en solo sur Sunny Meadows avec un multiplicateur custom très élevé. Ce n’est pas une enquête normale : c’est une extraction chirurgicale.</figcaption></figure>
       <div class="noob-lesson-grid">
-        <article><h2>Conditions à valider</h2><p>Joue en solo, sur Sunny Meadows, avec un multiplicateur suffisant pour Apocalypse III. Il faut identifier l’entité, réussir les 3 objectifs secondaires, prendre une photo du ghost et quitter vivant.</p></article>
+        <article><h2>Conditions à valider</h2><p>Joue en solo, sur Sunny Meadows, avec un multiplicateur suffisant pour Apocalypse III. Il faut identifier l’entité, réussir les 3 objectifs secondaires, capturer un média (photo, vidéo ou audio) et quitter vivant.</p></article>
         <article><h2>Paramètres à viser</h2><p>Base custom très punitive : santé mentale basse, peu ou pas de preuves, ghost rapide, joueur lent, météo/électricité défavorables. Ne modifie pas au hasard : vérifie que le multiplicateur reste au niveau Gold.</p></article>
         <article><h2>Reset intelligent</h2><p>Reset si les objectifs sont trop dangereux ensemble, si la pièce est trop profonde, ou si le ghost est impossible à identifier sans plusieurs chasses suicidaires. Une bonne run commence souvent avant d’ouvrir la porte.</p></article>
         <article><h2>Objectifs acceptables</h2><p>Les meilleurs objectifs sont ceux faisables depuis une zone contrôlée : encens, photo, événement proche, crucifix si la pièce est accessible. Les objectifs qui demandent de rester loin et longtemps méritent souvent un reset.</p></article>
         <article><h2>Plan d’entrée</h2><p>Entre avec lampe, encens/allumeur et outil d’écoute ou objectif. Repère ton trajet retour, garde l’entrée comme zone de repli, et ne t’enfonce pas sans raison claire. Chaque détour doit rapporter une info.</p></article>
-        <article><h2>Identifier sans preuves</h2><p>Écoute les pas et les accélérations : Deogen, Revenant, Hantu, Moroi, Raiju, Twins et Thaye peuvent se trahir. Si le comportement ne donne rien de net, ne transforme pas la run en roulette russe.</p></article>
-        <article><h2>Photo du ghost</h2><p>Prépare l’appareil avant de provoquer. Le meilleur scénario : ghost visible proche, photo rapide, encens immédiat, puis retraite. Si tu dois choisir entre photo parfaite et survie, choisis la survie.</p></article>
-        <article><h2>Extraction</h2><p>Quand l’identité, les 3 objectifs et la photo sont faits, pars. Apocalypse III ne récompense pas les preuves bonus ; il récompense les joueurs qui savent arrêter au bon moment.</p></article>
+        <article><h2>Identifier sans preuves</h2><p>Écoute les pas et les accélérations : Deildegast, Deogen, Revenant, Hantu, Moroi, Raiju, Twins et Thaye peuvent se trahir. Si le comportement ne donne rien de net, ne transforme pas la run en roulette russe.</p></article>
+        <article><h2>Média requis</h2><p>Depuis la v0.18.0.0, n’importe quel média valide convient : photo, vidéo ou audio. Choisis la capture la plus sûre au lieu de forcer une photo du ghost.</p></article>
+        <article><h2>Extraction</h2><p>Quand l’identité, les 3 objectifs et le média sont validés, pars. Apocalypse III ne récompense pas les risques bonus ; il récompense les joueurs qui savent arrêter au bon moment.</p></article>
       </div>
       <div class="fiche-rules">
         <h3 class="fiche-rules-title">Méthode courte recommandée</h3>
@@ -273,9 +273,9 @@
         <div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Début de run : sécurise une route simple entrée ↔ zone de repli. Ne cherche pas à “visiter” Sunny Meadows.</p></div>
         <div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Première info : localise approximativement le ghost par son, activité, objet déplacé ou chasse écoutée depuis une position sûre.</p></div>
         <div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Milieu de run : valide les objectifs un par un. Après chaque objectif risqué, reviens respirer au camion et réévalue.</p></div>
-        <div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Fin de run : provoque la photo seulement quand ton plan de fuite est prêt. Photo, encens, retrait, journal, départ.</p></div>
+        <div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Fin de run : sécurise le média le moins risqué disponible, puis vérifie le journal et pars dès que tout est validé.</p></div>
       </div>
-      <div class="memo-warning"><strong>Résumé brutal :</strong> Apocalypse III, ce n’est pas “être courageux”. C’est choisir une run viable, identifier avec peu d’indices, faire la photo sans paniquer, puis sortir vivant avec la carte dorée dans la poche.</div>
+      <div class="memo-warning"><strong>Résumé brutal :</strong> Apocalypse III, ce n’est pas “être courageux”. C’est choisir une run viable, identifier avec peu d’indices, sécuriser un média, puis sortir vivant avec la carte dorée dans la poche.</div>
     </section>
   </main>
 
@@ -584,7 +584,7 @@
       </div>
       <div class="memo-controls">
         <input id="ghost-search" class="memo-search" type="search" placeholder="Rechercher une entité…" aria-label="Rechercher une entité">
-        <span id="ghost-visible-count" class="ghost-count">29 entités</span>
+        <span id="ghost-visible-count" class="ghost-count">30 entités</span>
       </div>
       <div class="ghost-book">
         <aside class="ghost-book-left">
@@ -603,7 +603,7 @@
         <div id="ghost-walk-global-scale" class="ghost-walk-global-scale" aria-label="Vitesse des sons"></div>
       </div>
       <div id="ghost-memo-list" class="ghost-chart" aria-live="polite"></div>
-      <p class="memo-source">Données de chasse régulière vérifiées le 30 juin 2026. Les valeurs conditionnelles sont précisées sur chaque ligne.</p>
+      <p class="memo-source">Données de chasse régulière vérifiées le 22 juillet 2026. Les valeurs conditionnelles sont précisées sur chaque ligne. <a href="https://kineticgames.co.uk/news/phasmophobia-v01800-patch-notes" target="_blank" rel="noopener noreferrer">Notes officielles v0.18.0.0</a></p>
     </section>
   </main>
 
@@ -936,6 +936,7 @@
       <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">1 partie</div></div><div class="fiche-cell"><div class="fiche-k">Thème</div><div class="fiche-v">Médias</div></div></div>
       <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Débloquer assez d’équipement pour identifier le fantôme, en capturant des médias uniques. Chaque média réussi débloque un objet aléatoire.</p></div>
       <div class="fiche-rules"><h3 class="fiche-rules-title">Règles</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Vous démarrez l’enquête avec l’équipement de base minimum (lampe torche uniquement).</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Chaque média unique réussi (photo, vidéo ou capture audio de la liste) débloque un équipement tiré au hasard.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Un même type de média ne compte qu’une fois : variez vos preuves.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Vous ne pouvez utiliser que l’équipement déjà débloqué pour progresser.</p></div></div>
+      <div class="memo-warning"><strong>Info v0.18.0.0 :</strong> une lecture EMF 5 peut désormais fournir sa propre photo. Si plusieurs médias sont cadrés, le jeu priorise le média unique ou le mieux récompensé.</div>
       <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Victoire si vous identifiez correctement le fantôme avec l’équipement débloqué au cours de la partie.</p></div>
     </section>
 
