@@ -109,12 +109,13 @@
       </div>
       <section class="credits-box" aria-labelledby="credits-title">
         <h2 id="credits-title">Sources et crédits</h2>
-        <p>Les défis Le Tarot Surprise, Média Surprise et Le Mur de la mort, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
+        <p>Les défis Le Tarot Surprise, Média Surprise, Le Mur de la mort et La Coupe du Monde Phasmophobia, ainsi que leurs règles originales, ont été créés par MrTiboute.</p>
         <div class="credit-links">
           <a class="credit-link" href="https://mrtiboute.tv/defis/tarot-surprise" target="_blank" rel="noopener noreferrer">Source originale — Le Tarot Surprise</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/media-surprise" target="_blank" rel="noopener noreferrer">Source originale — Média Surprise</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/cursed-run" target="_blank" rel="noopener noreferrer">Source originale — Cursed Run</a>
           <a class="credit-link" href="https://mrtiboute.tv/defis/mur-de-la-mort" target="_blank" rel="noopener noreferrer">Source originale — Le Mur de la mort</a>
+          <a class="credit-link" href="https://www.youtube.com/watch?v=AsYvQd8bVLg" target="_blank" rel="noopener noreferrer">Source originale — La Coupe du Monde Phasmophobia</a>
           <a class="credit-link" href="https://mrtiboute.tv" target="_blank" rel="noopener noreferrer">Site officiel de MrTiboute</a>
         </div>
         <p>Les informations générales, noms d’objets et certaines images proviennent du wiki communautaire Phasmophobia / Fandom. Cette application est un projet non officiel et n’est affiliée ni à MrTiboute ni aux créateurs du jeu.</p>
@@ -413,6 +414,18 @@
             <div class="challenge-meta"><span>1-4 joueurs</span><span>Grille 5x5</span><span>Bingo</span></div>
             <p class="challenge-credit"><a href="https://mrtiboute.tv/defis/bingo" target="_blank" rel="noopener noreferrer">Source : https://mrtiboute.tv/defis/bingo</a></p>
             <button id="open-bingo-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
+          </div>
+        </article>
+        <article class="challenge-select-card">
+          <div class="challenge-card-visual">
+            <div class="challenge-photo"><span class="possessed-card-symbol" aria-hidden="true">🏆</span></div>
+          </div>
+          <div class="challenge-card-body">
+            <h2>La Coupe du Monde Phasmophobia</h2>
+            <p>Fais s’affronter huit défis dans un tournoi à élimination directe. À chaque match, le défi réussi le plus rapidement se qualifie.</p>
+            <div class="challenge-meta"><span>1-4 joueurs</span><span>8 défis</span><span>Tournoi chronométré</span></div>
+            <p class="challenge-credit"><a href="https://www.youtube.com/watch?v=AsYvQd8bVLg" target="_blank" rel="noopener noreferrer">Défi original créé par MrTiboute.</a></p>
+            <button id="open-world-cup-challenge" class="challenge-launch-btn" type="button">Ouvrir le défi</button>
           </div>
         </article>
         <article class="challenge-select-card">
@@ -1237,6 +1250,46 @@
       <div class="credits-box">
         <h3>Source du défi</h3>
         <p><a href="https://mrtiboute.tv/defis/bingo" target="_blank" rel="noopener noreferrer">Consulter la page originale du défi</a></p>
+      </div>
+    </div>
+  </main>
+
+  <main id="world-cup-challenge-view" class="app-view" hidden>
+    <div class="hunter-container">
+      <div class="hub-topbar">
+        <div class="lang-control">
+          <span class="lang-label">Langue</span>
+          <div class="lang-buttons">
+            <button type="button" class="lang-btn" data-lang="fr">FR</button>
+            <button type="button" class="lang-btn" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+      <div class="challenge-toolbar"><button id="back-world-cup-to-challenges" class="back-challenges-btn" type="button">← Retour aux défis</button></div>
+      <h1>La Coupe du Monde Phasmophobia</h1>
+
+      <section class="fiche">
+        <div class="fiche-setup"><div class="fiche-cell"><div class="fiche-k">Joueurs</div><div class="fiche-v">1-4</div></div><div class="fiche-cell"><div class="fiche-k">Format</div><div class="fiche-v">Élimination directe</div></div><div class="fiche-cell"><div class="fiche-k">Participants</div><div class="fiche-v">8 défis</div></div></div>
+        <div class="fiche-block obj"><div class="fiche-block-label">Objectif</div><p>Faire s’affronter huit défis dans un tableau à élimination directe et désigner le défi champion du monde.</p></div>
+        <div class="fiche-rules"><h3 class="fiche-rules-title">Déroulement</h3><div class="fiche-rule"><span class="fiche-rule-n">01</span><p>Choisis huit défis différents et place-les dans les quatre quarts de finale.</p></div><div class="fiche-rule"><span class="fiche-rule-n">02</span><p>Les deux défis d’un match sont joués sur la même carte et avec le même état de Blood Moon.</p></div><div class="fiche-rule"><span class="fiche-rule-n">03</span><p>Chaque défi conserve ses propres paramètres, restrictions et conditions de réussite.</p></div><div class="fiche-rule"><span class="fiche-rule-n">04</span><p>Lance le chrono à l’ouverture de la porte et arrête-le à la fin du contrat.</p></div><div class="fiche-rule"><span class="fiche-rule-n">05</span><p>Le meilleur temps valide gagne le match. Une mauvaise entité ou l’élimination de toute l’équipe invalide la tentative.</p></div><div class="fiche-rule"><span class="fiche-rule-n">06</span><p>Si les deux défis échouent ou terminent exactement à égalité, la confrontation doit être rejouée.</p></div></div>
+        <div class="fiche-block win"><div class="fiche-block-label">Conditions de victoire</div><p>Le vainqueur de chaque match avance au tour suivant. Le gagnant de la finale devient champion de la Coupe du Monde Phasmophobia.</p></div>
+      </section>
+
+      <section class="challenge-session-control" data-challenge-session="worldcup">
+        <div><strong>Défi non démarré</strong><p>Les règles restent visibles. Démarre le défi pour préparer les huit participants et afficher le tournoi.</p></div>
+        <div class="challenge-session-actions">
+          <button class="good-btn" type="button" data-challenge-start="worldcup">Démarrer le défi</button>
+          <button class="danger-btn" type="button" data-challenge-stop="worldcup" hidden>Stopper le défi</button>
+        </div>
+      </section>
+
+      <div class="challenge-live-area" data-challenge-live="worldcup" hidden>
+        <section id="world-cup-panel" class="world-cup-panel" aria-live="polite"></section>
+      </div>
+
+      <div class="credits-box">
+        <h3>Source du défi</h3>
+        <p><a href="https://www.youtube.com/watch?v=AsYvQd8bVLg" target="_blank" rel="noopener noreferrer">Regarder la Coupe du Monde Phasmophobia créée par MrTiboute</a></p>
       </div>
     </div>
   </main>

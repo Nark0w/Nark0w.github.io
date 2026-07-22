@@ -368,6 +368,56 @@
     .media-container,.possessed-container,.wall-container,.hunter-container{position:relative}
     .media-panel,.possessed-panel,.wall-panel,.hunter-panel,.die-panel,.bingo-panel,.simple-panel{margin:18px 0;padding:18px;background:rgba(13,11,9,.55);border:1px solid var(--line)}
     .media-panel h2,.possessed-panel h2,.wall-panel h2,.hunter-panel h2,.die-panel h2,.bingo-panel h2,.simple-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0 0 14px;text-align:center}
+
+    /* ----- Coupe du Monde ----- */
+    .world-cup-panel{margin:18px 0;padding:20px;background:rgba(13,11,9,.58);border:1px solid var(--line);border-top:3px solid var(--amber)}
+    .world-cup-setup{padding:18px;background:rgba(0,0,0,.28);border:1px solid var(--line);margin-bottom:18px}
+    .world-cup-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+    .world-cup-section-head h2,.world-cup-match-panel h2{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#cfc7bc;margin:0}
+    .world-cup-section-head p{max-width:720px;margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+    .world-cup-entrants{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:10px}
+    .world-cup-slot{display:flex;flex-direction:column;gap:6px;padding:10px;background:rgba(0,0,0,.32);border:1px solid var(--line)}
+    .world-cup-slot label,.world-cup-field label,.world-cup-manual label{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted2)}
+    .world-cup-slot select,.world-cup-field select,.world-cup-manual input{width:100%;margin:0;padding:10px 11px;background:#0d0b09;border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:12px;outline:none}
+    .world-cup-slot select:focus,.world-cup-field select:focus,.world-cup-manual input:focus{border-color:var(--amber)}
+    .world-cup-slot select:disabled{opacity:.72;cursor:not-allowed}
+    .world-cup-setup-actions,.world-cup-timer-actions,.world-cup-result-actions,.world-cup-footer-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+    .world-cup-status{margin:14px 0 0;padding:11px 13px;background:rgba(0,0,0,.38);border:1px solid var(--line);font-family:var(--mono);font-size:12px;line-height:1.5;color:#cfc7bc;text-align:center}
+    .world-cup-status.error{border-color:var(--red);color:#f0a99e}
+    .world-cup-status.win{border-color:var(--green);color:var(--green-bright)}
+    .world-cup-bracket{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:14px;align-items:start;margin:18px 0}
+    .world-cup-round{padding:14px;background:rgba(0,0,0,.25);border:1px solid var(--line)}
+    .world-cup-round h3{margin:0 0 12px;font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;text-align:center;color:var(--amber)}
+    .world-cup-games{display:flex;flex-direction:column;gap:10px}
+    .world-cup-game{padding:10px;background:#120f0c;border:1px solid var(--line);transition:border-color .2s,box-shadow .2s}
+    .world-cup-game.active{border-color:var(--amber);box-shadow:0 0 18px rgba(196,151,54,.16)}
+    .world-cup-game.complete{border-color:rgba(111,174,126,.42)}
+    .world-cup-game.replay{border-color:var(--red)}
+    .world-cup-game-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted3)}
+    .world-cup-contender{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 8px;border-top:1px solid var(--line-soft);font-size:12.5px;color:#cfc7bc}
+    .world-cup-game-title+.world-cup-contender{border-top:0}
+    .world-cup-contender.winner{color:var(--green-bright);background:rgba(111,174,126,.07)}
+    .world-cup-result{font-family:var(--mono);font-size:10px;color:var(--muted2);white-space:nowrap}
+    .world-cup-result.success{color:var(--green-bright)}
+    .world-cup-result.fail{color:#ef8d7d}
+    .world-cup-champion{padding:18px;margin:18px 0;text-align:center;border:1px solid var(--green);background:linear-gradient(135deg,rgba(111,174,126,.12),rgba(196,151,54,.08));box-shadow:0 0 26px rgba(111,174,126,.14)}
+    .world-cup-champion span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+    .world-cup-champion strong{display:block;font-family:var(--display);font-size:clamp(24px,4vw,38px);color:var(--green-bright)}
+    .world-cup-match-panel{padding:18px;background:rgba(0,0,0,.3);border:1px solid var(--line);border-left:3px solid var(--amber)}
+    .world-cup-match-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:5px}
+    .world-cup-versus{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;margin:16px 0}
+    .world-cup-team{padding:13px;background:#120f0c;border:1px solid var(--line);font-family:var(--serif);font-weight:600;color:#ece7dd;text-align:center}
+    .world-cup-team.current{border-color:var(--amber);box-shadow:0 0 16px rgba(196,151,54,.15)}
+    .world-cup-vs{font-family:var(--display);font-size:19px;color:var(--red-bright)}
+    .world-cup-match-settings{display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:10px;margin:12px 0}
+    .world-cup-field,.world-cup-manual{display:flex;flex-direction:column;gap:6px}
+    .world-cup-runner{margin-top:14px;padding:14px;background:rgba(0,0,0,.3);border:1px solid var(--line);text-align:center}
+    .world-cup-runner>span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2)}
+    .world-cup-runner>strong{display:block;margin:6px 0 10px;font-size:18px;color:#efeae0}
+    .world-cup-timer{font-family:var(--display);font-variant-numeric:tabular-nums;font-size:clamp(42px,8vw,72px);line-height:1;color:var(--amber);text-shadow:0 0 22px rgba(196,151,54,.22)}
+    .world-cup-manual{max-width:260px;margin:13px auto 0;text-align:left}
+    .world-cup-manual small{color:var(--muted3);font-size:11px;line-height:1.35}
+    .world-cup-empty{padding:30px;text-align:center;border:1px dashed var(--line);color:var(--muted);font-family:var(--mono);font-size:12px}
     .media-phase-badge{color:var(--green-bright)!important}
     .media-type-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:0;margin:16px 0}
     .media-type-btn{font-family:var(--serif);background:rgba(0,0,0,.4);border:1px solid var(--line);color:var(--muted2);
@@ -825,6 +875,15 @@
       .challenge-mode-block{align-items:stretch;flex-direction:column}
       .challenge-page-mode-control,.challenge-page-streamer{width:100%}
       .challenge-page-mode-control .topbar-mode-btn{flex:1}
+      .world-cup-panel{padding:12px}
+      .world-cup-entrants,.world-cup-bracket,.world-cup-match-settings{grid-template-columns:1fr}
+      .world-cup-versus{grid-template-columns:1fr}
+      .world-cup-vs{text-align:center}
+    }
+
+    @media(min-width:641px) and (max-width:980px){
+      .world-cup-entrants{grid-template-columns:repeat(2,minmax(170px,1fr))}
+      .world-cup-bracket{grid-template-columns:1fr}
     }
 
     @media(max-width:760px){
