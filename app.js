@@ -515,6 +515,43 @@ const phasmophobiaObjects=[
       bet:{title:"Pari Gagnant",route:"pari-gagnant",draw:"ghost",drawLabel:"Pari actuel",status:"Tire ou choisis l’entité pariée avant de lancer la partie."}
     };
     let simpleChallengeStates={truck:{wins:0,losses:0,record:0,draw:[],status:simpleChallengeConfigs.truck.status},poor:{wins:0,losses:0,record:0,draw:[],status:simpleChallengeConfigs.poor.status},five:{wins:0,losses:0,record:0,draw:[],status:simpleChallengeConfigs.five.status},bet:{wins:0,losses:0,record:0,draw:[],status:simpleChallengeConfigs.bet.status}};
+    const worldCupChallengeOptions=[
+      {id:"poor",fr:"Le Cauchemar du Pauvre",en:"Poor Nightmare"},
+      {id:"zero",fr:"0 % de santé mentale",en:"0% Sanity"},
+      {id:"bet",fr:"Pari Gagnant",en:"Winning Bet"},
+      {id:"random",fr:"Difficulté random",en:"Random Difficulty"},
+      {id:"friendly",fr:"Entité amicale",en:"Friendly Ghost"},
+      {id:"noevidence",fr:"Sans preuve",en:"No Evidence"},
+      {id:"media",fr:"Média Surprise",en:"Media Surprise"},
+      {id:"truck",fr:"Le Camion Maudit",en:"Cursed Truck"},
+      {id:"tarot",fr:"Le Tarot Surprise",en:"Tarot Surprise"},
+      {id:"cursed",fr:"Cursed Run",en:"Cursed Run"},
+      {id:"die",fr:"Le Dé Maudit",en:"Cursed Die"},
+      {id:"bingo",fr:"Le Bingo Phasmo",en:"Phasmo Bingo"},
+      {id:"five",fr:"5 minutes pour vivre",en:"5 Minutes to Live"},
+      {id:"wall",fr:"Le Mur de la mort",en:"Wall of Death"},
+      {id:"hunter",fr:"Chasseur et enquêteur",en:"Hunter and Investigator"},
+      {id:"possessed",fr:"Le Possédé",en:"The Possessed"}
+    ];
+    const worldCupDefaultEntrants=["poor","zero","bet","random","friendly","noevidence","media","truck"];
+    function createWorldCupMatch(stage,index,a="",b="",map="tanglewood"){
+      return {stage,index,a,b,map,bloodMoon:"off",aResult:null,bResult:null,winner:null,replayReason:""}
+    }
+    function createWorldCupState(){
+      return {
+        configured:false,
+        entrants:[...worldCupDefaultEntrants],
+        matches:{
+          quarterfinals:[0,1,2,3].map(index=>createWorldCupMatch("quarterfinals",index,worldCupDefaultEntrants[index*2],worldCupDefaultEntrants[index*2+1],index===1?"tanglewood":"ridgeview")),
+          semifinals:[createWorldCupMatch("semifinals",0,"","","ridgeview"),createWorldCupMatch("semifinals",1,"","","tanglewood")],
+          final:[createWorldCupMatch("final",0,"","","willow")]
+        },
+        activeStage:"quarterfinals",activeIndex:0,activeSide:"a",champion:null,
+        timerMs:0,timerRunning:false,timerStartedAt:0,
+        status:"Choisis huit défis différents puis crée le tournoi."
+      }
+    }
+    let worldCupState=createWorldCupState(),worldCupTimerInterval=null;
     function wallIconSvg(icon){
       const icons={
         radio:`<path d="M44 34h32v66H44z"/><path d="M54 34V20h12v14"/><path d="M76 42h12"/><path d="M52 54h16M52 66h16M52 78h16"/>`,
@@ -723,10 +760,11 @@ const phasmophobiaObjects=[
     const bingoGrid=document.getElementById("bingo-grid"),bingoMarkedCount=document.getElementById("bingo-marked-count"),bingoLineCount=document.getElementById("bingo-line-count"),bingoTarget=document.getElementById("bingo-target"),bingoGenerateButton=document.getElementById("bingo-generate-btn"),bingoResetMarksButton=document.getElementById("bingo-reset-marks-btn"),bingoResetButton=document.getElementById("bingo-reset-btn"),bingoStatus=document.getElementById("bingo-status");
     const hunterTeamAInput=document.getElementById("hunter-team-a"),hunterTeamBInput=document.getElementById("hunter-team-b"),hunterRoundLimitSelect=document.getElementById("hunter-round-limit"),hunterDifficultySelect=document.getElementById("hunter-difficulty"),hunterRoundDisplay=document.getElementById("hunter-round-display"),hunterProtectionTime=document.getElementById("hunter-protection-time"),hunterHuntCount=document.getElementById("hunter-hunt-count"),hunterRoleSummary=document.getElementById("hunter-role-summary"),hunterTeamALabel=document.getElementById("hunter-team-a-label"),hunterTeamBLabel=document.getElementById("hunter-team-b-label"),hunterScoreA=document.getElementById("hunter-score-a"),hunterScoreB=document.getElementById("hunter-score-b"),hunterStatus=document.getElementById("hunter-status"),hunterLog=document.getElementById("hunter-log"),hunterEvidenceAnnounced=document.getElementById("hunter-evidence-announced"),hunterItemsRemoved=document.getElementById("hunter-items-removed"),hunterHuntsCompleted=document.getElementById("hunter-hunts-completed"),hunterInvestigatorChoice=document.getElementById("hunter-investigator-choice"),hunterHunterChoice=document.getElementById("hunter-hunter-choice"),hunterActualGhost=document.getElementById("hunter-actual-ghost"),hunterLockInvestigator=document.getElementById("hunter-lock-investigator"),hunterLockHunter=document.getElementById("hunter-lock-hunter"),hunterInvestigatorLock=document.getElementById("hunter-investigator-lock"),hunterHunterLock=document.getElementById("hunter-hunter-lock"),hunterScoreRound=document.getElementById("hunter-score-round"),hunterRoundResult=document.getElementById("hunter-round-result"),hunterNextRound=document.getElementById("hunter-next-round"),hunterAddOvertime=document.getElementById("hunter-add-overtime"),hunterUndo=document.getElementById("hunter-undo"),hunterReset=document.getElementById("hunter-reset");
     const simpleChallengeViews=[...document.querySelectorAll("[data-simple-challenge-view]")],simpleChallengePanels=[...document.querySelectorAll("[data-simple-panel]")];
+    const worldCupChallengeView=document.getElementById("world-cup-challenge-view"),worldCupPanel=document.getElementById("world-cup-panel");
     const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),randomChallengeButton=document.getElementById("random-challenge-btn"),challengeSessionControls=[...document.querySelectorAll("[data-challenge-session]")],challengeLiveAreas=[...document.querySelectorAll("[data-challenge-live]")],topCurrentChallenge=document.getElementById("top-current-challenge"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],pagePlayModeButtons=[...document.querySelectorAll("[data-page-play-mode]")],pageStreamerMode=document.querySelector("[data-page-streamer-mode]"),topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel"),screamerButton=document.getElementById("screamer-button"),screamerOverlay=document.getElementById("screamer-overlay");
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     let activeChallenge=null;
-    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,die:false,bingo:false,hunter:false,possessed:false};
+    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,die:false,bingo:false,worldcup:false,hunter:false,possessed:false};
     const challengeDifficultySelects=[...document.querySelectorAll("[data-challenge-difficulty]")];
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
@@ -734,6 +772,22 @@ const phasmophobiaObjects=[
       "Joueurs":"Players",
       "Durée":"Duration",
       "Difficulté":"Difficulty",
+      "La Coupe du Monde Phasmophobia":"The Phasmophobia World Cup",
+      "Fais s’affronter huit défis dans un tournoi à élimination directe. À chaque match, le défi réussi le plus rapidement se qualifie.":"Pit eight challenges against each other in a single-elimination tournament. In every matchup, the fastest completed challenge advances.",
+      "8 défis":"8 challenges",
+      "Tournoi chronométré":"Timed tournament",
+      "Élimination directe":"Single elimination",
+      "Participants":"Entrants",
+      "Faire s’affronter huit défis dans un tableau à élimination directe et désigner le défi champion du monde.":"Pit eight challenges against each other in a single-elimination bracket and crown the world champion challenge.",
+      "Choisis huit défis différents et place-les dans les quatre quarts de finale.":"Choose eight different challenges and place them in the four quarterfinals.",
+      "Les deux défis d’un match sont joués sur la même carte et avec le même état de Blood Moon.":"Both challenges in a matchup are played on the same map and with the same Blood Moon state.",
+      "Chaque défi conserve ses propres paramètres, restrictions et conditions de réussite.":"Each challenge keeps its own settings, restrictions and completion conditions.",
+      "Lance le chrono à l’ouverture de la porte et arrête-le à la fin du contrat.":"Start the timer when the front door opens and stop it when the contract ends.",
+      "Le meilleur temps valide gagne le match. Une mauvaise entité ou l’élimination de toute l’équipe invalide la tentative.":"The best valid time wins the matchup. A wrong ghost or the whole team being eliminated invalidates the attempt.",
+      "Si les deux défis échouent ou terminent exactement à égalité, la confrontation doit être rejouée.":"If both challenges fail or finish in an exact tie, the matchup must be replayed.",
+      "Le vainqueur de chaque match avance au tour suivant. Le gagnant de la finale devient champion de la Coupe du Monde Phasmophobia.":"Each matchup winner advances to the next round. The final winner becomes Phasmophobia World Cup champion.",
+      "Les règles restent visibles. Démarre le défi pour préparer les huit participants et afficher le tournoi.":"The rules stay visible. Start the challenge to prepare the eight entrants and display the tournament.",
+      "Regarder la Coupe du Monde Phasmophobia créée par MrTiboute":"Watch the Phasmophobia World Cup created by MrTiboute",
       "~2 heures":"~2 hours",
       "Règles":"Rules",
       "Conditions de victoire":"Win conditions",
@@ -1224,6 +1278,7 @@ const phasmophobiaObjects=[
       renderMapMemo();
       renderMediaChallenge();
       renderCursedRun();
+      renderWorldCup();
       renderHunterChallenge();
       renderChallengeSessionControls();
       renderChallengeRoomGate();
@@ -1274,6 +1329,7 @@ const phasmophobiaObjects=[
       else if(!cursedChallengeView.hidden)page="cursed";
       else if(!dieChallengeView.hidden)page="die";
       else if(!bingoChallengeView.hidden)page="bingo";
+      else if(worldCupChallengeView&&!worldCupChallengeView.hidden)page="worldcup";
       else if(!hunterChallengeView.hidden)page="hunter";
       else if(!possessedChallengeView.hidden)page="possessed";
       else {
@@ -1290,8 +1346,8 @@ const phasmophobiaObjects=[
         else if(!challengeSelectionView.hidden)page="challenges"
       }
       const titles={
-        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",noobs:"Phasmophobia pour les noobs",amateur:"Amateur - Phasmophobia",intermediate:"Intermédiaire - Phasmophobia",professional:"Professionnel - Phasmophobia",nightmare:"Cauchemar - Phasmophobia",insanity:"Démence - Phasmophobia",apoc1:"Apocalypse I - Phasmophobia",apoc2:"Apocalypse II - Phasmophobia",apoc3:"Apocalypse III - Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",mapMemo:"Plans des pièces - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise",media:"Média Surprise",wall:"Mur de la mort",cursed:"Cursed Run",die:"Le Dé Maudit",bingo:"Le Bingo Phasmo",truck:"Le Camion Maudit",poor:"Le Cauchemar du Pauvre",five:"5 minutes pour vivre",bet:"Pari Gagnant",possessed:"Le Possédé"},
-        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",noobs:"Phasmophobia for Noobs",amateur:"Amateur - Phasmophobia",intermediate:"Intermediate - Phasmophobia",professional:"Professional - Phasmophobia",nightmare:"Nightmare - Phasmophobia",insanity:"Insanity - Phasmophobia",apoc1:"Apocalypse I - Phasmophobia",apoc2:"Apocalypse II - Phasmophobia",apoc3:"Apocalypse III - Phasmophobia",ghostMemo:"Ghost Reference - Phasmophobia",mapMemo:"Room Layouts - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise",media:"Media Surprise",wall:"Wall of Death",cursed:"Cursed Run",die:"Cursed Die",bingo:"Phasmo Bingo",truck:"Cursed Truck",poor:"Poor Nightmare",five:"5 Minutes to Live",bet:"Winning Bet",possessed:"The Possessed"}
+        fr:{hub:"Compagnon Phasmophobia",challenges:"Défis Phasmophobia",memo:"Mémos Phasmophobia",noobs:"Phasmophobia pour les noobs",amateur:"Amateur - Phasmophobia",intermediate:"Intermédiaire - Phasmophobia",professional:"Professionnel - Phasmophobia",nightmare:"Cauchemar - Phasmophobia",insanity:"Démence - Phasmophobia",apoc1:"Apocalypse I - Phasmophobia",apoc2:"Apocalypse II - Phasmophobia",apoc3:"Apocalypse III - Phasmophobia",ghostMemo:"Mémo des entités - Phasmophobia",mapMemo:"Plans des pièces - Phasmophobia",funMemo:"Aide visuelle - Phasmophobia",tarot:"Tarot Surprise",media:"Média Surprise",wall:"Mur de la mort",cursed:"Cursed Run",die:"Le Dé Maudit",bingo:"Le Bingo Phasmo",worldcup:"La Coupe du Monde Phasmophobia",truck:"Le Camion Maudit",poor:"Le Cauchemar du Pauvre",five:"5 minutes pour vivre",bet:"Pari Gagnant",possessed:"Le Possédé"},
+        en:{hub:"Phasmophobia Companion",challenges:"Phasmophobia Challenges",memo:"Phasmophobia Reference Guides",noobs:"Phasmophobia for Noobs",amateur:"Amateur - Phasmophobia",intermediate:"Intermediate - Phasmophobia",professional:"Professional - Phasmophobia",nightmare:"Nightmare - Phasmophobia",insanity:"Insanity - Phasmophobia",apoc1:"Apocalypse I - Phasmophobia",apoc2:"Apocalypse II - Phasmophobia",apoc3:"Apocalypse III - Phasmophobia",ghostMemo:"Ghost Reference - Phasmophobia",mapMemo:"Room Layouts - Phasmophobia",funMemo:"Visual Guide - Phasmophobia",tarot:"Tarot Surprise",media:"Media Surprise",wall:"Wall of Death",cursed:"Cursed Run",die:"Cursed Die",bingo:"Phasmo Bingo",worldcup:"Phasmophobia World Cup",truck:"Cursed Truck",poor:"Poor Nightmare",five:"5 Minutes to Live",bet:"Winning Bet",possessed:"The Possessed"}
       };
       titles.fr.hunter="Chasseur et enquêteur";
       titles.en.hunter="Hunter and Investigator";
@@ -1299,7 +1355,7 @@ const phasmophobiaObjects=[
       titles.en.inviteRoom="Room invitation - Phasmophobia";
       document.title=titles[currentLanguage][page]
     }
-    function hideAllViews(){stopGhostWalkCadence();[hubView,inviteRoomView,challengeSelectionView,memoView,noobsView,...noobLevelViews,ghostMemoView,mapMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,dieChallengeView,bingoChallengeView,hunterChallengeView,possessedChallengeView,...simpleChallengeViews].forEach(view=>{if(view)view.hidden=true})}
+    function hideAllViews(){stopGhostWalkCadence();[hubView,inviteRoomView,challengeSelectionView,memoView,noobsView,...noobLevelViews,ghostMemoView,mapMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,dieChallengeView,bingoChallengeView,worldCupChallengeView,hunterChallengeView,possessedChallengeView,...simpleChallengeViews].forEach(view=>{if(view)view.hidden=true})}
     function currentRouteHash(){
       const hash=decodeURIComponent(location.hash||"").replace(/^#/,"");
       const lastHash=hash.split("#").filter(Boolean).pop()||hash;
@@ -1391,6 +1447,11 @@ const phasmophobiaObjects=[
       if(!allowChallengeOpen())return;
       hideAllViews();bingoChallengeView.hidden=false;renderBingoChallenge();updateDocumentTitle();window.scrollTo(0,0)
     }
+    function openWorldCupChallenge(updateHistory=true){
+      if(updateHistory&&location.hash!=="#coupe-du-monde"){location.hash="coupe-du-monde";return}
+      if(!allowChallengeOpen())return;
+      hideAllViews();worldCupChallengeView.hidden=false;renderWorldCup();updateDocumentTitle();window.scrollTo(0,0)
+    }
     function openSimpleChallenge(challenge,updateHistory=true){
       const config=simpleChallengeConfigs[challenge];if(!config)return;
       if(updateHistory&&location.hash!==`#${config.route}`){location.hash=config.route;return}
@@ -1417,6 +1478,7 @@ const phasmophobiaObjects=[
       else if(route==="cursed-run")openCursedChallenge(false);
       else if(route==="de-maudit")openDieChallenge(false);
       else if(route==="bingo-phasmo")openBingoChallenge(false);
+      else if(route==="coupe-du-monde")openWorldCupChallenge(false);
       else if(Object.entries(simpleChallengeConfigs).some(([,config])=>config.route===route)){
         const entry=Object.entries(simpleChallengeConfigs).find(([,config])=>config.route===route);
         openSimpleChallenge(entry[0],false)
@@ -1450,7 +1512,7 @@ const phasmophobiaObjects=[
       if(noobsView&&!noobsView.hidden){showHub(true);return}
       if(!ghostMemoView.hidden||!mapMemoView.hidden||!funMemoView.hidden){showMemo(true);return}
       if(inviteRoomView&&!inviteRoomView.hidden){showHub(true);return}
-      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!dieChallengeView.hidden||!bingoChallengeView.hidden||simpleChallengeViews.some(view=>!view.hidden)||!hunterChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
+      if(!tarotChallengeView.hidden||!mediaChallengeView.hidden||!wallChallengeView.hidden||!cursedChallengeView.hidden||!dieChallengeView.hidden||!bingoChallengeView.hidden||(worldCupChallengeView&&!worldCupChallengeView.hidden)||simpleChallengeViews.some(view=>!view.hidden)||!hunterChallengeView.hidden||!possessedChallengeView.hidden){showChallengeSelection(true);return}
       showHub(true)
     }
 
@@ -1462,6 +1524,7 @@ const phasmophobiaObjects=[
         cursed:"Cursed Run",
         die:"Cursed Die",
         bingo:"Phasmo Bingo",
+        worldcup:"Phasmophobia World Cup",
         truck:"Cursed Truck",
         poor:"Poor Nightmare",
         five:"5 Minutes to Live",
@@ -1475,6 +1538,7 @@ const phasmophobiaObjects=[
         cursed:"Cursed Run",
         die:"Le Dé Maudit",
         bingo:"Le Bingo Phasmo",
+        worldcup:"La Coupe du Monde Phasmophobia",
         truck:"Le Camion Maudit",
         poor:"Le Cauchemar du Pauvre",
         five:"5 minutes pour vivre",
@@ -1570,9 +1634,11 @@ const phasmophobiaObjects=[
         previousActive=activeChallenge;
         challengeSessionState[previousActive]=false;
         if(previousActive==="tarot")pauseTimer()
+        if(previousActive==="worldcup")pauseWorldCupTimer(false)
       }
       challengeSessionState[challenge]=shouldStart;
       if(challenge==="tarot"&&!shouldStart)pauseTimer();
+      if(challenge==="worldcup"&&!shouldStart)pauseWorldCupTimer(false);
       if(shouldStart)activeChallenge=challenge;
       else if(activeChallenge===challenge)activeChallenge=null;
       renderChallengeSessionControls();
@@ -2522,6 +2588,224 @@ const phasmophobiaObjects=[
       document.querySelectorAll("[data-simple-reset]").forEach(button=>button.addEventListener("click",()=>{if(confirm("Réinitialiser ce défi ?"))resetSimpleChallenge(button.dataset.simpleReset)}))
     }
 
+    function worldCupText(fr,en){return currentLanguage==="en"?en:fr}
+    function worldCupChallengeName(id){
+      const option=worldCupChallengeOptions.find(item=>item.id===id);
+      return option?(currentLanguage==="en"?option.en:option.fr):worldCupText("À déterminer","TBD")
+    }
+    function worldCupMapName(id){
+      const map=cursedMaps.find(item=>item.id===id);
+      return map?map.name:worldCupText("Carte à choisir","Choose a map")
+    }
+    function worldCupStageData(stage){
+      return {
+        quarterfinals:{fr:"Quarts de finale",en:"Quarterfinals",singleFr:"Quart",singleEn:"Quarterfinal"},
+        semifinals:{fr:"Demi-finales",en:"Semifinals",singleFr:"Demi-finale",singleEn:"Semifinal"},
+        final:{fr:"Finale",en:"Final",singleFr:"Finale",singleEn:"Final"}
+      }[stage]
+    }
+    function worldCupStageLabel(stage,plural=true){
+      const data=worldCupStageData(stage)||worldCupStageData("quarterfinals");
+      return currentLanguage==="en"?(plural?data.en:data.singleEn):(plural?data.fr:data.singleFr)
+    }
+    function worldCupActiveMatch(){return worldCupState.matches?.[worldCupState.activeStage]?.[worldCupState.activeIndex]||null}
+    function worldCupElapsedMs(){
+      return Math.max(0,Number(worldCupState.timerMs)||0)+(worldCupState.timerRunning&&worldCupState.timerStartedAt?Math.max(0,Date.now()-Number(worldCupState.timerStartedAt)):0)
+    }
+    function formatWorldCupTime(ms){
+      const total=Math.max(0,Math.round((Number(ms)||0)/1000)),hours=Math.floor(total/3600),minutes=Math.floor((total%3600)/60),seconds=total%60;
+      return hours?`${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`:`${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`
+    }
+    function parseWorldCupTime(value){
+      const text=String(value||"").trim();if(!text)return null;
+      const parts=text.split(":").map(part=>Number(part.replace(",",".")));
+      if(parts.some(part=>!Number.isFinite(part)||part<0)||parts.length<1||parts.length>3)return NaN;
+      let seconds=0;
+      if(parts.length===1)seconds=parts[0];
+      else if(parts.length===2)seconds=parts[0]*60+parts[1];
+      else seconds=parts[0]*3600+parts[1]*60+parts[2];
+      return seconds*1000
+    }
+    function normalizeWorldCupResult(result){
+      if(!result||!['success','fail'].includes(result.status))return null;
+      return {status:result.status,timeMs:Math.max(0,Number(result.timeMs)||0)}
+    }
+    function normalizeWorldCupState(saved){
+      const base=createWorldCupState(),source=saved&&typeof saved==="object"?saved:{};
+      const optionIds=new Set(worldCupChallengeOptions.map(option=>option.id)),incomingEntrants=Array.isArray(source.entrants)?source.entrants.map(String):[];
+      const entrantsValid=incomingEntrants.length===8&&incomingEntrants.every(id=>optionIds.has(id))&&new Set(incomingEntrants).size===8;
+      base.configured=Boolean(source.configured)&&entrantsValid;
+      base.entrants=entrantsValid?incomingEntrants:[...worldCupDefaultEntrants];
+      ["quarterfinals","semifinals","final"].forEach(stage=>{
+        base.matches[stage]=base.matches[stage].map((match,index)=>{
+          const incoming=source.matches?.[stage]?.[index]||{};
+          return {...match,...incoming,stage,index,a:String(incoming.a??match.a),b:String(incoming.b??match.b),map:String(incoming.map||match.map),bloodMoon:incoming.bloodMoon==="on"?"on":"off",aResult:normalizeWorldCupResult(incoming.aResult),bResult:normalizeWorldCupResult(incoming.bResult),winner:incoming.winner?String(incoming.winner):null,replayReason:incoming.replayReason?String(incoming.replayReason):""}
+        })
+      });
+      base.activeStage=["quarterfinals","semifinals","final"].includes(source.activeStage)?source.activeStage:"quarterfinals";
+      base.activeIndex=Math.min(base.matches[base.activeStage].length-1,Math.max(0,Number(source.activeIndex)||0));
+      base.activeSide=source.activeSide==="b"?"b":"a";
+      base.champion=optionIds.has(String(source.champion))?String(source.champion):null;
+      base.timerMs=Math.max(0,Number(source.timerMs)||0);
+      base.timerRunning=Boolean(source.timerRunning);
+      base.timerStartedAt=base.timerRunning?Number(source.timerStartedAt)||Date.now():0;
+      base.status=String(source.status||base.status);
+      return base
+    }
+    function saveWorldCupState(){try{localStorage.setItem("phasmo-world-cup",JSON.stringify(worldCupState))}catch(error){}}
+    function loadWorldCupState(){
+      try{worldCupState=normalizeWorldCupState(JSON.parse(localStorage.getItem("phasmo-world-cup")||"null"))}
+      catch(error){worldCupState=createWorldCupState()}
+      syncWorldCupTimerInterval()
+    }
+    function updateWorldCupTimerDisplay(){
+      const display=document.getElementById("world-cup-timer");if(display)display.textContent=formatWorldCupTime(worldCupElapsedMs())
+    }
+    function syncWorldCupTimerInterval(){
+      if(worldCupTimerInterval){clearInterval(worldCupTimerInterval);worldCupTimerInterval=null}
+      if(worldCupState.timerRunning)worldCupTimerInterval=setInterval(updateWorldCupTimerDisplay,250)
+      updateWorldCupTimerDisplay()
+    }
+    function resetWorldCupTimer(render=true){
+      if(worldCupTimerInterval){clearInterval(worldCupTimerInterval);worldCupTimerInterval=null}
+      worldCupState.timerMs=0;worldCupState.timerRunning=false;worldCupState.timerStartedAt=0;
+      saveWorldCupState();if(render)renderWorldCup()
+    }
+    function startWorldCupTimer(){
+      if(!worldCupState.configured||worldCupState.champion||worldCupState.timerRunning)return;
+      const match=worldCupActiveMatch();if(!match||match.replayReason)return;
+      worldCupState.timerStartedAt=Date.now();worldCupState.timerRunning=true;
+      saveWorldCupState();syncWorldCupTimerInterval();renderWorldCup();scheduleRoomChallengeSync("worldcup")
+    }
+    function pauseWorldCupTimer(sync=true){
+      if(worldCupState.timerRunning){worldCupState.timerMs=worldCupElapsedMs();worldCupState.timerRunning=false;worldCupState.timerStartedAt=0}
+      syncWorldCupTimerInterval();saveWorldCupState();renderWorldCup();if(sync)scheduleRoomChallengeSync("worldcup")
+    }
+    function worldCupFindNextMatch(){
+      for(const stage of ["quarterfinals","semifinals","final"]){
+        const matches=worldCupState.matches[stage]||[];
+        for(let index=0;index<matches.length;index++){
+          const match=matches[index];if(match.a&&match.b&&!match.winner){return {stage,index,side:match.aResult?"b":"a"}}
+        }
+      }
+      return null
+    }
+    function worldCupFeedWinner(match){
+      if(match.stage==="quarterfinals"){
+        const target=worldCupState.matches.semifinals[Math.floor(match.index/2)],side=match.index%2===0?"a":"b";target[side]=match.winner
+      }else if(match.stage==="semifinals"){
+        const target=worldCupState.matches.final[0],side=match.index===0?"a":"b";target[side]=match.winner
+      }else worldCupState.champion=match.winner
+    }
+    function resolveWorldCupMatch(match){
+      const a=match.aResult,b=match.bResult;if(!a||!b)return;
+      let winner=null;
+      if(a.status==="success"&&b.status==="fail")winner=match.a;
+      else if(b.status==="success"&&a.status==="fail")winner=match.b;
+      else if(a.status==="success"&&b.status==="success"){
+        if(a.timeMs<b.timeMs)winner=match.a;else if(b.timeMs<a.timeMs)winner=match.b;else match.replayReason="tie"
+      }else match.replayReason="both-failed";
+      if(!winner){
+        worldCupState.activeStage=match.stage;worldCupState.activeIndex=match.index;worldCupState.activeSide="a";
+        worldCupState.status=match.replayReason==="tie"?worldCupText("Égalité parfaite : rejoue cette confrontation.","Perfect tie: replay this matchup."):worldCupText("Les deux défis ont échoué : rejoue cette confrontation.","Both challenges failed: replay this matchup.");
+        return
+      }
+      match.winner=winner;match.replayReason="";worldCupFeedWinner(match);
+      if(worldCupState.champion){
+        worldCupState.status=worldCupText(`${worldCupChallengeName(winner)} remporte la Coupe du Monde Phasmophobia !`,`${worldCupChallengeName(winner)} wins the Phasmophobia World Cup!`);return
+      }
+      const next=worldCupFindNextMatch();
+      if(next){worldCupState.activeStage=next.stage;worldCupState.activeIndex=next.index;worldCupState.activeSide=next.side;worldCupState.status=worldCupText(`${worldCupChallengeName(winner)} se qualifie. Match suivant prêt.`,`${worldCupChallengeName(winner)} advances. Next matchup ready.`)}
+    }
+    function recordWorldCupResult(status){
+      const match=worldCupActiveMatch();if(!match||!worldCupState.configured||match.winner||match.replayReason)return;
+      const input=document.getElementById("world-cup-manual-time"),manual=parseWorldCupTime(input?.value),current=worldCupElapsedMs();
+      if(Number.isNaN(manual)){worldCupState.status=worldCupText("Temps invalide. Utilise mm:ss ou hh:mm:ss.","Invalid time. Use mm:ss or hh:mm:ss.");renderWorldCup();return}
+      const timeMs=manual===null?current:manual;
+      if(status==="success"&&timeMs<1000){worldCupState.status=worldCupText("Lance le chrono ou saisis un temps avant de valider.","Start the timer or enter a time before validating.");renderWorldCup();return}
+      if(worldCupState.timerRunning){worldCupState.timerMs=current;worldCupState.timerRunning=false;worldCupState.timerStartedAt=0}
+      const side=worldCupState.activeSide,result={status,timeMs};match[`${side}Result`]=result;
+      resetWorldCupTimer(false);
+      if(side==="a"){
+        worldCupState.activeSide="b";
+        worldCupState.status=status==="success"?worldCupText(`${worldCupChallengeName(match.a)} termine en ${formatWorldCupTime(timeMs)}. ${worldCupChallengeName(match.b)} doit maintenant établir son temps.`,`${worldCupChallengeName(match.a)} finishes in ${formatWorldCupTime(timeMs)}. ${worldCupChallengeName(match.b)} now sets its time.`):worldCupText(`${worldCupChallengeName(match.a)} a échoué. ${worldCupChallengeName(match.b)} gagne en réussissant sa tentative.`,`${worldCupChallengeName(match.a)} failed. ${worldCupChallengeName(match.b)} wins by completing its attempt.`)
+      }else resolveWorldCupMatch(match);
+      saveWorldCupState();syncWorldCupTimerInterval();renderWorldCup();scheduleRoomChallengeSync("worldcup")
+    }
+    function replayWorldCupMatch(){
+      const match=worldCupActiveMatch();if(!match||!match.replayReason)return;
+      match.aResult=null;match.bResult=null;match.winner=null;match.replayReason="";worldCupState.activeSide="a";
+      worldCupState.status=worldCupText("Confrontation remise à zéro. Le premier défi peut repartir.","Matchup reset. The first challenge can start again.");
+      resetWorldCupTimer(false);saveWorldCupState();renderWorldCup();scheduleRoomChallengeSync("worldcup")
+    }
+    function configureWorldCup(){
+      const selects=[...worldCupPanel.querySelectorAll("[data-world-cup-entrant]")],entrants=selects.map(select=>select.value);
+      if(entrants.length!==8||entrants.some(value=>!worldCupChallengeOptions.some(option=>option.id===value))||new Set(entrants).size!==8){
+        worldCupState.status=worldCupText("Choisis huit défis différents pour créer le tournoi.","Choose eight different challenges to create the tournament.");renderWorldCup();return
+      }
+      const next=createWorldCupState();next.configured=true;next.entrants=entrants;
+      next.matches.quarterfinals.forEach((match,index)=>{match.a=entrants[index*2];match.b=entrants[index*2+1]});
+      next.status=worldCupText("Tournoi créé. Le premier quart de finale est prêt.","Tournament created. The first quarterfinal is ready.");
+      worldCupState=next;saveWorldCupState();renderWorldCup();scheduleRoomChallengeSync("worldcup")
+    }
+    function useWorldCupVideoPreset(){
+      worldCupState.entrants=[...worldCupDefaultEntrants];worldCupState.status=worldCupText("Tableau de la vidéo chargé. Tu peux créer le tournoi.","Video bracket loaded. You can create the tournament.");saveWorldCupState();renderWorldCup()
+    }
+    function resetWorldCup(){
+      if(!confirm(worldCupText("Réinitialiser toute la Coupe du Monde ? Le tableau et tous les temps seront effacés.","Reset the entire World Cup? The bracket and all times will be cleared.")))return;
+      if(worldCupTimerInterval){clearInterval(worldCupTimerInterval);worldCupTimerInterval=null}
+      worldCupState=createWorldCupState();saveWorldCupState();renderWorldCup();scheduleRoomChallengeSync("worldcup")
+    }
+    function updateWorldCupMatchSetting(key,value){
+      const match=worldCupActiveMatch();if(!match||match.aResult)return;
+      if(key==="map"&&cursedMaps.some(item=>item.id===value))match.map=value;
+      if(key==="bloodMoon")match.bloodMoon=value==="on"?"on":"off";
+      saveWorldCupState();renderWorldCup();scheduleRoomChallengeSync("worldcup")
+    }
+    function worldCupResultLabel(result){
+      if(!result)return "—";
+      return result.status==="success"?formatWorldCupTime(result.timeMs):worldCupText("Échec","Failed")
+    }
+    function renderWorldCupGame(match){
+      const active=worldCupState.configured&&!worldCupState.champion&&worldCupState.activeStage===match.stage&&worldCupState.activeIndex===match.index;
+      const className=`world-cup-game${active?" active":""}${match.winner?" complete":""}${match.replayReason?" replay":""}`;
+      const matchNumber=match.stage==="final"?"":` ${match.index+1}`,map=worldCupMapName(match.map),moon=match.bloodMoon==="on"?" · Blood Moon":"";
+      const contender=(side)=>{const id=match[side],result=match[`${side}Result`],winner=match.winner===id;return `<div class="world-cup-contender${winner?" winner":""}"><span>${escapeHtml(id?worldCupChallengeName(id):worldCupText("À déterminer","TBD"))}</span><span class="world-cup-result ${result?.status||""}">${escapeHtml(worldCupResultLabel(result))}</span></div>`};
+      return `<article class="${className}"><div class="world-cup-game-title"><span>${escapeHtml(worldCupStageLabel(match.stage,false)+matchNumber)}</span><span>${escapeHtml(map+moon)}</span></div>${contender("a")}${contender("b")}</article>`
+    }
+    function renderWorldCupBracket(){
+      return `<div class="world-cup-bracket">${["quarterfinals","semifinals","final"].map(stage=>`<section class="world-cup-round"><h3>${escapeHtml(worldCupStageLabel(stage,true))}</h3><div class="world-cup-games">${worldCupState.matches[stage].map(renderWorldCupGame).join("")}</div></section>`).join("")}</div>`
+    }
+    function renderWorldCupMatchPanel(){
+      if(!worldCupState.configured)return `<div class="world-cup-empty">${escapeHtml(worldCupText("Crée le tournoi pour afficher le premier match.","Create the tournament to display the first matchup."))}</div>`;
+      if(worldCupState.champion)return `<div class="world-cup-champion"><span>${escapeHtml(worldCupText("Champion du monde","World champion"))}</span><strong>🏆 ${escapeHtml(worldCupChallengeName(worldCupState.champion))}</strong></div>`;
+      const match=worldCupActiveMatch();if(!match)return "";
+      const activeMatchLabel=worldCupStageLabel(match.stage,false)+(match.stage==="final"?"":` ${match.index+1}`);
+      if(match.replayReason)return `<section class="world-cup-match-panel"><div class="world-cup-match-kicker">${escapeHtml(activeMatchLabel)}</div><h2>${escapeHtml(worldCupText("Confrontation à rejouer","Matchup must be replayed"))}</h2><div class="world-cup-versus"><div class="world-cup-team">${escapeHtml(worldCupChallengeName(match.a))}</div><span class="world-cup-vs">VS</span><div class="world-cup-team">${escapeHtml(worldCupChallengeName(match.b))}</div></div><button class="warning-btn" type="button" data-world-cup-replay>${escapeHtml(worldCupText("Rejouer la confrontation","Replay matchup"))}</button></section>`;
+      const side=worldCupState.activeSide,currentId=match[side],settingsLocked=Boolean(match.aResult),mapOptions=cursedMaps.map(map=>`<option value="${escapeHtml(map.id)}"${map.id===match.map?" selected":""}>${escapeHtml(map.name)}</option>`).join("");
+      return `<section class="world-cup-match-panel"><div class="world-cup-match-kicker">${escapeHtml(activeMatchLabel)}</div><h2>${escapeHtml(worldCupText("Match en cours","Current matchup"))}</h2><div class="world-cup-versus"><div class="world-cup-team${side==="a"?" current":""}">${escapeHtml(worldCupChallengeName(match.a))}</div><span class="world-cup-vs">VS</span><div class="world-cup-team${side==="b"?" current":""}">${escapeHtml(worldCupChallengeName(match.b))}</div></div><div class="world-cup-match-settings"><div class="world-cup-field"><label for="world-cup-map">${escapeHtml(worldCupText("Carte commune","Shared map"))}</label><select id="world-cup-map" data-world-cup-setting="map"${settingsLocked?" disabled":""}>${mapOptions}</select></div><div class="world-cup-field"><label for="world-cup-blood-moon">Blood Moon</label><select id="world-cup-blood-moon" data-world-cup-setting="bloodMoon"${settingsLocked?" disabled":""}><option value="off"${match.bloodMoon!=="on"?" selected":""}>${escapeHtml(worldCupText("Désactivée","Off"))}</option><option value="on"${match.bloodMoon==="on"?" selected":""}>${escapeHtml(worldCupText("Activée","On"))}</option></select></div></div><div class="world-cup-runner"><span>${escapeHtml(worldCupText("Tentative actuelle","Current attempt"))}</span><strong>${escapeHtml(worldCupChallengeName(currentId))}</strong><div id="world-cup-timer" class="world-cup-timer">${formatWorldCupTime(worldCupElapsedMs())}</div><div class="world-cup-timer-actions"><button class="warning-btn" type="button" data-world-cup-timer="${worldCupState.timerRunning?"pause":"start"}">${escapeHtml(worldCupState.timerRunning?worldCupText("Pause","Pause"):worldCupText("Lancer le chrono","Start timer"))}</button><button class="back-challenges-btn" type="button" data-world-cup-timer="reset">${escapeHtml(worldCupText("Remettre à zéro","Reset timer"))}</button></div><div class="world-cup-manual"><label for="world-cup-manual-time">${escapeHtml(worldCupText("Temps manuel facultatif","Optional manual time"))}</label><input id="world-cup-manual-time" type="text" inputmode="numeric" placeholder="mm:ss"><small>${escapeHtml(worldCupText("Si renseigné, ce temps remplace le chrono lors de la validation.","When entered, this time replaces the stopwatch on validation."))}</small></div><div class="world-cup-result-actions"><button class="good-btn" type="button" data-world-cup-result="success">${escapeHtml(worldCupText("Défi réussi","Challenge completed"))}</button><button class="danger-btn" type="button" data-world-cup-result="fail">${escapeHtml(worldCupText("Tentative échouée","Attempt failed"))}</button></div></div></section>`
+    }
+    function bindWorldCupEvents(){
+      worldCupPanel.querySelectorAll("[data-world-cup-entrant]").forEach(select=>select.addEventListener("change",()=>{worldCupState.entrants[Number(select.dataset.worldCupEntrant)]=select.value;saveWorldCupState()}));
+      worldCupPanel.querySelector("[data-world-cup-configure]")?.addEventListener("click",configureWorldCup);
+      worldCupPanel.querySelector("[data-world-cup-preset]")?.addEventListener("click",useWorldCupVideoPreset);
+      worldCupPanel.querySelector("[data-world-cup-new]")?.addEventListener("click",resetWorldCup);
+      worldCupPanel.querySelector("[data-world-cup-reset]")?.addEventListener("click",resetWorldCup);
+      worldCupPanel.querySelector("[data-world-cup-replay]")?.addEventListener("click",replayWorldCupMatch);
+      worldCupPanel.querySelectorAll("[data-world-cup-setting]").forEach(select=>select.addEventListener("change",()=>updateWorldCupMatchSetting(select.dataset.worldCupSetting,select.value)));
+      worldCupPanel.querySelectorAll("[data-world-cup-timer]").forEach(button=>button.addEventListener("click",()=>{const action=button.dataset.worldCupTimer;if(action==="start")startWorldCupTimer();else if(action==="pause")pauseWorldCupTimer();else{resetWorldCupTimer();scheduleRoomChallengeSync("worldcup")}}));
+      worldCupPanel.querySelectorAll("[data-world-cup-result]").forEach(button=>button.addEventListener("click",()=>recordWorldCupResult(button.dataset.worldCupResult)))
+    }
+    function renderWorldCup(){
+      if(!worldCupPanel)return;
+      const options=(selected)=>worldCupChallengeOptions.map(option=>`<option value="${escapeHtml(option.id)}"${option.id===selected?" selected":""}>${escapeHtml(currentLanguage==="en"?option.en:option.fr)}</option>`).join("");
+      const entrantFields=worldCupState.entrants.map((entrant,index)=>`<div class="world-cup-slot"><label for="world-cup-entrant-${index}">${escapeHtml(worldCupText("Participant","Entrant"))} ${index+1}</label><select id="world-cup-entrant-${index}" data-world-cup-entrant="${index}"${worldCupState.configured?" disabled":""}>${options(entrant)}</select></div>`).join("");
+      const setupActions=worldCupState.configured?`<button class="back-challenges-btn" type="button" data-world-cup-new>${escapeHtml(worldCupText("Préparer un nouveau tournoi","Prepare a new tournament"))}</button>`:`<button class="warning-btn" type="button" data-world-cup-preset>${escapeHtml(worldCupText("Charger le tableau de la vidéo","Load video bracket"))}</button><button class="good-btn" type="button" data-world-cup-configure>${escapeHtml(worldCupText("Créer le tournoi","Create tournament"))}</button>`;
+      const statusClass=worldCupState.champion?" win":/pour créer le tournoi|to create the tournament|temps invalide|invalid time/i.test(worldCupState.status)?" error":"";
+      worldCupPanel.innerHTML=`<section class="world-cup-setup"><div class="world-cup-section-head"><div><h2>${escapeHtml(worldCupText("Les huit participants","The eight entrants"))}</h2><p>${escapeHtml(worldCupText("L’ordre forme directement les quatre quarts de finale : 1 contre 2, 3 contre 4, 5 contre 6 et 7 contre 8.","The order directly creates the four quarterfinals: 1 vs 2, 3 vs 4, 5 vs 6 and 7 vs 8."))}</p></div></div><div class="world-cup-entrants">${entrantFields}</div><div class="world-cup-setup-actions">${setupActions}</div><div class="world-cup-status${statusClass}">${escapeHtml(worldCupState.status)}</div></section>${renderWorldCupBracket()}${renderWorldCupMatchPanel()}<div class="world-cup-footer-actions"><button class="danger-btn" type="button" data-world-cup-reset>${escapeHtml(worldCupText("Réinitialiser la Coupe","Reset World Cup"))}</button></div>`;
+      bindWorldCupEvents();syncWorldCupTimerInterval()
+    }
+
     function hunterText(fr,en){return currentLanguage==="en"?en:fr}
     function hunterDifficulty(){return hunterDifficultySettings[hunterState.difficulty]||hunterDifficultySettings.normal}
     function hunterFormatTime(seconds){const minutes=Math.floor(seconds/60),rest=seconds%60;return rest?`${minutes}:${String(rest).padStart(2,"0")}`:`${minutes} min`}
@@ -2757,7 +3041,7 @@ const phasmophobiaObjects=[
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
       else if(possessedHostConnection&&possessedHostConnection.open){possessedHostConnection.send(message)}
     }
-    function challengeHash(challenge){return simpleChallengeConfigs[challenge]?.route||{tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",cursed:"cursed-run",die:"de-maudit",bingo:"bingo-phasmo",hunter:"chasseur-enqueteur",possessed:"le-possede"}[challenge]||"challenges"}
+    function challengeHash(challenge){return simpleChallengeConfigs[challenge]?.route||{tarot:"tarot-surprise",media:"media-surprise",wall:"mur-de-la-mort",cursed:"cursed-run",die:"de-maudit",bingo:"bingo-phasmo",worldcup:"coupe-du-monde",hunter:"chasseur-enqueteur",possessed:"le-possede"}[challenge]||"challenges"}
     function updatePossessedInviteLink(challenge=currentRoomChallenge){
       if(!possessedRoomCode||!possessedShareLink)return;
       const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash=challengeHash(challenge);possessedShareLink.value=url.toString()
@@ -2777,11 +3061,12 @@ const phasmophobiaObjects=[
       else if(challenge==="cursed")openCursedChallenge(true);
       else if(challenge==="die")openDieChallenge(true);
       else if(challenge==="bingo")openBingoChallenge(true);
+      else if(challenge==="worldcup")openWorldCupChallenge(true);
       else if(simpleChallengeConfigs[challenge])openSimpleChallenge(challenge,true);
       else if(challenge==="hunter")openHunterChallenge(true);
       else if(challenge==="possessed")openPossessedChallenge(true)
     }
-    const randomChallengePool=["tarot","media","cursed","die","bingo","truck","poor","five","bet","wall","hunter","possessed"];
+    const randomChallengePool=["tarot","media","cursed","die","bingo","worldcup","truck","poor","five","bet","wall","hunter","possessed"];
     function openRandomChallenge(){
       const challenge=randomChallengePool[Math.floor(Math.random()*randomChallengePool.length)];
       openRoomChallenge(challenge)
@@ -2833,12 +3118,14 @@ const phasmophobiaObjects=[
     function applyCursedDieRoomState(state){if(!state)return;setCursedDieState(state,true)}
     function captureBingoRoomState(){return structuredClone(bingoState)}
     function applyBingoRoomState(state){if(!state)return;setBingoState(state,true)}
+    function captureWorldCupRoomState(){return structuredClone(worldCupState)}
+    function applyWorldCupRoomState(state){if(!state)return;worldCupState=normalizeWorldCupState(state);saveWorldCupState();syncWorldCupTimerInterval();renderWorldCup()}
     function captureSimpleRoomState(challenge){return structuredClone(simpleChallengeState(challenge))}
     function applySimpleRoomState(challenge,state){if(!simpleChallengeConfigs[challenge]||!state)return;simpleChallengeStates[challenge]={wins:Number(state.wins)||0,losses:Number(state.losses)||0,record:Number(state.record)||0,draw:Array.isArray(state.draw)?state.draw:[],status:state.status||simpleChallengeConfigs[challenge].status};saveSimpleChallenges();renderSimpleChallenges()}
     function captureHunterRoomState(){return structuredClone(hunterState)}
     function applyHunterRoomState(state){if(!state)return;hunterState={...hunterState,...state,scores:{A:Number(state.scores?.A)||0,B:Number(state.scores?.B)||0},history:Array.isArray(state.history)?state.history:[]};hunterSave();renderHunterChallenge()}
     function captureRoomChallengeState(challenge){
-      const state=challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="die"?captureCursedDieRoomState():(challenge==="bingo"?captureBingoRoomState():(simpleChallengeConfigs[challenge]?captureSimpleRoomState(challenge):(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState()))))));
+      const state=challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="die"?captureCursedDieRoomState():(challenge==="bingo"?captureBingoRoomState():(challenge==="worldcup"?captureWorldCupRoomState():(simpleChallengeConfigs[challenge]?captureSimpleRoomState(challenge):(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState())))))));
       state.sessionStarted=!!challengeSessionState[challenge];
       if(challengeDifficulties[challenge])state.difficulty=challengeDifficulties[challenge];
       return state
@@ -2853,7 +3140,7 @@ const phasmophobiaObjects=[
           saveChallengeDifficulties()
         }
         setChallengeStarted(message.challenge,Boolean(message.state&&message.state.sessionStarted),{sync:false,confirm:false});
-        if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="die")applyCursedDieRoomState(message.state);else if(message.challenge==="bingo")applyBingoRoomState(message.state);else if(simpleChallengeConfigs[message.challenge])applySimpleRoomState(message.challenge,message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)
+        if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="die")applyCursedDieRoomState(message.state);else if(message.challenge==="bingo")applyBingoRoomState(message.state);else if(message.challenge==="worldcup")applyWorldCupRoomState(message.state);else if(simpleChallengeConfigs[message.challenge])applySimpleRoomState(message.challenge,message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)
       }
       finally{applyingRoomState=false}
     }
@@ -3330,6 +3617,8 @@ const phasmophobiaObjects=[
     document.getElementById("back-die-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.getElementById("open-bingo-challenge").addEventListener("click",()=>openRoomChallenge("bingo"));
     document.getElementById("back-bingo-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
+    document.getElementById("open-world-cup-challenge").addEventListener("click",()=>openRoomChallenge("worldcup"));
+    document.getElementById("back-world-cup-to-challenges").addEventListener("click",()=>showChallengeSelection(true));
     document.querySelectorAll("[data-open-simple-challenge]").forEach(button=>button.addEventListener("click",()=>openRoomChallenge(button.dataset.openSimpleChallenge)));
     document.querySelectorAll("[data-back-simple-challenge]").forEach(button=>button.addEventListener("click",()=>showChallengeSelection(true)));
     document.getElementById("open-hunter-challenge").addEventListener("click",()=>openRoomChallenge("hunter"));
@@ -3690,6 +3979,7 @@ const phasmophobiaObjects=[
     loadCursedProgress();
     loadCursedDieState();
     loadBingoState();
+    loadWorldCupState();
     loadSimpleChallenges();
     hunterLoad();
     renderGhostMemo();
@@ -3698,6 +3988,7 @@ const phasmophobiaObjects=[
     renderCursedRun();
     renderCursedDie();
     renderBingoChallenge();
+    renderWorldCup();
     renderSimpleChallenges();
     renderHunterChallenge();
     renderChallengeSessionControls();
