@@ -1583,7 +1583,7 @@ const phasmophobiaObjects=[
       topCurrentChallenge.href=`#${challengeHash(activeChallenge)}`;
       topCurrentChallenge.textContent=`${possessedText("Défi en cours","Active challenge")} : ${challengeLabel(activeChallenge)}`
     }
-    function canManageChallengeSession(){return playMode!=="room"||possessedIsHost}
+    function canManageChallengeSession(){return playMode!=="room"||isRoomConnected()}
     function isMultiplayerChallenge(challenge){return challenge==="hunter"||challenge==="possessed"}
     function challengeDifficulty(challenge){
       const settings=challengeDifficultySettings[challenge]||{};
@@ -1635,7 +1635,7 @@ const phasmophobiaObjects=[
         const soloBlocked=playMode==="solo"&&isMultiplayerChallenge(challenge);
         const title=control.querySelector("strong"),note=control.querySelector("p"),start=control.querySelector("[data-challenge-start]"),stop=control.querySelector("[data-challenge-stop]");
         if(title)title.textContent=started?possessedText("Défi démarré","Challenge started"):possessedText("Défi non démarré","Challenge not started");
-        if(note)note.textContent=soloBlocked?possessedText("Ce défi nécessite le mode Multi local ou Room.","This challenge requires Local multi or Room mode."):!canManage?possessedText("Seul l'hôte peut démarrer ou stopper le défi en room.","Only the host can start or stop the challenge in a room."):started?possessedText("Le suivi est visible. Stoppe le défi pour revenir aux règles seules.","Tracking is visible. Stop the challenge to return to rules only."):possessedText("Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.","Rules stay visible. Start the challenge to show tracking and actions.");
+        if(note)note.textContent=soloBlocked?possessedText("Ce défi nécessite le mode Multi local ou Room.","This challenge requires Local multi or Room mode."):!canManage?possessedText("Connecte-toi à la room pour démarrer ou stopper le défi.","Connect to the room to start or stop the challenge."):started?possessedText("Le suivi est visible. Stoppe le défi pour revenir aux règles seules.","Tracking is visible. Stop the challenge to return to rules only."):possessedText("Les règles restent visibles. Démarre le défi pour afficher le suivi et les actions.","Rules stay visible. Start the challenge to show tracking and actions.");
         if(start){start.hidden=started;start.disabled=!canManage||soloBlocked}
         if(stop){stop.hidden=!started;stop.disabled=!canManage}
       });

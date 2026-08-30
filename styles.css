@@ -515,8 +515,9 @@
     .simple-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0}
     .simple-status{margin:12px auto 0;max-width:980px;padding:11px 14px;background:rgba(0,0,0,.4);border:1px solid var(--line);font-family:var(--mono);font-size:13px;line-height:1.45;color:#bcb4a9;text-align:center}
     .simple-status.win{border-color:var(--green);color:var(--green-bright);box-shadow:0 0 14px rgba(111,174,126,.2)}
-    .wall-grid{--wall-cell-size:clamp(178px,21vw,216px);display:grid;grid-template-columns:repeat(auto-fill,var(--wall-cell-size));justify-content:center;gap:10px;margin:18px 0}
-    .wall-cell{position:relative;width:var(--wall-cell-size);aspect-ratio:1/1;min-height:0;margin:0;padding:12px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
+    #wall-challenge-view .challenge-live-area{max-width:none}
+    .wall-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(178px,100%),1fr));gap:10px;margin:18px 0}
+    .wall-cell{position:relative;width:100%;aspect-ratio:1/1;min-height:0;margin:0;padding:12px;background:linear-gradient(180deg,#17130f,#0d0b09);border:1px solid var(--line);color:#cfc7bc;box-shadow:none;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
     .wall-cell:hover{border-color:var(--red);transform:translateY(-1px)}
     .wall-cell.open{background:linear-gradient(180deg,#2b1714,#140d0b);border-color:var(--red-bright);color:#f6e7e1}
     .wall-cell.locked{opacity:.55;cursor:not-allowed}
