@@ -762,7 +762,7 @@
     .possessed-role-text{color:#bcb4a9;font-size:14px;line-height:1.6;margin:0}
     .possessed-online-status{font-family:var(--mono);font-size:13px;color:var(--muted);margin:10px 0}
     .room-sync-note{margin:10px 0 0;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted2);letter-spacing:.04em}
-    .possessed-room-code{font-family:var(--display);font-size:40px;letter-spacing:.3em;color:var(--red-bright);text-align:center;margin:10px 0;text-shadow:0 0 20px rgba(178,59,46,.4)}
+    .possessed-room-code{font-family:var(--display);font-size:clamp(20px,4vw,36px);letter-spacing:.16em;overflow-wrap:anywhere;color:var(--red-bright);text-align:center;margin:10px 0;text-shadow:0 0 20px rgba(178,59,46,.4)}
     .possessed-share-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
     .possessed-share-row input{flex:1;min-width:200px;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:13px;padding:10px 12px}
     .possessed-lobby-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0}
@@ -792,7 +792,7 @@
     .possessed-round-limit label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2)}
     .possessed-round-limit input{background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:14px;padding:10px 12px;outline:none}
     .possessed-round-limit input:focus{border-color:var(--red)}
-    .possessed-round-result{margin-top:14px;padding:12px;background:rgba(0,0,0,.36);border:1px solid var(--line);color:#cfc7bc;line-height:1.5;text-align:left}
+    .possessed-round-result{margin-top:14px;padding:12px;background:rgba(0,0,0,.36);border:1px solid var(--line);color:#cfc7bc;line-height:1.5;text-align:left;white-space:pre-line}
     .possessed-round-result strong{color:#efeae0}
     .possessed-role-popup .challenge-popup-card{border-color:var(--line)}
     .possessed-role-popup .possessed-role-card{margin:0 auto 18px}

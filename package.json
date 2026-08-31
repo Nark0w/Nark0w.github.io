@@ -4,9 +4,10 @@
   "private": true,
   "description": "Application statique de défis Phasmophobia",
   "scripts": {
-    "check": "npm run check:js && npm run check:static",
-    "check:js": "node --check app.js",
+    "check": "npm run check:js && npm run check:static && npm run check:security",
+    "check:js": "node --check app.js && node --check room-security.js",
     "check:static": "node scripts/check-static.mjs",
+    "check:security": "node scripts/check-security.mjs",
     "build": "node scripts/build.mjs"
   },
   "engines": {

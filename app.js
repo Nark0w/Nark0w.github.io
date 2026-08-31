@@ -788,9 +788,10 @@ const phasmophobiaObjects=[
     const simpleChallengeViews=[...document.querySelectorAll("[data-simple-challenge-view]")],simpleChallengePanels=[...document.querySelectorAll("[data-simple-panel]")];
     const worldCupChallengeView=document.getElementById("world-cup-challenge-view"),worldCupPanel=document.getElementById("world-cup-panel");
     const challengeLaunchButtons=[...document.querySelectorAll(".challenge-launch-btn")],challengeRoomNote=document.getElementById("challenge-room-note"),randomChallengeButton=document.getElementById("random-challenge-btn"),challengeSessionControls=[...document.querySelectorAll("[data-challenge-session]")],challengeLiveAreas=[...document.querySelectorAll("[data-challenge-live]")],topCurrentChallenge=document.getElementById("top-current-challenge"),playModeButtons=[...document.querySelectorAll("[data-play-mode]")],pagePlayModeButtons=[...document.querySelectorAll("[data-page-play-mode]")],pageStreamerMode=document.querySelector("[data-page-streamer-mode]"),topRoomMenu=document.getElementById("top-room-menu"),topRoomContent=document.getElementById("top-room-content"),topRoomSummary=document.getElementById("top-room-summary"),possessedRolePanel=document.getElementById("possessed-room-title")?.closest(".possessed-panel"),screamerButton=document.getElementById("screamer-button"),screamerOverlay=document.getElementById("screamer-overlay");
+    const {ROOM_CODE_LENGTH,isPlainRecord,boundedString,boundedInteger,enumValue,uniqueStrings,messageSizeIsSafe,createRateLimiter}=window.RoomSecurity;
     let currentLanguage="fr",playMode="solo",isApplyingLanguage=false,languageObserver=null;
     let activeChallenge=null;
-    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,die:false,bingo:false,worldcup:false,hunter:false,possessed:false};
+    const challengeSessionState={tarot:false,media:false,wall:false,cursed:false,die:false,bingo:false,worldcup:false,truck:false,poor:false,five:false,bet:false,hunter:false,possessed:false};
     const challengeDifficultySelects=[...document.querySelectorAll("[data-challenge-difficulty]")];
     const originalTextNodes=new WeakMap(),originalAttributes=new WeakMap();
 
@@ -1384,19 +1385,20 @@ const phasmophobiaObjects=[
       document.title=titles[currentLanguage][page]
     }
     function hideAllViews(){stopGhostWalkCadence();[hubView,inviteRoomView,challengeSelectionView,memoView,noobsView,...noobLevelViews,ghostMemoView,mapMemoView,funMemoView,tarotChallengeView,mediaChallengeView,wallChallengeView,cursedChallengeView,dieChallengeView,bingoChallengeView,worldCupChallengeView,hunterChallengeView,possessedChallengeView,...simpleChallengeViews].forEach(view=>{if(view)view.hidden=true})}
+    function decodedLocationHash(){try{return decodeURIComponent(location.hash||"")}catch(error){return String(location.hash||"")}}
     function currentRouteHash(){
-      const hash=decodeURIComponent(location.hash||"").replace(/^#/,"");
+      const hash=decodedLocationHash().replace(/^#/,"");
       const lastHash=hash.split("#").filter(Boolean).pop()||hash;
       const route=(lastHash.split("?")[0]||"").replace(/^#/,"");
       return route
     }
     function possessedInviteCodeFromUrl(){
       const url=new URL(location.href),fromSearch=normalizeRoomCode(url.searchParams.get("possessedRoom"));
-      if(fromSearch.length===5)return fromSearch;
-      const match=decodeURIComponent(location.hash||"").match(/[?&]possessedRoom=([^&#]+)/i);
+      if(fromSearch.length===ROOM_CODE_LENGTH)return fromSearch;
+      const match=decodedLocationHash().match(/[?&]possessedRoom=([^&#]+)/i);
       return normalizeRoomCode(match&&match[1])
     }
-    function hasPossessedInvite(){return possessedInviteCodeFromUrl().length===5}
+    function hasPossessedInvite(){return possessedInviteCodeFromUrl().length===ROOM_CODE_LENGTH}
     function allowChallengeOpen(){
       if(hasPossessedInvite()&&!isRoomConnected()){prefillPossessedRoomFromUrl();showInviteRoom(false);return false}
       if(hasChallengeRoom())return true;
@@ -2202,7 +2204,7 @@ const phasmophobiaObjects=[
           const alt=currentLanguage==="en"?`${map.name} room layout - ${label}`:`Découpage des pièces de ${map.name} - ${label}`;
           return `<figure class="map-room-figure">
             <figcaption>${escapeHtml(label)}</figcaption>
-            <img src="${image.url}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)">
+            <img src="${image.url}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer">
           </figure>`
         }).join("");
         return `<article class="map-room-card">
@@ -2246,7 +2248,7 @@ const phasmophobiaObjects=[
     }
     function mediaObjectImageTag(obj){
       const image=tierImage(obj),name=mediaLocalizedName(obj.name);
-      return `<img src="${image.url}" data-file="${escapeHtml(image.file)}" alt="${escapeHtml(name)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)">`
+      return `<img src="${image.url}" data-file="${escapeHtml(image.file)}" alt="${escapeHtml(name)}" loading="lazy" referrerpolicy="no-referrer">`
     }
     function mediaRenderObject(obj,locked=false){
       const isStarting=mediaStartingNames.includes(obj.name),isNew=mediaLastUnlockedName===obj.name;
@@ -2390,7 +2392,7 @@ const phasmophobiaObjects=[
           <button class="cursed-map-photo" type="button" data-cursed-map="${escapeHtml(map.id)}" aria-pressed="${validated?"true":"false"}" aria-label="${escapeHtml(note)}">
             <span class="cursed-map-pin" aria-hidden="true"></span>
             <span class="cursed-map-image">
-              <img src="${map.image}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)">
+              <img src="${map.image}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer">
               <span class="cursed-map-cross" aria-hidden="true"></span>
             </span>
             <span class="cursed-map-caption">
@@ -2668,29 +2670,32 @@ const phasmophobiaObjects=[
       return seconds*1000
     }
     function normalizeWorldCupResult(result){
-      if(!result||!['success','fail'].includes(result.status))return null;
-      return {status:result.status,timeMs:Math.max(0,Number(result.timeMs)||0)}
+      if(!isPlainRecord(result)||!['success','fail'].includes(result.status))return null;
+      const timeMs=Number(result.timeMs);
+      return {status:result.status,timeMs:Number.isFinite(timeMs)?Math.min(604800000,Math.max(0,timeMs)):0}
     }
     function normalizeWorldCupState(saved){
-      const base=createWorldCupState(),source=saved&&typeof saved==="object"?saved:{};
+      const base=createWorldCupState(),source=isPlainRecord(saved)?saved:{};
       const optionIds=new Set(worldCupChallengeOptions.map(option=>option.id)),incomingEntrants=Array.isArray(source.entrants)?source.entrants.map(String):[];
+      const mapIds=new Set(cursedMaps.map(map=>map.id));
       const entrantsValid=incomingEntrants.length===8&&incomingEntrants.every(id=>optionIds.has(id))&&new Set(incomingEntrants).size===8;
       base.configured=Boolean(source.configured)&&entrantsValid;
       base.entrants=entrantsValid?incomingEntrants:[...worldCupDefaultEntrants];
       ["quarterfinals","semifinals","final"].forEach(stage=>{
         base.matches[stage]=base.matches[stage].map((match,index)=>{
-          const incoming=source.matches?.[stage]?.[index]||{};
-          return {...match,...incoming,stage,index,a:String(incoming.a??match.a),b:String(incoming.b??match.b),map:String(incoming.map||match.map),bloodMoon:incoming.bloodMoon==="on"?"on":"off",aResult:normalizeWorldCupResult(incoming.aResult),bResult:normalizeWorldCupResult(incoming.bResult),winner:incoming.winner?String(incoming.winner):null,replayReason:incoming.replayReason?String(incoming.replayReason):""}
+          const incoming=isPlainRecord(source.matches?.[stage]?.[index])?source.matches[stage][index]:{};
+          const contender=value=>optionIds.has(value)?value:null;
+          return {stage,index,a:contender(incoming.a)??contender(match.a)??"",b:contender(incoming.b)??contender(match.b)??"",map:mapIds.has(incoming.map)?incoming.map:match.map,bloodMoon:incoming.bloodMoon==="on"?"on":"off",aResult:normalizeWorldCupResult(incoming.aResult),bResult:normalizeWorldCupResult(incoming.bResult),winner:contender(incoming.winner),replayReason:boundedString(incoming.replayReason,200)}
         })
       });
       base.activeStage=["quarterfinals","semifinals","final"].includes(source.activeStage)?source.activeStage:"quarterfinals";
-      base.activeIndex=Math.min(base.matches[base.activeStage].length-1,Math.max(0,Number(source.activeIndex)||0));
+      base.activeIndex=boundedInteger(source.activeIndex,0,base.matches[base.activeStage].length-1,0);
       base.activeSide=source.activeSide==="b"?"b":"a";
-      base.champion=optionIds.has(String(source.champion))?String(source.champion):null;
-      base.timerMs=Math.max(0,Number(source.timerMs)||0);
+      base.champion=optionIds.has(source.champion)?source.champion:null;
+      base.timerMs=boundedInteger(source.timerMs,0,604800000,0);
       base.timerRunning=Boolean(source.timerRunning);
-      base.timerStartedAt=base.timerRunning?Number(source.timerStartedAt)||Date.now():0;
-      base.status=String(source.status||base.status);
+      base.timerStartedAt=base.timerRunning?boundedInteger(source.timerStartedAt,0,Number.MAX_SAFE_INTEGER,Date.now()):0;
+      base.status=boundedString(source.status,400,base.status);
       return base
     }
     function saveWorldCupState(){try{localStorage.setItem("phasmo-world-cup",JSON.stringify(worldCupState))}catch(error){}}
@@ -3077,6 +3082,88 @@ const phasmophobiaObjects=[
       if(topRoomMenu)topRoomMenu.hidden=!needsRoom;
       renderTopRoomSummary(connected);updateLocalDistributionVisibility();if(typeof renderPossessedPrivateRole==="function")renderPossessedPrivateRole()
     }
+    const roomMessageLimiter=createRateLimiter(),roomChallengeIds=new Set(Object.keys(challengeSessionState));
+    const roomEquipmentNames=phasmophobiaObjects.map(item=>item.name),roomMapIds=cursedMaps.map(map=>map.id),roomGhostNames=ghostHuntThresholds.map(ghost=>ghost.fr);
+    const roomOutcome=(value,allowed)=>allowed.includes(value)?value:null;
+    const roomUniqueNumbers=(value,min,max,limit=max-min+1)=>{
+      if(!Array.isArray(value))return [];
+      const result=[];for(const entry of value){const number=Number(entry);if(!Number.isInteger(number)||number<min||number>max||result.includes(number))continue;result.push(number);if(result.length>=limit)break}return result
+    };
+    const roomBoundedStrings=(value,maxItems,maxLength)=>Array.isArray(value)?value.slice(0,maxItems).filter(item=>typeof item==="string").map(item=>boundedString(item,maxLength)):[];
+    function roomDifficultyValue(challenge,value){return challengeDifficultySettings[challenge]?.[value]?value:(challengeDifficulties[challenge]||"normal")}
+    function roomFinalizeState(challenge,source,state){
+      state.sessionStarted=Boolean(source.sessionStarted);
+      if(challengeDifficultySettings[challenge])state.difficulty=roomDifficultyValue(challenge,source.difficulty);
+      return state
+    }
+    function normalizeTarotRoomState(state){
+      if(!isPlainRecord(state)||!isPlainRecord(state.tiers))return null;
+      const tiers=Object.create(null);roomEquipmentNames.forEach(name=>{tiers[name]=boundedInteger(state.tiers[name],1,3,2)});
+      return roomFinalizeState("tarot",state,{tiers,remainingNames:uniqueStrings(state.remainingNames,roomEquipmentNames),selectedNames:uniqueStrings(state.selectedNames,roomEquipmentNames),removedNames:uniqueStrings(state.removedNames,roomEquipmentNames),lostNames:uniqueStrings(state.lostNames,roomEquipmentNames),permanentLostNames:uniqueStrings(state.permanentLostNames,roomEquipmentNames),singleCopyNames:uniqueStrings(state.singleCopyNames,roomEquipmentNames),roundEffects:roomBoundedStrings(state.roundEffects,24,180),roundCount:boundedInteger(state.roundCount,1,999,1),winCount:boundedInteger(state.winCount,0,999,0),lossCount:boundedInteger(state.lossCount,0,999,0),elapsedSeconds:boundedInteger(state.elapsedSeconds,0,604800,0),nextTarotMultiplier:boundedInteger(state.nextTarotMultiplier,1,4,1),streamerModeChecked:Boolean(state.streamerModeChecked),challengeOutcome:roomOutcome(state.challengeOutcome,[null,"victory","defeat"]),resultText:boundedString(state.resultText,1200),popupOpen:Boolean(state.popupOpen),popupMessage:boundedString(state.popupMessage,500),timerRunning:Boolean(state.timerRunning)})
+    }
+    function normalizeMediaRoomState(state){
+      if(!isPlainRecord(state))return null;
+      const last=roomEquipmentNames.includes(state.mediaLastUnlockedName)?state.mediaLastUnlockedName:null;
+      return roomFinalizeState("media",state,{unlockedNames:uniqueStrings(state.unlockedNames,roomEquipmentNames),mediaUniqueCount:boundedInteger(state.mediaUniqueCount,0,999,0),mediaDuplicateCount:boundedInteger(state.mediaDuplicateCount,0,999,0),mediaObjectiveCount:boundedInteger(state.mediaObjectiveCount,0,999,0),mediaPhase:enumValue(state.mediaPhase,["photo","video","audio"],"photo"),pagesCompleted:uniqueStrings(state.pagesCompleted,["photo","video","audio"],3),mediaLastUnlockedName:last,mediaOutcome:roomOutcome(state.mediaOutcome,[null,"win","loss"]),resultText:boundedString(state.resultText,1200),popupOpen:Boolean(state.popupOpen)})
+    }
+    function normalizeWallRoomState(state){
+      if(!isPlainRecord(state)||!Array.isArray(state.order)||state.order.length!==wallMaluses.length)return null;
+      const order=state.order.map(Number),validOrder=order.every(Number.isInteger)&&new Set(order).size===wallMaluses.length&&order.every(index=>index>=0&&index<wallMaluses.length);if(!validOrder)return null;
+      const opened=roomUniqueNumbers(state.opened,0,wallMaluses.length-1,wallMaluses.length);
+      return roomFinalizeState("wall",state,{order,opened,roundStart:boundedInteger(state.roundStart,0,opened.length,0),round:boundedInteger(state.round,1,20,1),wins:boundedInteger(state.wins,0,20,0),outcome:roomOutcome(state.outcome,[null,"victory","defeat"]),status:boundedString(state.status,400,"Ouvre 2 cases avant de lancer la partie.")})
+    }
+    function normalizeCursedRoomState(state){if(!isPlainRecord(state))return null;return roomFinalizeState("cursed",state,{validated:uniqueStrings(state.validated,roomMapIds)})}
+    function normalizeDieRoomState(state){
+      if(!isPlainRecord(state))return null;
+      const history=Array.isArray(state.history)?state.history.slice(0,12).filter(isPlainRecord).map(entry=>({roll:boundedInteger(entry.roll,1,4,1),time:boundedString(entry.time,24),streak:boundedInteger(entry.streak,0,999,0),result:enumValue(entry.result,["win","loss"],"loss")})):[];
+      return roomFinalizeState("die",state,{streak:boundedInteger(state.streak,0,999,0),record:boundedInteger(state.record,0,999,0),currentRoll:[1,2,3,4].includes(Number(state.currentRoll))?Number(state.currentRoll):null,history,status:boundedString(state.status,300,"Prêt à lancer le dé."),outcome:roomOutcome(state.outcome,[null,"win","loss"])})
+    }
+    function normalizeBingoRoomState(state){
+      if(!isPlainRecord(state))return null;
+      const allowed=[...bingoPool,"Case gratuite"],cells=Array.isArray(state.cells)?state.cells.slice(0,25).map(value=>allowed.includes(value)?value:""):[];
+      return roomFinalizeState("bingo",state,{cells,marked:roomUniqueNumbers(state.marked,0,24,25),status:boundedString(state.status,300,"Génère une grille pour commencer."),outcome:roomOutcome(state.outcome,[null,"win"])})
+    }
+    function normalizeSimpleRoomState(challenge,state){
+      if(!isPlainRecord(state)||!simpleChallengeConfigs[challenge])return null;
+      const config=simpleChallengeConfigs[challenge],allowed=config.draw==="objects"?roomEquipmentNames:(config.draw==="ghost"?roomGhostNames:[]),draw=allowed.length?uniqueStrings(state.draw,allowed,4):[];
+      return roomFinalizeState(challenge,state,{wins:boundedInteger(state.wins,0,999,0),losses:boundedInteger(state.losses,0,999,0),record:boundedInteger(state.record,0,999,0),draw,status:boundedString(state.status,400,config.status)})
+    }
+    function normalizeHunterRoomState(state){
+      if(!isPlainRecord(state))return null;
+      const normalizeGhost=value=>{const ghost=ghostHuntThresholds.find(item=>item.fr===value||item.en===value);return ghost?ghost.fr:""};
+      const history=Array.isArray(state.history)?state.history.slice(0,20).filter(isPlainRecord).map(entry=>({round:boundedInteger(entry.round,1,20,1),investigators:enumValue(entry.investigators,["A","B"],"A"),hunters:enumValue(entry.hunters,["A","B"],"B"),investigatorPoints:boundedInteger(entry.investigatorPoints,0,20,0),hunterPoints:boundedInteger(entry.hunterPoints,0,20,0),actualGhost:normalizeGhost(entry.actualGhost),message:boundedString(entry.message,300)})):[];
+      return roomFinalizeState("hunter",state,{teamA:boundedString(state.teamA,24,"Équipe A")||"Équipe A",teamB:boundedString(state.teamB,24,"Équipe B")||"Équipe B",roundLimit:boundedInteger(state.roundLimit,2,20,4),difficulty:enumValue(state.difficulty,Object.keys(hunterDifficultySettings),"normal"),round:boundedInteger(state.round,1,20,1),scores:{A:boundedInteger(state.scores?.A,0,999,0),B:boundedInteger(state.scores?.B,0,999,0)},history,outcome:roomOutcome(state.outcome,[null,"A","B","draw"]),status:boundedString(state.status,400),investigatorChoice:normalizeGhost(state.investigatorChoice),hunterChoice:normalizeGhost(state.hunterChoice),actualGhost:normalizeGhost(state.actualGhost),investigatorLocked:Boolean(state.investigatorLocked),hunterLocked:Boolean(state.hunterLocked),evidenceAnnounced:Boolean(state.evidenceAnnounced),itemsRemoved:Boolean(state.itemsRemoved),huntsCompleted:Boolean(state.huntsCompleted),roundScored:Boolean(state.roundScored),lastRoundResult:boundedString(state.lastRoundResult,400)})
+    }
+    function normalizeWorldCupRoomState(state){
+      if(!isPlainRecord(state))return null;
+      const normalized=normalizeWorldCupState(state);normalized.status=boundedString(normalized.status,400);normalized.timerMs=boundedInteger(normalized.timerMs,0,604800000,0);normalized.timerStartedAt=normalized.timerRunning?boundedInteger(normalized.timerStartedAt,0,Number.MAX_SAFE_INTEGER,Date.now()):0;
+      Object.values(normalized.matches).flat().forEach(match=>{match.replayReason=boundedString(match.replayReason,200)});
+      return roomFinalizeState("worldcup",state,normalized)
+    }
+    function normalizeRoomChallengeState(challenge,state){
+      if(!roomChallengeIds.has(challenge)||challenge==="possessed")return null;
+      if(challenge==="tarot")return normalizeTarotRoomState(state);
+      if(challenge==="media")return normalizeMediaRoomState(state);
+      if(challenge==="wall")return normalizeWallRoomState(state);
+      if(challenge==="cursed")return normalizeCursedRoomState(state);
+      if(challenge==="die")return normalizeDieRoomState(state);
+      if(challenge==="bingo")return normalizeBingoRoomState(state);
+      if(challenge==="worldcup")return normalizeWorldCupRoomState(state);
+      if(simpleChallengeConfigs[challenge])return normalizeSimpleRoomState(challenge,state);
+      if(challenge==="hunter")return normalizeHunterRoomState(state);
+      return null
+    }
+    function normalizeRoomChallengeMessage(message,type="challenge-state"){
+      if(!isPlainRecord(message)||!messageSizeIsSafe(message)||!roomChallengeIds.has(message.challenge))return null;
+      const state=normalizeRoomChallengeState(message.challenge,message.state);return state?{type,challenge:message.challenge,state}:null
+    }
+    function roomMessageAccepted(connection,data,allowedTypes){
+      const peerId=connection?.peer||"host";
+      if(!isPlainRecord(data)||!messageSizeIsSafe(data)||typeof data.type!=="string"||!allowedTypes.includes(data.type)||!roomMessageLimiter.accept(peerId)){
+        console.warn("[room] message rejeté",peerId);try{connection?.close()}catch(error){}return false
+      }
+      return true
+    }
     function sendRoomMessage(message,exceptPeer=null){
       if(!message||!shouldSyncRoom())return;
       if(possessedIsHost){possessedConnections.forEach((connection,peerId)=>{if(peerId!==exceptPeer&&connection.open)connection.send(message)})}
@@ -3117,13 +3204,16 @@ const phasmophobiaObjects=[
       if(playMode==="room")pauseTarotIfLeavingChallenge(challenge);
       if(playMode==="room")rememberRoomChallenge(challenge);
       applyRoomChallengeRoute(challenge);
-      if(playMode==="room"){sendRoomMessage({type:"challenge-route",challenge});if(challenge==="possessed")broadcastPossessedPublicState();else sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
+      if(playMode==="room"){
+        sendRoomMessage({type:possessedIsHost?"challenge-route":"challenge-route-request",challenge});
+        if(possessedIsHost){if(challenge==="possessed")broadcastPossessedPublicState();else sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})}
+      }
     }
     function objectByName(name){return allObjects.find(obj=>obj.name===name)||phasmophobiaObjects.find(obj=>obj.name===name)||null}
     function objectsFromNames(names){return (Array.isArray(names)?names:[]).map(objectByName).filter(Boolean)}
     function captureTarotRoomState(){
       const tiers={};allObjects.forEach(obj=>{tiers[obj.name]=obj.tier});
-      return {tiers,remainingNames:remainingObjects.map(obj=>obj.name),selectedNames:selectedObjects.map(obj=>obj.name),removedNames:removedObjects.map(obj=>obj.name),lostNames:permanentlyLostObjects.map(obj=>obj.name),permanentLostNames:[...permanentLostNames],singleCopyNames:[...singleCopyNames],roundEffects:[...roundEffects],roundCount,winCount,lossCount,elapsedSeconds,nextTarotMultiplier,streamerModeChecked:streamerMode.checked,challengeOutcome,resultHtml:resultDiv.innerHTML,popupOpen:challengePopup.classList.contains("open"),popupMessage:challengePopupMessage.textContent,timerRunning:!!timerInterval}
+      return {tiers,remainingNames:remainingObjects.map(obj=>obj.name),selectedNames:selectedObjects.map(obj=>obj.name),removedNames:removedObjects.map(obj=>obj.name),lostNames:permanentlyLostObjects.map(obj=>obj.name),permanentLostNames:[...permanentLostNames],singleCopyNames:[...singleCopyNames],roundEffects:[...roundEffects],roundCount,winCount,lossCount,elapsedSeconds,nextTarotMultiplier,streamerModeChecked:streamerMode.checked,challengeOutcome,resultText:resultDiv.textContent,popupOpen:challengePopup.classList.contains("open"),popupMessage:challengePopupMessage.textContent,timerRunning:!!timerInterval}
     }
     function applyTarotRoomState(state){
       if(!state)return;
@@ -3133,16 +3223,16 @@ const phasmophobiaObjects=[
       remainingObjects=objectsFromNames(state.remainingNames);selectedObjects=objectsFromNames(state.selectedNames);removedObjects=objectsFromNames(state.removedNames);permanentlyLostObjects=objectsFromNames(state.lostNames);
       roundCount=Number(state.roundCount)||1;winCount=Number(state.winCount)||0;lossCount=Number(state.lossCount)||0;elapsedSeconds=Number(state.elapsedSeconds)||0;nextTarotMultiplier=Number(state.nextTarotMultiplier)||1;
       const outcome=state.challengeOutcome||null;challengeOutcome=null;closeChallengePopup();
-      streamerMode.checked=Boolean(state.streamerModeChecked);resultDiv.innerHTML=state.resultHtml||"";updateTimerButton();updateTimer();updateModeDisplay();updateTarotStatus();renderActiveEffects();updateLists();
+      streamerMode.checked=Boolean(state.streamerModeChecked);resultDiv.textContent=state.resultText||"";updateTimerButton();updateTimer();updateModeDisplay();updateTarotStatus();renderActiveEffects();updateLists();
       if(outcome&&state.popupOpen)showChallengePopup(outcome,state.popupMessage||"");else challengeOutcome=outcome;
       if(state.timerRunning){timerInterval=setInterval(()=>{elapsedSeconds++;updateTimer();checkChallengeState()},1000)}
       updateTimerButton()
     }
-    function captureMediaRoomState(){return {unlockedNames:[...mediaUnlockedNames],mediaUniqueCount,mediaDuplicateCount,mediaObjectiveCount,mediaPhase,pagesCompleted:[...mediaPagesCompleted],mediaLastUnlockedName,mediaOutcome,resultHtml:mediaResult?mediaResult.innerHTML:"",popupOpen:mediaPopup.classList.contains("open")}}
+    function captureMediaRoomState(){return {unlockedNames:[...mediaUnlockedNames],mediaUniqueCount,mediaDuplicateCount,mediaObjectiveCount,mediaPhase,pagesCompleted:[...mediaPagesCompleted],mediaLastUnlockedName,mediaOutcome,resultText:mediaResult?mediaResult.textContent:"",popupOpen:mediaPopup.classList.contains("open")}}
     function applyMediaRoomState(state){
       if(!state)return;
       mediaUnlockedNames=new Set(state.unlockedNames||mediaStartingNames);mediaUniqueCount=Number(state.mediaUniqueCount)||0;mediaDuplicateCount=Number(state.mediaDuplicateCount)||0;mediaObjectiveCount=Number(state.mediaObjectiveCount)||0;mediaPhase=state.mediaPhase||"photo";mediaPagesCompleted=new Set(state.pagesCompleted||[]);mediaLastUnlockedName=state.mediaLastUnlockedName||null;mediaOutcome=state.mediaOutcome||null;
-      renderMediaChallenge();if(mediaResult&&state.resultHtml)mediaResult.innerHTML=state.resultHtml;
+      renderMediaChallenge();if(mediaResult)mediaResult.textContent=state.resultText||"";
       if(mediaOutcome&&state.popupOpen)showMediaOutcome(mediaOutcome);else closeMediaPopup()
     }
     function captureWallRoomState(){return {order:[...wallMalusOrder],opened:[...wallOpenedIndexes],roundStart:wallRoundStartIndex,round:wallRound,wins:wallWins,outcome:wallOutcome,status:wallStatusText}}
@@ -3164,14 +3254,15 @@ const phasmophobiaObjects=[
     function captureSimpleRoomState(challenge){return structuredClone(simpleChallengeState(challenge))}
     function applySimpleRoomState(challenge,state){if(!simpleChallengeConfigs[challenge]||!state)return;simpleChallengeStates[challenge]={wins:Number(state.wins)||0,losses:Number(state.losses)||0,record:Number(state.record)||0,draw:Array.isArray(state.draw)?state.draw:[],status:state.status||simpleChallengeConfigs[challenge].status};saveSimpleChallenges();renderSimpleChallenges()}
     function captureHunterRoomState(){return structuredClone(hunterState)}
-    function applyHunterRoomState(state){if(!state)return;hunterState={...hunterState,...state,scores:{A:Number(state.scores?.A)||0,B:Number(state.scores?.B)||0},history:Array.isArray(state.history)?state.history:[]};hunterSave();renderHunterChallenge()}
+    function applyHunterRoomState(state){if(!state)return;hunterState={...hunterState,...state,scores:{A:Number(state.scores?.A)||0,B:Number(state.scores?.B)||0},history:Array.isArray(state.history)?state.history:[]};hunterNormalizeState();hunterSave();renderHunterChallenge()}
     function captureRoomChallengeState(challenge){
       const state=challenge==="media"?captureMediaRoomState():(challenge==="wall"?captureWallRoomState():(challenge==="cursed"?captureCursedRoomState():(challenge==="die"?captureCursedDieRoomState():(challenge==="bingo"?captureBingoRoomState():(challenge==="worldcup"?captureWorldCupRoomState():(simpleChallengeConfigs[challenge]?captureSimpleRoomState(challenge):(challenge==="hunter"?captureHunterRoomState():captureTarotRoomState())))))));
       state.sessionStarted=!!challengeSessionState[challenge];
       if(challengeDifficulties[challenge])state.difficulty=challengeDifficulties[challenge];
-      return state
+      return normalizeRoomChallengeState(challenge,state)||state
     }
     function applyRoomChallengeState(message){
+      const normalized=normalizeRoomChallengeMessage(message);if(!normalized)return false;message=normalized;
       applyingRoomState=true;
       try{
         const difficulty=message.state&&message.state.difficulty;
@@ -3184,11 +3275,12 @@ const phasmophobiaObjects=[
         if(message.challenge==="media")applyMediaRoomState(message.state);else if(message.challenge==="wall")applyWallRoomState(message.state);else if(message.challenge==="cursed")applyCursedRoomState(message.state);else if(message.challenge==="die")applyCursedDieRoomState(message.state);else if(message.challenge==="bingo")applyBingoRoomState(message.state);else if(message.challenge==="worldcup")applyWorldCupRoomState(message.state);else if(simpleChallengeConfigs[message.challenge])applySimpleRoomState(message.challenge,message.state);else if(message.challenge==="hunter")applyHunterRoomState(message.state);else applyTarotRoomState(message.state)
       }
       finally{applyingRoomState=false}
+      return true
     }
     function scheduleRoomChallengeSync(challenge){
       if(applyingRoomState||!shouldSyncRoom())return;
       clearTimeout(roomSyncTimers[challenge]);
-      roomSyncTimers[challenge]=setTimeout(()=>{if(!applyingRoomState&&shouldSyncRoom())sendRoomMessage({type:"challenge-state",challenge,state:captureRoomChallengeState(challenge)})},0)
+      roomSyncTimers[challenge]=setTimeout(()=>{if(!applyingRoomState&&shouldSyncRoom())sendRoomMessage({type:possessedIsHost?"challenge-state":"challenge-state-proposal",challenge,state:captureRoomChallengeState(challenge)})},0)
     }
     let possessedPeer=null,possessedHostConnection=null,possessedConnections=new Map(),possessedPlayers=[],possessedIsHost=false,possessedRoomCode="",possessedOnlineStarted=false,possessedDistributionRound=0;
     let possessedGameRound=1,possessedRoundLimit=5,possessedScores={},possessedVotes={},possessedRoundResolved=false,possessedCurrentRoles={},possessedCurrentPossessedId=null,possessedRoundSummary="";
@@ -3228,8 +3320,15 @@ const phasmophobiaObjects=[
     function capturePossessedPublicState(){
       return {round:possessedGameRound,roundLimit:possessedRoundLimit,scores:{...possessedScores},votes:{...possessedVotes},resolved:possessedRoundResolved,ghostCorrect:!!(possessedGhostCorrect&&possessedGhostCorrect.checked),diedEarly:!!(possessedDiedEarly&&possessedDiedEarly.checked),summary:possessedRoundSummary,started:possessedOnlineStarted,distributionRound:possessedDistributionRound,challengeSessionStarted:!!challengeSessionState.possessed,difficulty:challengeDifficulties.possessed}
     }
+    function normalizePossessedPublicState(state){
+      if(!isPlainRecord(state))return null;
+      const players=possessedRoundPlayers(),ids=players.map(player=>player.id),scores=Object.create(null),votes=Object.create(null);
+      ids.forEach(id=>{scores[id]=boundedInteger(state.scores?.[id],0,999,0);const target=state.votes?.[id];if(ids.includes(target))votes[id]=target});
+      const roundLimit=boundedInteger(state.roundLimit,1,20,5),round=boundedInteger(state.round,1,roundLimit,1);
+      return {round,roundLimit,scores,votes,resolved:Boolean(state.resolved),ghostCorrect:Boolean(state.ghostCorrect),diedEarly:Boolean(state.diedEarly),summary:boundedString(state.summary,1600),started:Boolean(state.started),distributionRound:boundedInteger(state.distributionRound,0,999,0),challengeSessionStarted:Boolean(state.challengeSessionStarted),difficulty:roomDifficultyValue("possessed",state.difficulty)}
+    }
     function applyPossessedPublicState(state){
-      if(!state)return;
+      state=normalizePossessedPublicState(state);if(!state)return false;
       if(challengeDifficultySettings.possessed[state.difficulty]){
         challengeDifficulties.possessed=state.difficulty;
         saveChallengeDifficulties()
@@ -3243,7 +3342,7 @@ const phasmophobiaObjects=[
       possessedOnlineStarted=Boolean(state.started)||possessedOnlineStarted;possessedDistributionRound=Number(state.distributionRound)||possessedDistributionRound;
       if(possessedGhostCorrect)possessedGhostCorrect.checked=Boolean(state.ghostCorrect);
       if(possessedDiedEarly)possessedDiedEarly.checked=Boolean(state.diedEarly);
-      renderPossessedGamePanel()
+      renderPossessedGamePanel();return true
     }
     function broadcastPossessedPublicState(){
       if(playMode==="room"&&possessedIsHost)sendRoomMessage({type:"possessed-state",state:capturePossessedPublicState()})
@@ -3275,7 +3374,7 @@ const phasmophobiaObjects=[
       possessedNextRound.textContent=possessedGameRound>=possessedRoundLimit?possessedText("Limite atteinte","Limit reached"):possessedText("Nouvelle manche","Next round");
       possessedResetScores.disabled=!canManage;
       possessedRoundResult.hidden=!possessedRoundSummary;
-      possessedRoundResult.innerHTML=possessedRoundSummary
+      possessedRoundResult.textContent=possessedRoundSummary
     }
     function submitPossessedVote(voterId,targetId){
       const players=possessedRoundPlayers();
@@ -3311,14 +3410,13 @@ const phasmophobiaObjects=[
       players.forEach(player=>{possessedScores[player.id]=(Number(possessedScores[player.id])||0)+deltas[player.id]});
       const accusedText=accusedId?possessedPlayerName(accusedId,players):(topIds.length>1?possessedText("égalité","tie"):possessedText("aucun vote","no vote"));
       const possessedName=possessedPlayerName(possessedCurrentPossessedId,players);
-      const deltaText=players.map(player=>`${escapeHtml(player.name)} ${deltas[player.id]>=0?"+":""}${deltas[player.id]}`).join(" / ");
       const outcomeLines=[];
       outcomeLines.push(discovered?possessedText(`Le Possédé est découvert : +${difficulty.investigatorPoints} pour chaque Enquêteur.`,`The Possessed was found: +${difficulty.investigatorPoints} for each Investigator.`):possessedText("Le Possédé n'est pas découvert.","The Possessed was not found."));
       if(!discovered&&!diedEarly)outcomeLines.push(possessedText(`Possédé non découvert : +${difficulty.possessedPoints} pour lui.`,`Undiscovered Possessed: +${difficulty.possessedPoints} for them.`));
       if(diedEarly)outcomeLines.push(possessedText(`Le Possédé est mort avant ses ${difficulty.corruptions} corruption(s) : il marque 0 point sur cette manche.`,`The Possessed died before completing ${difficulty.corruptions} corruption(s): they score 0 for this round.`));
       if(ghostOk)outcomeLines.push(possessedText("Fantôme correct : +1 pour tous.","Correct ghost: +1 for everyone."));
       if(possessedGameRound>=possessedRoundLimit){const leaders=possessedScoreLeaders(players).winners;outcomeLines.push(possessedText(`Partie terminée après ${possessedRoundLimit} manche(s). Gagnant : ${leaders.length?leaders.join(", "):"aucun"}.`,`Game over after ${possessedRoundLimit} round(s). Winner: ${leaders.length?leaders.join(", "):"none"}.`))}
-      possessedRoundSummary=`<strong>Manche ${possessedGameRound}</strong><br>Vote final : ${escapeHtml(accusedText)}. Le Possédé était ${escapeHtml(possessedName)}.<br>${outcomeLines.join("<br>")}<br><strong>Points :</strong> ${deltaText}`;
+      possessedRoundSummary=`Manche ${possessedGameRound}\nVote final : ${accusedText}. Le Possédé était ${possessedName}.\n${outcomeLines.join("\n")}\nPoints : ${players.map(player=>`${player.name} ${deltas[player.id]>=0?"+":""}${deltas[player.id]}`).join(" / ")}`;
       possessedRoundResolved=true;renderPossessedGamePanel();broadcastPossessedPublicState()
     }
     function nextPossessedRound(){
@@ -3431,9 +3529,9 @@ const phasmophobiaObjects=[
     }
     function loadPlayMode(){let saved="solo";try{saved=localStorage.getItem("phasmo-play-mode")||"solo"}catch(error){}setPlayMode(saved)}
     function randomRoomCode(){
-      const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",buffer=new Uint32Array(5);crypto.getRandomValues(buffer);return [...buffer].map(value=>alphabet[value%alphabet.length]).join("")
+      return window.RoomSecurity.randomRoomCode()
     }
-    function normalizeRoomCode(value){return String(value||"").toUpperCase().replace(/[^A-Z2-9]/g,"").slice(0,5)}
+    function normalizeRoomCode(value){return window.RoomSecurity.normalizeRoomCode(value)}
     function setPossessedOnlineStatus(fr,en){const text=possessedText(fr,en);possessedOnlineStatus.textContent=text;if(inviteWaitingStatus)inviteWaitingStatus.textContent=text}
     function showPossessedOnlineSetup(){possessedOnlineSetup.hidden=false;possessedOnlineSetup.style.removeProperty("display");possessedOnlineLobby.hidden=true;renderChallengeRoomGate();renderInviteRoom()}
     function showPossessedOnlineLobby(){possessedOnlineSetup.hidden=true;possessedOnlineSetup.style.display="none";possessedOnlineLobby.hidden=false;possessedOnlineRole.hidden=true;renderChallengeRoomGate();renderInviteRoom()}
@@ -3482,52 +3580,68 @@ const phasmophobiaObjects=[
       possessedConnections.forEach(connection=>{if(connection.open)connection.send(message)});renderPossessedLobby()
     }
     function cleanupPossessedPeer(showSetup=true){
-      plog("cleanup peer (destruction)",{hote:possessedIsHost,code:possessedRoomCode,peerVivant:!!possessedPeer});
+      plog("cleanup peer (destruction)",{hote:possessedIsHost,peerVivant:!!possessedPeer});
       possessedConnections.forEach(connection=>{try{connection.close()}catch(error){}});possessedConnections.clear();
       if(possessedHostConnection){try{possessedHostConnection.close()}catch(error){}possessedHostConnection=null}
       if(possessedPeer){try{possessedPeer.destroy()}catch(error){}possessedPeer=null}
-      possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";currentRoomChallenge=null;possessedGuestRoomPanelClosed=false;possessedOnlineStarted=false;possessedDistributionRound=0;resetPossessedRoundProgress(true);possessedScores={};possessedGameRound=1;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;clearPossessedOwnRole();closePossessedRolePopup();renderChallengeRoomGate();renderPossessedGamePanel();
+      roomMessageLimiter.reset();possessedPlayers=[];possessedIsHost=false;possessedRoomCode="";currentRoomChallenge=null;possessedGuestRoomPanelClosed=false;possessedOnlineStarted=false;possessedDistributionRound=0;resetPossessedRoundProgress(true);possessedScores={};possessedGameRound=1;possessedOnlineRole.innerHTML="";possessedOnlineRole.hidden=true;possessedHostRoomInfo.hidden=true;possessedRoleActions.hidden=true;possessedStartOnline.hidden=true;possessedRedrawOnline.hidden=true;clearPossessedOwnRole();closePossessedRolePopup();renderChallengeRoomGate();renderPossessedGamePanel();
       if(showSetup){showPossessedOnlineSetup();setPossessedOnlineStatus("En attente…","Waiting…")}
     }
     function plog(){console.log("[possessed]",...arguments)}
     function setupHostConnection(connection){
       let joined=false;
+      if(typeof connection.peer!=="string"||connection.peer.length<1||connection.peer.length>128){connection.close();return}
       plog("hôte: connexion entrante de",connection.peer);
       connection.on("data",data=>{
-        if(!data)return;
-        if(joined){if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge);sendRoomMessage(data,connection.peer);if(data.challenge==="possessed")broadcastPossessedPublicState()}else if(data.type==="challenge-state"){applyRoomChallengeState(data);sendRoomMessage(data,connection.peer)}else if(data.type==="possessed-session"){setChallengeStarted("possessed",Boolean(data.started),{sync:false});broadcastPossessedPublicState()}else if(data.type==="possessed-vote")handlePossessedVote(data,connection.peer);return}
-        if(data.type!=="join")return;
+        const allowed=joined?["challenge-route-request","challenge-state-proposal","possessed-session","possessed-vote"]:["join"];
+        if(!roomMessageAccepted(connection,data,allowed))return;
+        if(joined){
+          if(data.type==="challenge-route-request"&&roomChallengeIds.has(data.challenge)){
+            applyingRoomState=true;try{pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}finally{applyingRoomState=false}
+            sendRoomMessage({type:"challenge-route",challenge:data.challenge});if(data.challenge==="possessed")broadcastPossessedPublicState();else sendRoomMessage({type:"challenge-state",challenge:data.challenge,state:captureRoomChallengeState(data.challenge)})
+          }else if(data.type==="challenge-state-proposal"){
+            const normalized=normalizeRoomChallengeMessage(data,"challenge-state");if(normalized&&normalized.challenge===currentRoomChallenge&&applyRoomChallengeState(normalized))sendRoomMessage({type:"challenge-state",challenge:normalized.challenge,state:captureRoomChallengeState(normalized.challenge)})
+          }else if(data.type==="possessed-session"&&currentRoomChallenge==="possessed"&&typeof data.started==="boolean"){
+            setChallengeStarted("possessed",data.started,{sync:false});broadcastPossessedPublicState()
+          }else if(data.type==="possessed-vote")handlePossessedVote(data,connection.peer);
+          return
+        }
         if(possessedPlayers.length>=4){plog("hôte: rejet (room pleine)",connection.peer);connection.send({type:"reject",reason:"full"});connection.close();return}
-        joined=true;const player={id:connection.peer,name:String(data.name||"Joueur").trim().slice(0,24)||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
+        joined=true;const player={id:connection.peer,name:boundedString(data.name,24,"Joueur").trim()||"Joueur",host:false};possessedPlayers.push(player);possessedConnections.set(connection.peer,connection);plog("hôte: joueur accepté",player.name,connection.peer,"total="+possessedPlayers.length);broadcastPossessedLobby();sendCurrentChallengeTo(connection);setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)
       });
-      connection.on("close",()=>{plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);delete possessedVotes[connection.peer];delete possessedScores[connection.peer];broadcastPossessedLobby();broadcastPossessedPublicState();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
+      connection.on("close",()=>{roomMessageLimiter.clear(connection.peer);plog("hôte: connexion fermée",connection.peer,"joined="+joined);if(!joined)return;possessedConnections.delete(connection.peer);possessedPlayers=possessedPlayers.filter(player=>player.id!==connection.peer);delete possessedVotes[connection.peer];delete possessedScores[connection.peer];broadcastPossessedLobby();broadcastPossessedPublicState();setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) connecté(s).`,`${possessedPlayers.length} player(s) connected.`)});
       connection.on("error",error=>{console.warn("[possessed] hôte: erreur connexion",error&&error.type,error)})
     }
     function createPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
-      setPlayMode("room");cleanupPossessedPeer(false);const hostRaw=document.getElementById("possessed-host-name").value.trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
-      const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;plog("création room, peerId =",peerId);possessedPeer=new Peer(peerId);
+      setPlayMode("room");cleanupPossessedPeer(false);const hostRaw=boundedString(document.getElementById("possessed-host-name").value,24).trim();savePossessedName(hostRaw);const hostName=hostRaw||possessedText("Hôte","Host");possessedRoomCode=randomRoomCode();possessedIsHost=true;setPossessedOnlineStatus("Création de la room…","Creating room…");showPossessedOnlineLobby();
+      const peerId=`phasmo-possessed-${possessedRoomCode.toLowerCase()}`;plog("création de la room");possessedPeer=new Peer(peerId);
       possessedPeer.on("open",id=>{plog("hôte: peer ouvert (broker OK)",id);possessedPlayers=[{id:"host",name:hostName,host:true}];possessedRoomCodeDisplay.textContent=possessedRoomCode;const url=new URL(location.href);url.searchParams.set("possessedRoom",possessedRoomCode);url.hash="challenges";possessedShareLink.value=url.toString();updatePossessedInviteLink();setPossessedOnlineStatus("Room créée. Partage le code ou le lien.","Room created. Share the code or link.");renderPossessedLobby()});
       possessedPeer.on("connection",setupHostConnection);
       possessedPeer.on("disconnected",()=>console.warn("[possessed] hôte: déconnecté du broker PeerJS"));
       possessedPeer.on("error",error=>{console.warn("[possessed] hôte: erreur peer",error&&error.type,error);setPossessedOnlineStatus(error&&error.type==="unavailable-id"?"Ce code est déjà utilisé. Réessaie.":"Connexion impossible. Réessaie ou utilise le mode local.",error&&error.type==="unavailable-id"?"This code is already in use. Try again.":"Unable to connect. Try again or use local mode.")})
     }
+    function normalizeLobbyPlayers(value){
+      if(!Array.isArray(value)||value.length<1||value.length>4)return null;
+      const players=[];for(const entry of value){if(!isPlainRecord(entry)||typeof entry.id!=="string"||entry.id.length<1||entry.id.length>128)return null;const id=entry.id;if(players.some(player=>player.id===id))return null;players.push({id,name:boundedString(entry.name,24,"Joueur")||"Joueur",host:Boolean(entry.host)})}
+      return players.filter(player=>player.host).length===1?players:null
+    }
     function handlePossessedGuestData(data){
-      if(!data)return;
+      if(!roomMessageAccepted(possessedHostConnection,data,["lobby","role","challenge-route","challenge-state","possessed-state","reject"]))return;
       plog("invité: message reçu de l’hôte →",data.type,data.type==="reject"?("raison="+data.reason):"");
-      if(data.type==="lobby"){possessedPlayers=Array.isArray(data.players)?data.players:[];possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=Number(data.round)||possessedDistributionRound;if(!possessedIsHost&&!possessedGuestRoomPanelClosed&&possessedPlayers.length){if(topRoomMenu)topRoomMenu.open=false;possessedGuestRoomPanelClosed=true}setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`);renderPossessedLobby()}
-      else if(data.type==="role"){possessedOnlineStarted=true;possessedDistributionRound=Number(data.round)||Math.max(1,possessedDistributionRound);possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";setPossessedOwnRole(data.role);renderPossessedGamePanel();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.")}
-      else if(data.type==="challenge-route"){pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}
+      if(data.type==="lobby"){const players=normalizeLobbyPlayers(data.players);if(!players)return;possessedPlayers=players;possessedOnlineStarted=Boolean(data.started);possessedDistributionRound=boundedInteger(data.round,0,999,possessedDistributionRound);if(!possessedIsHost&&!possessedGuestRoomPanelClosed&&possessedPlayers.length){if(topRoomMenu)topRoomMenu.open=false;possessedGuestRoomPanelClosed=true}setPossessedOnlineStatus(`${possessedPlayers.length} joueur(s) dans la room.`,`${possessedPlayers.length} player(s) in the room.`);renderPossessedLobby()}
+      else if(data.type==="role"&&["possessed","investigator"].includes(data.role)){possessedOnlineStarted=true;possessedDistributionRound=boundedInteger(data.round,1,999,Math.max(1,possessedDistributionRound));possessedOnlineRole.hidden=true;possessedOnlineRole.innerHTML="";setPossessedOwnRole(data.role);renderPossessedGamePanel();setPossessedOnlineStatus(possessedDistributionRound>1?"Les rôles ont été redistribués.":"Les rôles ont été distribués.",possessedDistributionRound>1?"Roles have been reassigned.":"Roles have been assigned.")}
+      else if(data.type==="challenge-route"&&roomChallengeIds.has(data.challenge)){applyingRoomState=true;try{pauseTarotIfLeavingChallenge(data.challenge);rememberRoomChallenge(data.challenge);applyRoomChallengeRoute(data.challenge)}finally{applyingRoomState=false}}
       else if(data.type==="challenge-state")applyRoomChallengeState(data);
       else if(data.type==="possessed-state")applyPossessedPublicState(data.state);
-      else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"La partie a déjà commencé.",full?"The room is full.":"The game has already started.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
+      else if(data.type==="reject"){const full=data.reason==="full";setPossessedOnlineStatus(full?"La room est complète.":"Connexion refusée.",full?"The room is full.":"Connection rejected.");cleanupPossessedPeer(false);showPossessedOnlineSetup()}
     }
     function joinPossessedRoom(){
       if(typeof Peer==="undefined"){setPossessedOnlineStatus("Impossible de charger le service de room. Vérifie ta connexion Internet.","Unable to load the room service. Check your Internet connection.");return}
-      const code=normalizeRoomCode(document.getElementById("possessed-join-code").value),nameRaw=document.getElementById("possessed-join-name").value.trim(),name=nameRaw||possessedText("Joueur","Player");savePossessedName(nameRaw);
-      if(code.length!==5){setPossessedOnlineStatus("Entre un code de room valide à 5 caractères.","Enter a valid 5-character room code.");return}
-      setPlayMode("room");plog("tentative de jointure, code =",code);cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;possessedGuestRoomPanelClosed=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
-      possessedPeer.on("open",id=>{const hostId=`phasmo-possessed-${code.toLowerCase()}`;plog("invité: peer ouvert",id,"→ connexion à",hostId);possessedHostConnection=possessedPeer.connect(hostId,{reliable:true});possessedHostConnection.on("open",()=>{plog("invité: connexion à l’hôte ouverte, envoi du join");possessedHostConnection.send({type:"join",name});setPossessedOnlineStatus("Connecté. En attente de l’hôte…","Connected. Waiting for the host…")});possessedHostConnection.on("data",handlePossessedGuestData);possessedHostConnection.on("close",()=>{plog("invité: connexion à l’hôte fermée");if(!possessedPeer)return;cleanupPossessedPeer(false);showPossessedOnlineSetup();setPossessedOnlineStatus("L’hôte a quitté la room.","The host left the room.")});possessedHostConnection.on("error",error=>{console.warn("[possessed] invité: erreur connexion hôte",error&&error.type,error);setPossessedOnlineStatus("Connexion à l’hôte impossible.","Unable to connect to the host.")})});
+      const code=normalizeRoomCode(document.getElementById("possessed-join-code").value),nameRaw=boundedString(document.getElementById("possessed-join-name").value,24).trim(),name=nameRaw||possessedText("Joueur","Player");savePossessedName(nameRaw);
+      if(code.length!==ROOM_CODE_LENGTH){setPossessedOnlineStatus(`Entre un code de room valide à ${ROOM_CODE_LENGTH} caractères.`,`Enter a valid ${ROOM_CODE_LENGTH}-character room code.`);return}
+      setPlayMode("room");plog("tentative de jointure");cleanupPossessedPeer(false);possessedRoomCode=code;possessedIsHost=false;possessedGuestRoomPanelClosed=false;showPossessedOnlineLobby();setPossessedOnlineStatus("Connexion à la room…","Connecting to room…");possessedPeer=new Peer();
+      possessedPeer.on("open",id=>{const hostId=`phasmo-possessed-${code.toLowerCase()}`;plog("invité: connexion à l’hôte");possessedHostConnection=possessedPeer.connect(hostId,{reliable:true});possessedHostConnection.on("open",()=>{plog("invité: connexion à l’hôte ouverte, envoi du join");possessedHostConnection.send({type:"join",name});setPossessedOnlineStatus("Connecté. En attente de l’hôte…","Connected. Waiting for the host…")});possessedHostConnection.on("data",handlePossessedGuestData);possessedHostConnection.on("close",()=>{plog("invité: connexion à l’hôte fermée");if(!possessedPeer)return;cleanupPossessedPeer(false);showPossessedOnlineSetup();setPossessedOnlineStatus("L’hôte a quitté la room.","The host left the room.")});possessedHostConnection.on("error",error=>{console.warn("[possessed] invité: erreur connexion hôte",error&&error.type,error);setPossessedOnlineStatus("Connexion à l’hôte impossible.","Unable to connect to the host.")})});
       possessedPeer.on("disconnected",()=>console.warn("[possessed] invité: déconnecté du broker PeerJS"));
       possessedPeer.on("error",error=>{console.warn("[possessed] invité: erreur peer",error&&error.type,error);setPossessedOnlineStatus("Room introuvable ou connexion impossible.","Room not found or unable to connect.")})
     }
@@ -3545,9 +3659,10 @@ const phasmophobiaObjects=[
       try{await navigator.clipboard.writeText(value);document.getElementById("possessed-copy-link").textContent=possessedText("Lien copié !","Link copied!")}catch(error){possessedShareLink.select();document.execCommand("copy")}
     }
     function relocatePossessedPanel(){relocateRoomControls();renderChallengeRoomGate()}
-    function savePossessedName(name){try{if(name)localStorage.setItem("phasmo-possessed-name",name)}catch(error){}}
+    function savePossessedName(name){try{const safeName=boundedString(name,24).trim();if(safeName)localStorage.setItem("phasmo-possessed-name",safeName)}catch(error){}}
     function loadPossessedName(){
       let saved="";try{saved=localStorage.getItem("phasmo-possessed-name")||""}catch(error){}
+      saved=boundedString(saved,24).trim();
       if(saved)["possessed-host-name","possessed-join-name","invite-join-name"].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=saved});
     }
     function prefillPossessedRoomFromUrl(){
@@ -3764,11 +3879,13 @@ const phasmophobiaObjects=[
     function tierImage(obj){return obj.images[String(obj.tier)]}
     function fallbackSvg(label){const safe=String(label).slice(0,28);return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="100%" height="100%" fill="#1a1a2e"/><text x="50%" y="46%" fill="#e6e6e6" text-anchor="middle" font-family="Arial" font-size="18">${currentLanguage==="en"?"Image unavailable":"Image indisponible"}</text><text x="50%" y="58%" fill="#e94560" text-anchor="middle" font-family="Arial" font-size="14">${safe}</text></svg>`)}`}
     function handleImageError(img){
+      if(img.nextElementSibling?.classList.contains("tarot-image-fallback")){img.style.display="none";img.nextElementSibling.style.display="flex";return}
       if(img.dataset.file&&img.dataset.fallbackUsed!=="1"){img.dataset.fallbackUsed="1";img.src=`https://phasmophobia.fandom.com/wiki/Special:Redirect/file/${encodeURIComponent(img.dataset.file)}`;return}
       img.onerror=null;img.src=fallbackSvg(img.alt)
     }
+    document.addEventListener("error",event=>{if(event.target instanceof HTMLImageElement)handleImageError(event.target)},true);
     window.handleImageError=handleImageError;
-    function imageTag(obj,extra=""){const image=tierImage(obj);return `<img src="${image.url}" data-file="${escapeHtml(image.file)}" alt="${escapeHtml(obj.name)} — Tier ${obj.tier}" loading="lazy" referrerpolicy="no-referrer" onerror="handleImageError(this)" ${extra}>`}
+    function imageTag(obj,extra=""){const image=tierImage(obj);return `<img src="${image.url}" data-file="${escapeHtml(image.file)}" alt="${escapeHtml(obj.name)} — Tier ${obj.tier}" loading="lazy" referrerpolicy="no-referrer" ${extra}>`}
     function card(obj){return `${imageTag(obj)}<p>${escapeHtml(obj.name)}</p><span class="tier-badge tier-${obj.tier}">T${obj.tier}</span>${singleCopyNames.has(obj.name)?'<span class="quantity-badge">1 exemplaire</span>':''}`}
     function resetSelectionDisplay(){resultDiv.innerHTML="Aucun objet en cours de sélection.";scheduleRoomChallengeSync("tarot")}
     function showMessage(title,message){resultDiv.innerHTML=`<p><strong>${escapeHtml(title)}</strong></p><p class="selection-note">${message}</p>`;scheduleRoomChallengeSync("tarot")}

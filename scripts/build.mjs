@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist");
-const deployableEntries = ["index.html", "styles.css", "app.js", ".nojekyll", "assets"];
+const deployableEntries = ["index.html", "styles.css", "room-security.js", "app.js", ".nojekyll", "assets"];
 
 await rm(output, { force: true, recursive: true });
 await mkdir(output, { recursive: true });
